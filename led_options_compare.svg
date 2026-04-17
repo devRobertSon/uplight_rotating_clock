@@ -1,0 +1,197 @@
+<svg viewBox="0 0 640 1280" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa; max-width:100%; height:auto; font-family: system-ui,-apple-system,sans-serif;">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e8a500"/>
+    </marker>
+    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#555"/>
+    </marker>
+    <marker id="agS" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto">
+      <path d="M8,0 L0,4 L8,8 z" fill="#555"/>
+    </marker>
+  </defs>
+  <style>
+    .t { font-size:17px; font-weight:700; fill:#1a1a1a; }
+    .s { font-size:12px; fill:#666; }
+    .d { font-size:11px; fill:#777; }
+    .l { font-size:12px; fill:#333; font-weight:600;}
+    .ok { font-size:12px; fill:#0d7a3f; font-weight:600; }
+    .no { font-size:12px; fill:#c33636; font-weight:600; }
+  </style>
+
+  <!-- ============ Panel A ============ -->
+  <g>
+    <rect x="0" y="0" width="640" height="420" fill="#fff" stroke="#e0e0e0"/>
+    <text x="20" y="28" class="t">안 A · 드럼 내부 관통 LED (이전 안)</text>
+    <text x="20" y="46" class="s">LED 바가 드럼 내부를 수평으로 관통 · 앞면 뚫린 숫자로 빛이 투과</text>
+    <text x="20" y="60" class="d">측면 단면도 (수직축 드럼 가정)</text>
+
+    <text x="35" y="195" font-size="30">👁</text>
+    <text x="25" y="225" class="d">뷰어</text>
+
+    <!-- Front cover -->
+    <rect x="110" y="90" width="7" height="210" fill="#aaa" stroke="#666"/>
+    <text x="100" y="315" class="d">커버</text>
+
+    <!-- Drum rectangle (vertical axis → side view is rectangle) -->
+    <rect x="150" y="120" width="200" height="160" fill="#f3f6fa" stroke="#5a7aa0" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Front face -->
+    <rect x="148" y="120" width="4" height="160" fill="#1f3c5c"/>
+    <!-- Cut-out slot -->
+    <rect x="146" y="170" width="8" height="60" fill="#fff"/>
+    <text x="115" y="135" class="d">앞면</text>
+    <text x="115" y="148" class="d">(뚫림)</text>
+
+    <!-- Rear face -->
+    <rect x="348" y="120" width="4" height="160" fill="#1f3c5c"/>
+    <text x="355" y="135" class="d">뒷면</text>
+
+    <!-- Axis -->
+    <line x1="250" y1="80" x2="250" y2="310" stroke="#888" stroke-width="1" stroke-dasharray="2,3"/>
+    <text x="254" y="88" class="d">축</text>
+
+    <!-- LED bar inside drum -->
+    <rect x="200" y="195" width="100" height="10" fill="#fff4a0" stroke="#c99400"/>
+    <text x="215" y="228" class="d">LED 바 (드럼 내부)</text>
+
+    <!-- Light rays from LED to front cut-out -->
+    <line x1="200" y1="198" x2="156" y2="180" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="200" y1="200" x2="156" y2="200" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="200" y1="203" x2="156" y2="220" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <!-- Glow indicator at front cut-out -->
+    <g opacity="0.85">
+      <circle cx="142" cy="180" r="4" fill="#ffd83d"/>
+      <circle cx="142" cy="200" r="5" fill="#ffd83d"/>
+      <circle cx="142" cy="220" r="4" fill="#ffd83d"/>
+    </g>
+
+    <!-- Back wall -->
+    <rect x="395" y="90" width="5" height="210" fill="#aaa" stroke="#666"/>
+    <text x="390" y="315" class="d">뒷판</text>
+
+    <!-- Depth ruler -->
+    <line x1="110" y1="335" x2="400" y2="335" stroke="#555" marker-start="url(#agS)" marker-end="url(#ag)"/>
+    <text x="205" y="353" class="l">전후 깊이 ≈ 100mm (예산 120 · 여유 20)</text>
+
+    <text x="20" y="380" class="ok">✓ 고콘트라스트, 선명 발광</text>
+    <text x="20" y="398" class="ok">✓ "뚫린 숫자" 스펙 유지</text>
+    <text x="340" y="380" class="no">✗ 드럼 상·하면에 LED 통과 슬롯 필요</text>
+    <text x="340" y="398" class="no">✗ 4드럼 수평 정렬·내부 배선 난이도</text>
+  </g>
+
+  <!-- ============ Panel B ============ -->
+  <g transform="translate(0,420)">
+    <rect x="0" y="0" width="640" height="420" fill="#fff" stroke="#e0e0e0"/>
+    <text x="20" y="28" class="t">안 B · 신규 업라이트 · 뚫린 숫자 그대로</text>
+    <text x="20" y="46" class="s">앞쪽 하단 LED → 위로 조사 → 앞면 아크릴 하단 엣지로 주입</text>
+    <text x="20" y="60" class="d">측면 단면도</text>
+
+    <text x="35" y="195" font-size="30">👁</text>
+
+    <rect x="110" y="80" width="7" height="200" fill="#aaa" stroke="#666"/>
+    <text x="100" y="295" class="d">커버</text>
+
+    <!-- Drum -->
+    <rect x="150" y="100" width="200" height="160" fill="#f3f6fa" stroke="#5a7aa0" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Front face: clear acrylic with cut-out -->
+    <rect x="148" y="100" width="4" height="160" fill="#aac4e8" opacity="0.75"/>
+    <rect x="146" y="150" width="8" height="60" fill="#fff"/>
+    <text x="115" y="115" class="d">앞면</text>
+    <text x="115" y="128" class="d">(뚫림)</text>
+
+    <!-- Rear face -->
+    <rect x="348" y="100" width="4" height="160" fill="#1f3c5c" opacity="0.4"/>
+
+    <!-- LED bar at front-bottom, in front of drum, below drum bottom -->
+    <rect x="125" y="285" width="55" height="9" fill="#fff4a0" stroke="#c99400"/>
+    <text x="110" y="312" class="d">LED 바</text>
+    <text x="110" y="324" class="d">(앞 하단, 위로 조사)</text>
+
+    <!-- Light rays going up from LED -->
+    <line x1="135" y1="284" x2="150" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="150" y1="284" x2="151" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="170" y1="284" x2="153" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <!-- TIR zigzag inside acrylic -->
+    <path d="M151,258 L153,230 L149,200 L153,165 L151,135 L152,105" stroke="#e8a500" stroke-width="0.9" fill="none" stroke-dasharray="3,2"/>
+
+    <!-- Faint glow ONLY at cut-out edges -->
+    <circle cx="146" cy="150" r="2" fill="#ffd83d"/>
+    <circle cx="146" cy="210" r="2" fill="#ffd83d"/>
+    <text x="85" y="165" class="d" fill="#c33636">윤곽만</text>
+    <text x="85" y="178" class="d" fill="#c33636">희미</text>
+
+    <rect x="360" y="80" width="5" height="200" fill="#aaa" stroke="#666"/>
+
+    <line x1="110" y1="345" x2="365" y2="345" stroke="#555" marker-start="url(#agS)" marker-end="url(#ag)"/>
+    <text x="200" y="363" class="l">전후 깊이 ≈ 95mm (여유 25)</text>
+
+    <text x="20" y="387" class="ok">✓ 공간 여유 大 · 드럼 ∅100mm 확대 가능</text>
+    <text x="20" y="405" class="ok">✓ 드럼 구조 단순</text>
+    <text x="340" y="387" class="no">✗ 뚫린 엣지만 산란 → 윤곽만 발광</text>
+    <text x="340" y="405" class="no">✗ 판독성 부족 (밝은 환경서 불리)</text>
+  </g>
+
+  <!-- ============ Panel C ============ -->
+  <g transform="translate(0,840)">
+    <rect x="0" y="0" width="640" height="420" fill="#fff" stroke="#e0e0e0"/>
+    <text x="20" y="28" class="t">안 C · 신규 업라이트 + 레이저 각인 [추천]</text>
+    <text x="20" y="46" class="s">판 스펙 "뚫림 → 각인"으로 변경 · 엣지라이팅으로 숫자 솔리드 발광</text>
+    <text x="20" y="60" class="d">측면 단면도</text>
+
+    <text x="35" y="195" font-size="30">👁</text>
+
+    <rect x="110" y="80" width="7" height="200" fill="#aaa" stroke="#666"/>
+    <text x="100" y="295" class="d">커버</text>
+
+    <!-- Drum -->
+    <rect x="150" y="100" width="200" height="160" fill="#f3f6fa" stroke="#5a7aa0" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Front face: clear acrylic, engraved area -->
+    <rect x="148" y="100" width="4" height="160" fill="#aac4e8" opacity="0.7"/>
+    <!-- Engraved solid glow region -->
+    <rect x="145" y="150" width="10" height="60" fill="#ffd83d" opacity="0.95"/>
+    <text x="110" y="115" class="d">앞면</text>
+    <text x="110" y="128" class="d">(각인)</text>
+
+    <!-- Rear face -->
+    <rect x="348" y="100" width="4" height="160" fill="#1f3c5c" opacity="0.4"/>
+
+    <!-- LED bar -->
+    <rect x="125" y="285" width="55" height="9" fill="#fff4a0" stroke="#c99400"/>
+    <text x="110" y="312" class="d">LED 바</text>
+    <text x="110" y="324" class="d">(앞 하단, 위로 조사)</text>
+
+    <!-- Light rays up -->
+    <line x1="135" y1="284" x2="150" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="150" y1="284" x2="151" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+    <line x1="170" y1="284" x2="153" y2="262" stroke="#e8a500" stroke-width="1.6" marker-end="url(#ar)"/>
+
+    <!-- Inside acrylic: light concentrated at engraved area -->
+    <path d="M151,258 L153,230 L149,205 L153,175 L151,130 L152,105" stroke="#ffd83d" stroke-width="1.0" fill="none"/>
+
+    <!-- Scattered light dots at engraved area -->
+    <g opacity="0.9">
+      <circle cx="140" cy="160" r="2.5" fill="#ffd83d"/>
+      <circle cx="137" cy="175" r="2.2" fill="#ffd83d"/>
+      <circle cx="135" cy="190" r="2.8" fill="#ffd83d"/>
+      <circle cx="140" cy="205" r="2.5" fill="#ffd83d"/>
+      <circle cx="138" cy="168" r="1.5" fill="#ffd83d"/>
+      <circle cx="142" cy="180" r="1.5" fill="#ffd83d"/>
+      <circle cx="136" cy="198" r="1.8" fill="#ffd83d"/>
+    </g>
+    <text x="78" y="168" class="d" fill="#0d7a3f">숫자 전체</text>
+    <text x="78" y="181" class="d" fill="#0d7a3f">솔리드 발광</text>
+
+    <rect x="360" y="80" width="5" height="200" fill="#aaa" stroke="#666"/>
+
+    <line x1="110" y1="345" x2="365" y2="345" stroke="#555" marker-start="url(#agS)" marker-end="url(#ag)"/>
+    <text x="200" y="363" class="l">전후 깊이 ≈ 95mm · 드럼 ∅100까지 확대 가능</text>
+
+    <text x="20" y="387" class="ok">✓ 숫자 솔리드 글로우, 판독성 최상</text>
+    <text x="20" y="405" class="ok">✓ 드럼 단순, LED 시공 쉬움, 공간 여유</text>
+    <text x="340" y="387" class="no">✗ 아크릴 스펙 변경 (뚫림 → 각인)</text>
+    <text x="340" y="405" class="no">✗ 자리 간 빛샘 차단용 배플 필요</text>
+  </g>
+
+</svg>

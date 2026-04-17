@@ -1,0 +1,201 @@
+<svg viewBox="0 0 720 820" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa; max-width:100%; height:auto; font-family: system-ui,-apple-system,sans-serif;">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+    <marker id="ar2" markerWidth="10" markerHeight="10" refX="1" refY="5" orient="auto">
+      <path d="M10,0 L0,5 L10,10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <style>
+    .title { font-size: 18px; font-weight: 700; fill: #1a1a1a; }
+    .sub { font-size: 12px; fill: #555; }
+    .bname { font-size: 13px; font-weight: 700; fill: #1a1a1a; }
+    .bsub { font-size: 10px; fill: #555; }
+    .iface { font-size: 10px; font-weight: 600; fill: #2255aa; }
+    .net { font-size: 11px; font-weight: 700; fill: #0d7a3f; }
+    .pwr { font-size: 11px; font-weight: 700; fill: #b35800; }
+    .note { font-size: 10px; fill: #777; font-style: italic; }
+    .esp { fill: #e3eaf4; stroke: #2f5179; stroke-width: 2; }
+    .box { fill: #f4f4f4; stroke: #666; stroke-width: 1.3; }
+    .motor { fill: #fff4e1; stroke: #c99400; stroke-width: 1.2; }
+    .sens { fill: #e1f0e4; stroke: #0d7a3f; stroke-width: 1.2; }
+    .net_box { fill: #eaf4e8; stroke: #0d7a3f; stroke-width: 1.3; stroke-dasharray: 5,3; }
+    .pwr_box { fill: #fdf0dd; stroke: #b35800; stroke-width: 1.3; }
+  </style>
+
+  <!-- Title -->
+  <text x="20" y="30" class="title">시스템 블록도 · 아크릴 회전 숫자 시계 v1.0</text>
+  <text x="20" y="48" class="sub">ESP32 중심 · I2C 확장으로 6 드럼 제어 · APSTA 동시 운용</text>
+
+  <!-- ============ ESP32 center ============ -->
+  <rect x="280" y="330" width="160" height="100" class="esp" rx="6"/>
+  <text x="360" y="360" class="bname" text-anchor="middle">ESP32-WROOM</text>
+  <text x="360" y="378" class="bsub" text-anchor="middle">MicroPython</text>
+  <text x="360" y="392" class="bsub" text-anchor="middle">WiFi + BT</text>
+  <text x="360" y="412" class="bsub" text-anchor="middle">I2C master · PWM · GPIO</text>
+
+  <!-- ============ I2C bus ============ -->
+  <text x="20" y="480" class="iface">── I2C 버스 (SDA/SCL) ──</text>
+
+  <!-- DS3231 -->
+  <rect x="40" y="495" width="140" height="55" class="box" rx="4"/>
+  <text x="110" y="515" class="bname" text-anchor="middle">DS3231 RTC</text>
+  <text x="110" y="530" class="bsub" text-anchor="middle">0x68 · CR2032 백업</text>
+  <text x="110" y="544" class="bsub" text-anchor="middle">시각 유지 (오프라인)</text>
+
+  <!-- MCP23017 #1 -->
+  <rect x="200" y="495" width="140" height="55" class="box" rx="4"/>
+  <text x="270" y="515" class="bname" text-anchor="middle">MCP23017 #1</text>
+  <text x="270" y="530" class="bsub" text-anchor="middle">0x20 · 16 GPIO</text>
+  <text x="270" y="544" class="bsub" text-anchor="middle">모터 1·2·3·4 (시십·시일·분십·분일)</text>
+
+  <!-- MCP23017 #2 -->
+  <rect x="360" y="495" width="140" height="55" class="box" rx="4"/>
+  <text x="430" y="515" class="bname" text-anchor="middle">MCP23017 #2</text>
+  <text x="430" y="530" class="bsub" text-anchor="middle">0x21 · 16 GPIO</text>
+  <text x="430" y="544" class="bsub" text-anchor="middle">모터 5·6 (요일·날씨), 여유 8핀</text>
+
+  <!-- I2C wire from ESP32 going down -->
+  <line x1="300" y1="430" x2="300" y2="465" stroke="#2255aa" stroke-width="1.2"/>
+  <line x1="300" y1="465" x2="525" y2="465" stroke="#2255aa" stroke-width="1.2"/>
+  <line x1="110" y1="465" x2="525" y2="465" stroke="#2255aa" stroke-width="1.2"/>
+  <line x1="110" y1="465" x2="110" y2="495" stroke="#2255aa" stroke-width="1.2"/>
+  <line x1="270" y1="465" x2="270" y2="495" stroke="#2255aa" stroke-width="1.2"/>
+  <line x1="430" y1="465" x2="430" y2="495" stroke="#2255aa" stroke-width="1.2"/>
+
+  <!-- ============ Motors (below MCP23017s) ============ -->
+  <text x="20" y="600" class="iface">── 스텝 모터 체인 × 6 (각 4핀 × ULN2003 × 28BYJ-48) ──</text>
+
+  <!-- Motor group visualization -->
+  <g>
+    <!-- Motor 1 -->
+    <rect x="30" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="77" y="633" class="bname" text-anchor="middle" font-size="11">드럼 1</text>
+    <text x="77" y="647" class="bsub" text-anchor="middle">요일 ∅60</text>
+    <text x="77" y="665" class="bsub" text-anchor="middle">ULN2003</text>
+    <text x="77" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+    <text x="77" y="698" class="bsub" text-anchor="middle" fill="#b35800">5V · 4핀</text>
+
+    <rect x="135" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="182" y="633" class="bname" text-anchor="middle" font-size="11">드럼 2</text>
+    <text x="182" y="647" class="bsub" text-anchor="middle">시십 ∅90</text>
+    <text x="182" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+
+    <rect x="240" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="287" y="633" class="bname" text-anchor="middle" font-size="11">드럼 3</text>
+    <text x="287" y="647" class="bsub" text-anchor="middle">시일 ∅90</text>
+    <text x="287" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+
+    <rect x="345" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="392" y="633" class="bname" text-anchor="middle" font-size="11">드럼 4</text>
+    <text x="392" y="647" class="bsub" text-anchor="middle">분십 ∅90</text>
+    <text x="392" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+
+    <rect x="450" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="497" y="633" class="bname" text-anchor="middle" font-size="11">드럼 5</text>
+    <text x="497" y="647" class="bsub" text-anchor="middle">분일 ∅90</text>
+    <text x="497" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+
+    <rect x="555" y="615" width="95" height="90" class="motor" rx="4"/>
+    <text x="602" y="633" class="bname" text-anchor="middle" font-size="11">드럼 6</text>
+    <text x="602" y="647" class="bsub" text-anchor="middle">날씨 ∅60</text>
+    <text x="602" y="679" class="bsub" text-anchor="middle">28BYJ-48</text>
+  </g>
+
+  <!-- Lines from MCP23017 to motors -->
+  <line x1="270" y1="550" x2="270" y2="615" stroke="#c99400" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="430" y1="550" x2="430" y2="615" stroke="#c99400" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <text x="230" y="583" class="note" fill="#b35800">MCP #1 → 드럼 1~4</text>
+  <text x="432" y="583" class="note" fill="#b35800">MCP #2 → 드럼 5·6</text>
+
+  <!-- ============ Hall sensors (above ESP32) ============ -->
+  <text x="20" y="200" class="iface">── 홀센서 × 6 (ESP32 직결, 인터럽트) ──</text>
+
+  <g>
+    <rect x="30" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="77" y="232" class="bname" text-anchor="middle" font-size="11">홀 1 · 요일</text>
+    <text x="77" y="250" class="bsub" text-anchor="middle">A3144 + 풀업</text>
+    <text x="77" y="264" class="bsub" text-anchor="middle">GPIO input</text>
+
+    <rect x="135" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="182" y="232" class="bname" text-anchor="middle" font-size="11">홀 2 · 시십</text>
+    <text x="182" y="250" class="bsub" text-anchor="middle">A3144</text>
+
+    <rect x="240" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="287" y="232" class="bname" text-anchor="middle" font-size="11">홀 3 · 시일</text>
+    <text x="287" y="250" class="bsub" text-anchor="middle">A3144</text>
+
+    <rect x="345" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="392" y="232" class="bname" text-anchor="middle" font-size="11">홀 4 · 분십</text>
+    <text x="392" y="250" class="bsub" text-anchor="middle">A3144</text>
+
+    <rect x="450" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="497" y="232" class="bname" text-anchor="middle" font-size="11">홀 5 · 분일</text>
+    <text x="497" y="250" class="bsub" text-anchor="middle">A3144</text>
+
+    <rect x="555" y="215" width="95" height="55" class="sens" rx="4"/>
+    <text x="602" y="232" class="bname" text-anchor="middle" font-size="11">홀 6 · 날씨</text>
+    <text x="602" y="250" class="bsub" text-anchor="middle">A3144</text>
+  </g>
+
+  <!-- Lines from hall to ESP32 -->
+  <line x1="360" y1="270" x2="360" y2="330" stroke="#0d7a3f" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="365" y="300" class="note" fill="#0d7a3f">6 × GPIO (INT)</text>
+
+  <!-- ============ LED bar (left of ESP32) ============ -->
+  <rect x="110" y="350" width="140" height="55" class="pwr_box" rx="4"/>
+  <text x="180" y="370" class="bname" text-anchor="middle">LED 바 (5V)</text>
+  <text x="180" y="385" class="bsub" text-anchor="middle">확산 커버, 4 자리 공통</text>
+  <text x="180" y="399" class="bsub" text-anchor="middle">MOSFET PWM 제어</text>
+  <line x1="250" y1="377" x2="280" y2="377" stroke="#b35800" stroke-width="1.3" marker-end="url(#ar)"/>
+  <text x="253" y="372" class="iface">PWM</text>
+
+  <!-- ============ Power (right of ESP32) ============ -->
+  <rect x="480" y="350" width="150" height="55" class="pwr_box" rx="4"/>
+  <text x="555" y="370" class="bname" text-anchor="middle">5V 3A 어댑터</text>
+  <text x="555" y="385" class="bsub" text-anchor="middle">2.1mm DC 바렐잭</text>
+  <text x="555" y="399" class="bsub" text-anchor="middle">ESP32 · 모터 · LED 공통</text>
+  <line x1="480" y1="377" x2="440" y2="377" stroke="#b35800" stroke-width="1.3" marker-end="url(#ar)"/>
+  <text x="445" y="372" class="iface">5V</text>
+
+  <!-- ============ Network (top of ESP32) ============ -->
+  <text x="20" y="90" class="iface">── 외부 네트워크 (WiFi APSTA 동시 활성) ──</text>
+
+  <!-- STA direction -->
+  <rect x="40" y="105" width="180" height="55" class="net_box" rx="4"/>
+  <text x="130" y="125" class="net" text-anchor="middle">홈 WiFi (STA)</text>
+  <text x="130" y="140" class="bsub" text-anchor="middle">→ NTP: kr.pool.ntp.org</text>
+  <text x="130" y="154" class="bsub" text-anchor="middle">→ 기상청 API</text>
+
+  <!-- AP direction -->
+  <rect x="250" y="105" width="180" height="55" class="net_box" rx="4"/>
+  <text x="340" y="125" class="net" text-anchor="middle">설정 AP ("시계설정")</text>
+  <text x="340" y="140" class="bsub" text-anchor="middle">캡티브 포털 HTTP</text>
+  <text x="340" y="154" class="bsub" text-anchor="middle">폰에서 SSID/PW 입력</text>
+
+  <!-- External services -->
+  <rect x="460" y="105" width="180" height="55" class="net_box" rx="4"/>
+  <text x="550" y="125" class="net" text-anchor="middle">외부 서비스</text>
+  <text x="550" y="140" class="bsub" text-anchor="middle">· NTP (시각 동기)</text>
+  <text x="550" y="154" class="bsub" text-anchor="middle">· KMA 기상청 (1시간/갱신)</text>
+
+  <!-- Connections from network to ESP32 -->
+  <line x1="130" y1="160" x2="310" y2="330" stroke="#0d7a3f" stroke-width="1.2"/>
+  <line x1="340" y1="160" x2="340" y2="330" stroke="#0d7a3f" stroke-width="1.2"/>
+  <line x1="460" y1="140" x2="250" y2="140" stroke="#0d7a3f" stroke-width="1" marker-end="url(#ar2)"/>
+  <text x="340" y="245" class="note" text-anchor="middle" fill="#0d7a3f">WiFi 2.4GHz</text>
+
+  <!-- Summary table at bottom -->
+  <g transform="translate(20, 735)">
+    <rect x="0" y="0" width="680" height="70" fill="#fafbfc" stroke="#ccc"/>
+    <text x="10" y="18" class="bname" font-size="12">핀 할당 요약 (ESP32 직결)</text>
+    <text x="10" y="35" class="bsub">· I2C: SDA(GPIO 21) / SCL(GPIO 22) → DS3231, MCP23017×2 공유</text>
+    <text x="10" y="49" class="bsub">· 홀센서 × 6: GPIO 13, 14, 27, 26, 25, 33 (input with interrupt)</text>
+    <text x="10" y="63" class="bsub">· LED PWM: GPIO 32 (MOSFET 게이트)</text>
+    <text x="375" y="35" class="bsub" fill="#888">여유 GPIO: 0, 2, 4, 5, 16, 17, 18, 19, 23 등</text>
+    <text x="375" y="49" class="bsub" fill="#888">※ 실제 핀 번호는 PCB 설계(Phase 6) 시 확정</text>
+  </g>
+</svg>
