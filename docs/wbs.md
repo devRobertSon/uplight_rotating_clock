@@ -1,6 +1,6 @@
 # WBS · 리스크 · 다음 작업
 
-> 본 문서는 [CONTEXT.md](../CONTEXT.md) §8, §10, §11 기반.
+> 본 문서는 [context.md](context.md) §8, §10, §11 기반.
 
 ---
 

@@ -49,7 +49,7 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | [docs/decisions.md](docs/decisions.md) | 설계 의사결정 로그 (21건 확정 + 기각 이력) |
 | [docs/bom.md](docs/bom.md) | 자재 명세서 (구매 완료 / 보유 / 외주) |
 | [docs/wbs.md](docs/wbs.md) | WBS · 리스크 · 다음 작업 |
-| [CONTEXT.md](CONTEXT.md) | Phase 0·1 전체 컨텍스트 핸드오프 원문 |
+| [docs/context.md](docs/context.md) | Phase 0·1 전체 컨텍스트 핸드오프 원문 |
 
 ### 이미지 산출물
 
@@ -60,6 +60,14 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | [images/bottom_cap_detail.svg](images/bottom_cap_detail.svg) | 하부 캡 상세 (자석 포켓) |
 | [images/led_options_compare.svg](images/led_options_compare.svg) | LED 조명 3안 비교 |
 | [images/block_diagram.svg](images/block_diagram.svg) | 시스템 블록도 (Mega 2560 기준 v2.0) |
+
+### 작업물 폴더
+
+| 경로 | 용도 |
+|---|---|
+| [cad/](cad/) | STEP · STL · DXF (Phase 2 이후 산출물) |
+| [firmware/proto/](firmware/proto/) | 프로토 1자리 Arduino 스케치 (Phase 4) |
+| [firmware/main/](firmware/main/) | 6자리 본편 Arduino 스케치 (Phase 8) |
 
 ---
 
