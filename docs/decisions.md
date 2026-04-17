@@ -54,4 +54,4 @@
 - 드럼 구조 3면도 → [`images/drum_structure.svg`](../images/drum_structure.svg) (D01·D02·D03 근거)
 - 캡 도면 → [`images/cap_drawings.svg`](../images/cap_drawings.svg) (D11·D12·D13 근거)
 - 하부 캡 상세 → [`images/bottom_cap_detail.svg`](../images/bottom_cap_detail.svg) (D10·D11 근거)
-- 시스템 블록도 → [`images/block_diagram.svg`](../images/block_diagram.svg) (구버전, D18 확정 전 기준)
+- 시스템 블록도 → [`images/block_diagram.svg`](../images/block_diagram.svg) (D18 반영 v2.0, Mega 2560 기준)

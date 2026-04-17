@@ -19,8 +19,8 @@
 |---|---|---|---|---|
 | 0. 요구·치수 확정 | ✅ 완료 | 3 | 1 | - |
 | 1. 핵심 설계 결정 | ✅ 완료 | 3 | 1 | - |
-| 2. 프로토 1자리 CAD | 🔜 **착수 대기** | 7 | 3 | - |
-| 3. 프로토 부품 확보 | ⚙️ 주문 완료, 입고 대기 | 2 | 1 | 1~2w |
+| 2. 프로토 1자리 CAD | 🔜 **착수 대기 (Onshape 확정)** | 7 | 3 | - |
+| 3. 프로토 부품 확보 | ⚙️ 주문 완료, 입고 대기 (여유 있음) | 2 | 1 | 병행 |
 | 4. 프로토 조립·펌웨어 | 예정 | 9 | 3 | - |
 | 5. 프로토 검증 | 예정 | 3 | 1 | - |
 | 6. 4자리 본 설계 | 예정 | 17 | 6 | - |
@@ -45,9 +45,9 @@
 | 2-3 | LED 바 관통 구조 CAD | 1 | [`led_options_compare.svg`](../images/led_options_compare.svg) |
 | 2-4 | 1자리분 아크릴 DXF | 1 | [`cap_drawings.svg`](../images/cap_drawings.svg), [`bottom_cap_detail.svg`](../images/bottom_cap_detail.svg) |
 
-- **Deliverable**: STEP/STL + DXF
+- **CAD 툴**: **Onshape** (확정)
+- **Deliverable**: STEP/STL 익스포트 + DXF
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
-- **선행 결정 필요**: 사용자 CAD 툴 확정 (Fusion 360 / SolidWorks / FreeCAD / Onshape)
 
 ---
 
@@ -68,14 +68,13 @@
 
 ## 5. 다음 해야 할 작업 (우선순위 순)
 
-1. **부품 입고 확인** (도착 시)
-   - 모든 품목 점검
-   - DS3231 **R5 저항 제거** 작업
-2. **Phase 2 착수 — 드럼 1자리 CAD 설계**
-   - 사용 CAD 툴 확정 (Fusion 360 / SolidWorks / FreeCAD / Onshape)
+1. **Phase 2 착수 — Onshape로 드럼 1자리 CAD 설계**
    - 기존 SVG 도면 참조하여 모델링
    - 출력: STEP/STL + 1자리분 아크릴 DXF
-3. **블록도 재작성** ([`images/block_diagram.svg`](../images/block_diagram.svg) 구버전 → Mega 2560 기준)
+2. **펌웨어 스켈레톤 선행 작성** (부품 입고 전에도 가능한 일)
+   - AccelStepper · WiFiEspAT · RTClib 연결 스텁
+   - 기상청 API 응답 스트리밍 파싱 프로토
+3. **부품 입고 대기** (도착 시 점검 및 DS3231 R5 저항 제거)
 
 ---
 

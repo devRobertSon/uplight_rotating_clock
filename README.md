@@ -31,7 +31,7 @@
 
 ![시스템 블록도](images/block_diagram.svg)
 
-> ⚠️ **주의**: 현재 블록도는 ESP32 + MCP23017 × 2 기준 **구버전**. Phase 2와 병행하여 Mega 2560 기준으로 재작성 예정.
+Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GPIO 확장 불필요), ESP8266 APSTA 동시 운용.
 
 ### 레이아웃 (좌→우, 단위 mm)
 
@@ -59,12 +59,12 @@
 | [images/cap_drawings.svg](images/cap_drawings.svg) | ∅90·∅60 캡 도면 |
 | [images/bottom_cap_detail.svg](images/bottom_cap_detail.svg) | 하부 캡 상세 (자석 포켓) |
 | [images/led_options_compare.svg](images/led_options_compare.svg) | LED 조명 3안 비교 |
-| [images/block_diagram.svg](images/block_diagram.svg) | 시스템 블록도 (구버전) |
+| [images/block_diagram.svg](images/block_diagram.svg) | 시스템 블록도 (Mega 2560 기준 v2.0) |
 
 ---
 
 ## 다음 해야 할 작업
 
-1. 부품 입고 확인 및 DS3231 R5 저항 제거
-2. Phase 2 착수 — CAD 툴 확정 후 드럼 1자리 설계 (STEP/STL + DXF)
-3. 블록도 Mega 2560 기준 재작성
+1. **Phase 2 착수** — Onshape로 드럼 1자리 CAD 설계 (STEP/STL + DXF)
+2. 부품 입고 대기 중 (아직 여유 있음) — 도착 시 점검 및 DS3231 R5 저항 제거
+3. 펌웨어 스켈레톤 선행 작성 (AccelStepper · WiFiEspAT · RTClib)
