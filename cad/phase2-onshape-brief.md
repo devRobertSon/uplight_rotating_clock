@@ -15,10 +15,22 @@
 
 ### 변수 이름 `#` 기호 규칙
 - **Variable Studio UI Name 칸 (정의)**: `#` 없이 — `drumDiameter`
-- **Variable Studio UI Value 칸 (다른 변수 참조 시)**: `#` 붙여서 — `= 2 * #capThickness + #drumVisibleHeight`
+- **Variable Studio UI Value 칸 (다른 변수 참조 시)**: `#` 붙여서, **`=` 기호 없이** — `2 * #capThickness + #drumVisibleHeight`
 - **Part Studio 치수 입력창**: `#` 붙여서 — `#drumDiameter`
 
-> 요약: **정의할 때는 `#` 없이, 참조할 때는 무조건 `#` 붙임.** Value 칸에서 자기 참조를 할 때도 동일.
+> 요약: **정의할 때는 `#` 없이, 참조할 때는 무조건 `#` 붙임.** 계산식에는 `=` 를 쓰지 않는다 (Onshape가 자동 계산).
+
+### 변수 타입 (Type 칸)
+
+Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 하나로 지정.
+
+| Type | 언제 선택 | 단위 예시 |
+|---|---|---|
+| **Length** | 길이·거리 (mm, inch 등) | `90 mm`, `5.2 mm` |
+| **Number** | 개수·비례수 등 **단위 없는 정수·실수** | `10` (면 수), `7` |
+| **Angle** | (본 프로젝트에선 사용 없음, 참고용) | `36 deg` |
+
+> **주의**: `drumFaces` 같은 면 개수는 반드시 **Number** 로 지정. Length로 두면 `sin(180 deg / #drumFaces)` 같은 식에서 단위 불일치 오류.
 
 ---
 
@@ -56,43 +68,44 @@
 
 ### 2.2 변수 입력 방법
 
-각 변수는 UI 폼에서 **Name · Value · Description** 세 칸을 채워 입력 (코드 아님).
+각 변수는 UI 폼에서 **Name · Type · Value · Description** 네 칸을 채워 입력 (코드 아님).
 - **Name 칸에는 `#` 를 넣지 않음** — `drumDiameter` 라고만 입력
-- **Value 칸**에는 값과 단위를 함께 (`90 mm`, `10`, `180 deg` 등)
-- **Value 칸에서 다른 변수를 참조할 때는 `#` 필수** — 예: `= 2 * #capThickness + #drumVisibleHeight`
+- **Type 칸**은 드롭다운에서 **Length** (길이) 또는 **Number** (단위 없는 수) 선택
+- **Value 칸**: 값과 단위 (`90 mm`, `10` 등). **`=` 를 쓰지 않는다**
+- **Value 칸에서 다른 변수를 참조할 때는 `#` 필수** — 예: `2 * #capThickness + #drumVisibleHeight`
 - Part Studio에서도 참조는 `#drumDiameter` 로
 
 ### 2.3 입력할 변수 목록
 
-| Name | Value | Description |
-|---|---|---|
-| `drumDiameter` | `90 mm` | 드럼 외경 (∅60 variant 존재) |
-| `drumFaces` | `10` | 면 수 (∅60은 7) |
-| `drumVisibleHeight` | `44 mm` | 가시 영역 높이 |
-| `capThickness` | `6 mm` | 캡 두께 |
-| `drumOverallHeight` | `= 2 * #capThickness + #drumVisibleHeight` | 자동 계산: 56 mm |
-| `panelLength` | `55 mm` | 상부 3 + 가시 44 + 하부 6 + 노출 2 |
-| `panelThickness` | `3 mm` | 아크릴 두께 |
-| `panelWidth_90` | `= #drumDiameter * sin(180 deg / #drumFaces)` | 27.81 mm |
-| `panelWidth_60` | `= 60 mm * sin(180 deg / 7)` | 26.04 mm |
-| `slotWidth` | `= #panelThickness + 0.2 mm` | 3.2 mm (FDM 공차) |
-| `hubOuter_90` | `20 mm` | ∅90 캡 허브 외경 |
-| `hubOuter_60` | `18 mm` | ∅60 캡 (D13, 인서트 OD5 수용) |
-| `shaftHole` | `5.2 mm` | 축 홀 (+0.2/-0) |
-| `insertHole` | `4.2 mm` | M3 히트 인서트 OD5×L4 |
-| `magnetDiameter` | `4.1 mm` | 자석 ∅4 + 0.1 여유 |
-| `magnetDepth` | `2.1 mm` | 자석 ∅4×2 + 0.1 여유 |
-| `magnetRadius_90` | `30 mm` | ∅90 드럼 중심 → 자석 중심 |
-| `magnetRadius_60` | `15 mm` | ∅60 드럼 |
-| `baffleThickness` | `2 mm` | 배플 두께 |
-| `gapInner` | `15 mm` | HH·MM 내부 간격 (D22) |
-| `gapOuter` | `20 mm` | 요일/날씨 ↔ 숫자 |
-| `gapColon` | `40 mm` | 콜론 |
-| `shaftDiameter` | `5 mm` | |
-| `shaftLength` | `75 mm` | |
-| `bearingOD` | `16 mm` | 625ZZ 외경 |
-| `bearingID` | `5 mm` | |
-| `bearingWidth` | `5 mm` | |
+| Name | Type | Value | Description |
+|---|---|---|---|
+| `drumDiameter` | Length | `90 mm` | 드럼 외경 (∅60 variant 존재) |
+| `drumFaces` | **Number** | `10` | 면 수 (∅60은 7). Length 아님! |
+| `drumVisibleHeight` | Length | `44 mm` | 가시 영역 높이 |
+| `capThickness` | Length | `6 mm` | 캡 두께 |
+| `drumOverallHeight` | Length | `2 * #capThickness + #drumVisibleHeight` | 자동 계산: 56 mm |
+| `panelLength` | Length | `55 mm` | 상부 3 + 가시 44 + 하부 6 + 노출 2 |
+| `panelThickness` | Length | `3 mm` | 아크릴 두께 |
+| `panelWidth_90` | Length | `#drumDiameter * sin(180 deg / #drumFaces)` | 27.81 mm |
+| `panelWidth_60` | Length | `60 mm * sin(180 deg / 7)` | 26.04 mm |
+| `slotWidth` | Length | `#panelThickness + 0.2 mm` | 3.2 mm (FDM 공차) |
+| `hubOuter_90` | Length | `20 mm` | ∅90 캡 허브 외경 |
+| `hubOuter_60` | Length | `18 mm` | ∅60 캡 (D13, 인서트 OD5 수용) |
+| `shaftHole` | Length | `5.2 mm` | 축 홀 (+0.2/-0) |
+| `insertHole` | Length | `4.2 mm` | M3 히트 인서트 OD5×L4 |
+| `magnetDiameter` | Length | `4.1 mm` | 자석 ∅4 + 0.1 여유 |
+| `magnetDepth` | Length | `2.1 mm` | 자석 ∅4×2 + 0.1 여유 |
+| `magnetRadius_90` | Length | `30 mm` | ∅90 드럼 중심 → 자석 중심 |
+| `magnetRadius_60` | Length | `15 mm` | ∅60 드럼 |
+| `baffleThickness` | Length | `2 mm` | 배플 두께 |
+| `gapInner` | Length | `15 mm` | HH·MM 내부 간격 (D22) |
+| `gapOuter` | Length | `20 mm` | 요일/날씨 ↔ 숫자 |
+| `gapColon` | Length | `40 mm` | 콜론 |
+| `shaftDiameter` | Length | `5 mm` | |
+| `shaftLength` | Length | `75 mm` | |
+| `bearingOD` | Length | `16 mm` | 625ZZ 외경 |
+| `bearingID` | Length | `5 mm` | |
+| `bearingWidth` | Length | `5 mm` | |
 
 ### 2.4 Part Studio에서 변수 참조하기
 
