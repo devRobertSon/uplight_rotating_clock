@@ -14,8 +14,11 @@
 | **Assembly** | Part Studio 파트 인스턴스 배치 + Mate | 프로토 1자리 1 어셈블리 | §9 |
 
 ### 변수 이름 `#` 기호 규칙
-- **Variable Studio UI Name 칸**: `#` 없이 — `drumDiameter`
+- **Variable Studio UI Name 칸 (정의)**: `#` 없이 — `drumDiameter`
+- **Variable Studio UI Value 칸 (다른 변수 참조 시)**: `#` 붙여서 — `= 2 * #capThickness + #drumVisibleHeight`
 - **Part Studio 치수 입력창**: `#` 붙여서 — `#drumDiameter`
+
+> 요약: **정의할 때는 `#` 없이, 참조할 때는 무조건 `#` 붙임.** Value 칸에서 자기 참조를 할 때도 동일.
 
 ---
 
@@ -56,7 +59,8 @@
 각 변수는 UI 폼에서 **Name · Value · Description** 세 칸을 채워 입력 (코드 아님).
 - **Name 칸에는 `#` 를 넣지 않음** — `drumDiameter` 라고만 입력
 - **Value 칸**에는 값과 단위를 함께 (`90 mm`, `10`, `180 deg` 등)
-- 참조는 Part Studio에서 `#drumDiameter` 로
+- **Value 칸에서 다른 변수를 참조할 때는 `#` 필수** — 예: `= 2 * #capThickness + #drumVisibleHeight`
+- Part Studio에서도 참조는 `#drumDiameter` 로
 
 ### 2.3 입력할 변수 목록
 
@@ -66,12 +70,12 @@
 | `drumFaces` | `10` | 면 수 (∅60은 7) |
 | `drumVisibleHeight` | `44 mm` | 가시 영역 높이 |
 | `capThickness` | `6 mm` | 캡 두께 |
-| `drumOverallHeight` | `= 2 * capThickness + drumVisibleHeight` | 자동 계산: 56 mm |
+| `drumOverallHeight` | `= 2 * #capThickness + #drumVisibleHeight` | 자동 계산: 56 mm |
 | `panelLength` | `55 mm` | 상부 3 + 가시 44 + 하부 6 + 노출 2 |
 | `panelThickness` | `3 mm` | 아크릴 두께 |
-| `panelWidth_90` | `= drumDiameter * sin(180 deg / drumFaces)` | 27.81 mm |
+| `panelWidth_90` | `= #drumDiameter * sin(180 deg / #drumFaces)` | 27.81 mm |
 | `panelWidth_60` | `= 60 mm * sin(180 deg / 7)` | 26.04 mm |
-| `slotWidth` | `= panelThickness + 0.2 mm` | 3.2 mm (FDM 공차) |
+| `slotWidth` | `= #panelThickness + 0.2 mm` | 3.2 mm (FDM 공차) |
 | `hubOuter_90` | `20 mm` | ∅90 캡 허브 외경 |
 | `hubOuter_60` | `18 mm` | ∅60 캡 (D13, 인서트 OD5 수용) |
 | `shaftHole` | `5.2 mm` | 축 홀 (+0.2/-0) |
