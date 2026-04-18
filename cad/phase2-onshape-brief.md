@@ -4,11 +4,26 @@
 
 ---
 
+## 0. Onshape 탭 역할과 본 브리프 매핑
+
+| 탭 | 실제 용도 | 본 프로젝트 용도 | 해당 섹션 |
+|---|---|---|---|
+| **Variable Studio** | 글로벌 변수 정의 (UI 폼: Name·Value·Description 입력) | 모든 치수 변수 | §2 |
+| **Feature Studio** | 커스텀 FeatureScript 코드 작성 (함수·자체 피처) | **사용 안 함** | — |
+| **Part Studio** | 스케치·피처 트리로 파트 모델링 | 파트 7종 각 1 스튜디오 | §3 ~ §8 |
+| **Assembly** | Part Studio 파트 인스턴스 배치 + Mate | 프로토 1자리 1 어셈블리 | §9 |
+
+### 변수 이름 `#` 기호 규칙
+- **Variable Studio UI Name 칸**: `#` 없이 — `drumDiameter`
+- **Part Studio 치수 입력창**: `#` 붙여서 — `#drumDiameter`
+
+---
+
 ## 1. Onshape 문서 구조
 
 ```
 📄 Document: "Uplight Rotating Clock"
-├── 📐 Variable Studio: "Clock Config"
+├── 📐 Variable Studio: "Clock Config"        (글로벌 변수 정의)
 ├── 🔧 Part Studio: "01 Drum ∅90 Caps"       (상·하부 캡 2파트, variant)
 ├── 🔧 Part Studio: "02 Acrylic Panel 90"    (27.8 × 55 × 3mm 단일파트)
 ├── 🔧 Part Studio: "03 Shaft & Bearing"     (Ø5×75, 625ZZ)
@@ -18,6 +33,8 @@
 ├── 🔧 Part Studio: "07 Frame Section"       (1자리 폭 프레임)
 └── 🗂 Assembly: "Proto 1-Digit"
 ```
+
+> **Feature Studio 탭은 사용하지 않음**. Feature Studio는 커스텀 FeatureScript 코드(함수·자체 피처) 작성 전용이며, Phase 2에서는 불필요. Onshape의 변수는 **Variable Studio** 탭에서 관리.
 
 ### 기존 결정 참조
 - 드럼 외관·치수: [`../docs/spec.md`](../docs/spec.md) §2
@@ -29,50 +46,57 @@
 
 ## 2. Variable Studio — 글로벌 변수
 
-Onshape **Feature Studio** 탭에서 `Create FeatureScript → Variable Studio` 생성 후 아래 변수 정의.
+### 2.1 Variable Studio 탭 만들기
 
-```
-// ========== 드럼 기본 ==========
-#drumDiameter       = 90 * millimeter      // ∅90, 본편 ∅60 variant
-#drumFaces          = 10                   // ∅60은 7
-#drumVisibleHeight  = 44 * millimeter      // 가시 영역
-#capThickness       = 6 * millimeter
-#drumOverallHeight  = 2 * #capThickness + #drumVisibleHeight  // 56
-#panelLength        = #capThickness / 2 + #drumVisibleHeight + #capThickness + 2 * millimeter
-                    //  = 3 + 44 + 6 + 2 = 55mm (상부 반관통 3, 가시 44, 하부 관통 6, 노출 2)
+1. 문서 하단 탭바 `+` → **Variable Studio** 선택
+2. 이름: `Clock Config`
 
-// ========== 아크릴 패널 ==========
-#panelThickness     = 3 * millimeter
-#panelWidth_90      = PI * #drumDiameter * sin(180 deg / #drumFaces) / (PI)
-                    // chord = 2*r*sin(pi/n). ∅90·10면 ≈ 27.81mm
-                    // ∅60·7면 ≈ 26.04mm
-#slotWidth          = #panelThickness + 0.2 * millimeter    // 3.2 (FDM 공차)
+### 2.2 변수 입력 방법
 
-// ========== 캡 허브 ==========
-#hubOuter_90        = 20 * millimeter
-#hubOuter_60        = 18 * millimeter      // D13 히트 인서트 OD5 수용 (15→18)
-#shaftHole          = 5.2 * millimeter     // H7 상당, +0.2/-0
-#insertHole         = 4.2 * millimeter     // M3 히트 인서트 OD5 × L4 자립 홀
+각 변수는 UI 폼에서 **Name · Value · Description** 세 칸을 채워 입력 (코드 아님).
+- **Name 칸에는 `#` 를 넣지 않음** — `drumDiameter` 라고만 입력
+- **Value 칸**에는 값과 단위를 함께 (`90 mm`, `10`, `180 deg` 등)
+- 참조는 Part Studio에서 `#drumDiameter` 로
 
-// ========== 자석 포켓 (하부 캡만) ==========
-#magnetDiameter     = 4.1 * millimeter     // 자석 ∅4 + 0.1 여유
-#magnetDepth        = 2.1 * millimeter
-#magnetRadius_90    = 30 * millimeter      // 드럼 중심 → 자석 중심
-#magnetRadius_60    = 15 * millimeter      // 보수적 선정 (더 안쪽)
+### 2.3 입력할 변수 목록
 
-// ========== 프레임 · 레이아웃 ==========
-#baffleThickness    = 2 * millimeter
-#gapInner           = 15 * millimeter      // HH·MM 내부 (D22)
-#gapOuter           = 20 * millimeter      // 요일/날씨 ↔ 숫자
-#gapColon           = 40 * millimeter      // 콜론
+| Name | Value | Description |
+|---|---|---|
+| `drumDiameter` | `90 mm` | 드럼 외경 (∅60 variant 존재) |
+| `drumFaces` | `10` | 면 수 (∅60은 7) |
+| `drumVisibleHeight` | `44 mm` | 가시 영역 높이 |
+| `capThickness` | `6 mm` | 캡 두께 |
+| `drumOverallHeight` | `= 2 * capThickness + drumVisibleHeight` | 자동 계산: 56 mm |
+| `panelLength` | `55 mm` | 상부 3 + 가시 44 + 하부 6 + 노출 2 |
+| `panelThickness` | `3 mm` | 아크릴 두께 |
+| `panelWidth_90` | `= drumDiameter * sin(180 deg / drumFaces)` | 27.81 mm |
+| `panelWidth_60` | `= 60 mm * sin(180 deg / 7)` | 26.04 mm |
+| `slotWidth` | `= panelThickness + 0.2 mm` | 3.2 mm (FDM 공차) |
+| `hubOuter_90` | `20 mm` | ∅90 캡 허브 외경 |
+| `hubOuter_60` | `18 mm` | ∅60 캡 (D13, 인서트 OD5 수용) |
+| `shaftHole` | `5.2 mm` | 축 홀 (+0.2/-0) |
+| `insertHole` | `4.2 mm` | M3 히트 인서트 OD5×L4 |
+| `magnetDiameter` | `4.1 mm` | 자석 ∅4 + 0.1 여유 |
+| `magnetDepth` | `2.1 mm` | 자석 ∅4×2 + 0.1 여유 |
+| `magnetRadius_90` | `30 mm` | ∅90 드럼 중심 → 자석 중심 |
+| `magnetRadius_60` | `15 mm` | ∅60 드럼 |
+| `baffleThickness` | `2 mm` | 배플 두께 |
+| `gapInner` | `15 mm` | HH·MM 내부 간격 (D22) |
+| `gapOuter` | `20 mm` | 요일/날씨 ↔ 숫자 |
+| `gapColon` | `40 mm` | 콜론 |
+| `shaftDiameter` | `5 mm` | |
+| `shaftLength` | `75 mm` | |
+| `bearingOD` | `16 mm` | 625ZZ 외경 |
+| `bearingID` | `5 mm` | |
+| `bearingWidth` | `5 mm` | |
 
-// ========== 샤프트 · 베어링 ==========
-#shaftDiameter      = 5 * millimeter
-#shaftLength        = 75 * millimeter
-#bearingOD          = 16 * millimeter       // 625ZZ
-#bearingID          = 5 * millimeter
-#bearingWidth       = 5 * millimeter
-```
+### 2.4 Part Studio에서 변수 참조하기
+
+각 Part Studio 맨 위에 **Variable Studio 피처**를 삽입하여 연결:
+
+1. Part Studio 좌상단 `Feature ▾` → `Variable Studio` 선택
+2. Reference 대화상자에서 `Clock Config` 선택 → ✓
+3. 이후 스케치 치수 입력창에 `#drumDiameter` 등으로 사용
 
 ---
 
