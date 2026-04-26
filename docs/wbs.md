@@ -9,7 +9,7 @@
 - **주당 가용 시간**: 3시간
 - **총 순 공수**: 약 **94 h**
 - **예상 경과**: **25~27주** (부품 리드타임 병행 반영)
-- **현재 진행률**: ~7% (Phase 0·1 완료, 순 6 h 소진)
+- **현재 진행률**: ~10% (Phase 0·1 완료, Phase 2 진행 중)
 
 ---
 
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | 0. 요구·치수 확정 | ✅ 완료 | 3 | 1 | - |
 | 1. 핵심 설계 결정 | ✅ 완료 | 3 | 1 | - |
-| 2. 프로토 1자리 CAD | 🔜 **착수 대기 (Onshape 확정)** | 7 | 3 | - |
+| 2. 프로토 1자리 CAD | 🔄 **진행 중** (∅90 Caps 완료, Panel DXF 발주 문의 중) | 7 | 3 | - |
 | 3. 프로토 부품 확보 | ⚙️ 주문 완료, 입고 대기 (여유 있음) | 2 | 1 | 병행 |
 | 4. 프로토 조립·펌웨어 | 예정 | 9 | 3 | - |
 | 5. 프로토 검증 | 예정 | 3 | 1 | - |
@@ -34,20 +34,45 @@
 
 ---
 
-## 3. Phase 2 상세 (다음 착수)
+## 3. Phase 2 상세 (진행 중)
 
-**Sub-tasks**
+### 3.1 진행 현황 (스냅샷 2026-04-26)
 
-| ID | 작업 | 순(h) | 참조 |
+| Part Studio / 산출물 | 상태 | 비고 |
+|---|---|---|
+| `Clock Config` Variable Studio | ✅ 완료 | 26개 변수 (drumDiameter_90/60, slotLength, hubBossHeight 등) |
+| `01 Drum ∅90 Caps` Part Studio | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss / M3 Hole / Configuration Checkbox `hasMagnet` / 자석 포켓 모두 적용 |
+| `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성, 가공 업체에 인그레이빙+커팅 가능 여부 문의 중 |
+| `03 Shaft & Bearing` | ⏳ 대기 | Phase 2 §5 절차 |
+| `04 Coupler` (헬리컬 빔) | ⏳ 대기 | 다음 세션 |
+| `05 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
+| `06 Hall Bracket` (A3144) | ⏳ 대기 | |
+| `07 Frame Section` (1자리, 105mm) | ⏳ 대기 | |
+| `08 Drum ∅60 Caps` (선택) | ⏳ 보류 | Phase 6 본편에서 ∅90 Caps 복제 + `_90` → `_60` 치환 |
+| Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
+
+### 3.2 Sub-task 진행 매핑
+
+| ID | 작업 | 순(h) | 상태 |
 |---|---|---|---|
-| 2-1 | 수직축 드럼 CAD (∅90, L 50, 10면) | 3 | [`drum_structure.svg`](../images/drum_structure.svg) |
-| 2-2 | 축·베어링·스텝 모터 마운트 | 2 | — |
-| 2-3 | LED 바 관통 구조 CAD | 1 | [`led_options_compare.svg`](../images/led_options_compare.svg) |
-| 2-4 | 1자리분 아크릴 DXF | 1 | [`cap_drawings.svg`](../images/cap_drawings.svg), [`bottom_cap_detail.svg`](../images/bottom_cap_detail.svg) |
+| 2-1 | 수직축 드럼 CAD (∅90, 10면, 보스 포함) | 3 | ✅ 완료 |
+| 2-2 | 축·베어링·스텝 모터 마운트 | 2 | ⏳ 대기 |
+| 2-3 | LED 바 관통 구조 CAD (Frame Section 안에) | 1 | ⏳ 대기 |
+| 2-4 | 1자리분 아크릴 DXF (10 digit master sheet) | 1 | ✅ 완료 (발주 문의 중) |
 
 - **CAD 툴**: **Onshape** (확정)
 - **Deliverable**: STEP/STL 익스포트 + DXF
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
+- **세부 작업 지시서**: [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md)
+
+### 3.3 Phase 2 진행 중 결정·정정 (D22~D25)
+
+| ID | 결정 | 발생 시점 |
+|---|---|---|
+| D22 | 드럼 간격 10 → 15 mm | Phase 2 시작 직후 |
+| D23 | 슬롯 길이 = `2·(apothem-slotWidth)·tan(180°/n) - 0.5`, 패널 폭 = 슬롯 - 0.2 (∅90: 25.03 / ∅60: 22.24) | CAD Step 6 슬롯 비겹침 발견 |
+| D24 | 슬롯 깊이 상부 3 Blind / 하부 6 Through | CAD Step 5 |
+| D25 | 허브 보스 ∅20 × 6 mm 위로 돌출, M3 홀 자리 확보 | CAD Step 7 (M3 홀 z 자리 부족 문제) |
 
 ---
 
@@ -56,6 +81,7 @@
 | 리스크 | 영향 | 대응 |
 |---|---|---|
 | 슬롯 공차 3.2 mm 불일치 | 중 | 1개 테스트 프린트 후 ±0.1 mm 조정 |
+| 아크릴 가공 업체 인그레이빙+커팅 가능 여부 | **중·미확정** | **현재 발주 문의 중** — 불가 시 다른 업체 또는 분리 발주 |
 | 28BYJ-48 스텝 누적 오차 | 중 | 하프 스텝 + 매시 정각 홈 복귀 |
 | Mega 8KB RAM 한계 | 중 | 기상청 JSON 스트리밍 파싱 |
 | ESP8266 AT 펌웨어 버전 차이 | 중 | WiFiEspAT 라이브러리 채택 |
@@ -66,15 +92,40 @@
 
 ---
 
-## 5. 다음 해야 할 작업 (우선순위 순)
+## 5. 다음 세션 시작 시 할 일 (우선순위 순)
 
-1. **Phase 2 착수 — Onshape로 드럼 1자리 CAD 설계**
-   - 기존 SVG 도면 참조하여 모델링
-   - 출력: STEP/STL + 1자리분 아크릴 DXF
-2. **펌웨어 스켈레톤 선행 작성** (부품 입고 전에도 가능한 일)
-   - AccelStepper · WiFiEspAT · RTClib 연결 스텁
-   - 기상청 API 응답 스트리밍 파싱 프로토
-3. **부품 입고 대기** (도착 시 점검 및 DS3231 R5 저항 제거)
+> 다음에 작업 재개할 때 이 섹션을 먼저 보세요.
+
+### 5.1 즉시 (병렬 가능)
+
+1. **아크릴 가공 업체 회신 확인**
+   - 인그레이빙+커팅 가능 여부 / 단가 / 리드타임
+   - 가능 시: 발주 진행 (수량은 [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md) §4.4 표 참조)
+   - 불가 시: 다른 업체 견적 또는 인그레이빙·컷 분리 발주 검토
+
+### 5.2 Onshape Phase 2 잔여 Part Studio (브리프 §5~§9 순서)
+
+순서대로 모델링. 각 단계는 [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md) 해당 섹션 참조.
+
+| 다음 작업 | 브리프 위치 | 예상 순공수 |
+|---|---|---|
+| `03 Shaft & Bearing` Part Studio | §5 | 15분 |
+| `05 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
+| `06 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
+| `07 Frame Section` (1자리, 105 mm 폭) | §8 | 1시간 |
+| `04 Coupler` (3D 프린트 헬리컬 빔) | (브리프 미상세) | 1시간 |
+| Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
+| Export STEP / STL × 6 / DXF | §11 | 15분 |
+
+### 5.3 부품 입고 후 (병행)
+
+- 입고 점검
+- DS3231 R5 (200 Ω) 저항 제거 (인두 1분 작업)
+- 샤프트 75 mm 실측 → Variable Studio `shaftLength` 보정
+
+### 5.4 펌웨어 스켈레톤 선행 (선택)
+
+부품 입고 전에도 가능. AccelStepper · WiFiEspAT · RTClib 연결 스텁을 `firmware/proto/` 에 작성.
 
 ---
 
