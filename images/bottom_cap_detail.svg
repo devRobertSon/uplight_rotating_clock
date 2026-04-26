@@ -24,7 +24,7 @@
   <g>
     <rect x="0" y="0" width="640" height="560" fill="#fff" stroke="#e0e0e0"/>
     <text x="20" y="28" class="title">1. 하부 캡 · 상면도 (위에서 ↓ 본 시점)</text>
-    <text x="20" y="46" class="sub">∅90 × 두께 6mm · 10 슬롯 3.2×28mm 관통 · 축 홀 ∅5 + M3 세트스크류 · 자석 포켓(밑면)</text>
+    <text x="20" y="46" class="sub">∅90 × 두께 6mm · 10 슬롯 3.2×25.23mm 관통 · 축 홀 ∅5 + M3 세트스크류 · 자석 포켓(밑면)</text>
 
     <!-- Decagon outline -->
     <polygon 
@@ -33,16 +33,16 @@
 
     <!-- 10 slots using rotate transform -->
     <g fill="#b8c6d6" stroke="#2f5179" stroke-width="0.8">
-      <rect x="278.28" y="398.82" width="83.44" height="9.6"/>
-      <g transform="rotate(36 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(72 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(108 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(144 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(180 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(216 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(252 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(288 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
-      <g transform="rotate(324 320 280)"><rect x="278.28" y="398.82" width="83.44" height="9.6"/></g>
+      <rect x="282.16" y="398.82" width="75.69" height="9.6"/>
+      <g transform="rotate(36 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(72 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(108 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(144 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(180 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(216 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(252 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(288 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
+      <g transform="rotate(324 320 280)"><rect x="282.16" y="398.82" width="75.69" height="9.6"/></g>
     </g>
 
     <!-- Slot # labels on a few slots -->
@@ -78,10 +78,12 @@
 
     <!-- Callout: slot dim -->
     <line x1="320" y1="404" x2="320" y2="462" stroke="#2255aa" stroke-width="0.6"/>
-    <line x1="278" y1="408.42" x2="278" y2="475" stroke="#2255aa" stroke-width="0.5" stroke-dasharray="3,2"/>
-    <line x1="362" y1="408.42" x2="362" y2="475" stroke="#2255aa" stroke-width="0.5" stroke-dasharray="3,2"/>
-    <line x1="278" y1="470" x2="362" y2="470" stroke="#2255aa" stroke-width="0.7" marker-start="url(#arBs)" marker-end="url(#arB)"/>
-    <text x="320" y="487" class="dim" text-anchor="middle">28mm (면 폭)</text>
+    <line x1="282.16" y1="408.42" x2="282.16" y2="475" stroke="#2255aa" stroke-width="0.5" stroke-dasharray="3,2"/>
+    <line x1="357.85" y1="408.42" x2="357.85" y2="475" stroke="#2255aa" stroke-width="0.5" stroke-dasharray="3,2"/>
+    <line x1="282.16" y1="470" x2="357.85" y2="470" stroke="#2255aa" stroke-width="0.7" marker-start="url(#arBs)" marker-end="url(#arB)"/>
+    <text x="320" y="487" class="dim" text-anchor="middle">25.23mm (슬롯 길이)</text>
+    <text x="320" y="500" class="note" text-anchor="middle">패널 폭 25.03 + 0.2 clearance</text>
+    <text x="320" y="513" class="note" text-anchor="middle">(면 chord 27.81 보다 짧음 — 인접 슬롯 비겹침)</text>
     
     <!-- Slot width detail call-out -->
     <line x1="362" y1="403.6" x2="480" y2="430" stroke="#2255aa" stroke-width="0.5"/>
