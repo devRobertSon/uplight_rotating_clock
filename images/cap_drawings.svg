@@ -88,8 +88,9 @@
     <!-- Slot width call-out -->
     <line x1="290" y1="413.6" x2="350" y2="395" stroke="#2255aa" stroke-width="0.5"/>
     <text x="355" y="394" class="dim">슬롯</text>
-    <text x="355" y="406" class="dim">3.2 × 28</text>
+    <text x="355" y="406" class="dim">3.2 × 25.23</text>
     <text x="355" y="418" class="note">10개 / 36° 피치</text>
+    <text x="355" y="430" class="note">(radial × tangential)</text>
 
     <!-- Hub detail -->
     <line x1="250" y1="290" x2="375" y2="280" stroke="#2255aa" stroke-width="0.5"/>
@@ -184,7 +185,7 @@
     <text x="103" y="672" class="note" text-anchor="middle">관통</text>
 
     <!-- Note at bottom -->
-    <text x="20" y="735" class="note">※ 슬롯은 6mm 전체 관통 (아크릴 패널이 캡을 통과). 상부 캡도 동일하게 관통 슬롯.</text>
+    <text x="20" y="735" class="note">※ 하부 캡: 슬롯 6mm 관통. 상부 캡: 슬롯 깊이 3mm Blind (관통 X) — 패널 위쪽 끝이 캡 안에서 멈춤.</text>
     <text x="20" y="748" class="note">※ 상부 캡 탈착으로 패널 교체 — M3 세트스크류 풀고 축 방향으로 슬라이드 탈거.</text>
   </g>
 
@@ -246,8 +247,9 @@
     <!-- Slot call-out -->
     <line x1="285" y1="366" x2="350" y2="375" stroke="#2255aa" stroke-width="0.5"/>
     <text x="355" y="373" class="dim">슬롯</text>
-    <text x="355" y="385" class="dim">3.2 × 26</text>
+    <text x="355" y="385" class="dim">3.2 × 22.44</text>
     <text x="355" y="397" class="note">7개 / 51.43° 피치</text>
+    <text x="355" y="409" class="note">(radial × tangential)</text>
 
     <!-- Hub details -->
     <line x1="242" y1="290" x2="375" y2="280" stroke="#2255aa" stroke-width="0.5"/>

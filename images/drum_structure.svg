@@ -148,8 +148,9 @@
     <line x1="267" y1="364" x2="193" y2="364" stroke="#2255aa" stroke-width="1.5"/>
     <line x1="267" y1="364" x2="267" y2="380" stroke="#2255aa" stroke-width="0.5"/>
     <line x1="193" y1="364" x2="193" y2="380" stroke="#2255aa" stroke-width="0.5"/>
-    <text x="488" y="200" class="dim">면(chord) = 27.8 mm</text>
-    <text x="488" y="216" class="sub">= 아크릴 판 폭</text>
+    <text x="488" y="200" class="dim">면(chord) = 27.81 mm</text>
+    <text x="488" y="216" class="sub">패널 폭 = 25.03 mm</text>
+    <text x="488" y="230" class="note">(슬롯 비겹침 + 0.2 clearance)</text>
     <line x1="485" y1="222" x2="270" y2="364" stroke="#2255aa" stroke-width="0.5" stroke-dasharray="3,2" opacity="0.5"/>
 
     <!-- Note -->
