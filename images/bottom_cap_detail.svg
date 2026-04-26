@@ -96,6 +96,7 @@
 
     <!-- Note at top right -->
     <text x="20" y="75" class="note">※ 상부 캡도 동일 형상, 자석 포켓만 없음. 상부 캡을 나사 3개로 분리 → 패널 탈부착 가능.</text>
+    <text x="20" y="90" class="note" fill="#a02020">※ 본 평면도는 캡 base disk만 표시. 별도 ∅20 × 6mm 허브 보스가 위(또는 조립 시 아래)로 돌출 — 단면 A-A 참조 (D25).</text>
   </g>
 
   <!-- ============ Panel 2: Section A-A ============ -->
@@ -124,6 +125,14 @@
     <!-- Draw cap as 3 rectangles -->
     <rect x="69.2" y="250" width="235.8" height="36" fill="#d0dae7" stroke="#5a7aa0" stroke-width="1.3"/>
     <rect x="335" y="250" width="235.8" height="36" fill="#d0dae7" stroke="#5a7aa0" stroke-width="1.3"/>
+
+    <!-- Hub boss (∅20 × 6mm) above cap top, centered. Scale 6px/mm → 120px wide × 36px tall -->
+    <rect x="260" y="214" width="120" height="36" fill="#c3d1e3" stroke="#5a7aa0" stroke-width="1.3"/>
+    <text x="320" y="208" class="sub" text-anchor="middle">허브 보스 ∅20 × 6 (D25)</text>
+
+    <!-- M3 insert hole through boss midheight (z=9, y=232 in this drawing) -->
+    <rect x="290" y="227" width="60" height="10" fill="#fffbe7" stroke="#333" stroke-width="0.8"/>
+    <text x="358" y="234" class="note">M3 ∅4.2</text>
 
     <!-- Magnet pocket: blind hole from bottom, ∅4 x 2mm deep -->
     <!-- Position: at 30mm from center, on front (left) side -->
