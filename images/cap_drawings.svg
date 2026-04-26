@@ -41,16 +41,16 @@
 
     <!-- 10 slots -->
     <g fill="#b8c6d6" stroke="#2f5179" stroke-width="0.8">
-      <rect x="178.28" y="408.80" width="83.44" height="9.6"/>
-      <g transform="rotate(36 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(72 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(108 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(144 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(180 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(216 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(252 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(288 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
-      <g transform="rotate(324 220 290)"><rect x="178.28" y="408.80" width="83.44" height="9.6"/></g>
+      <rect x="182.16" y="408.80" width="75.69" height="9.6"/>
+      <g transform="rotate(36 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(72 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(108 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(144 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(180 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(216 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(252 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(288 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
+      <g transform="rotate(324 220 290)"><rect x="182.16" y="408.80" width="75.69" height="9.6"/></g>
     </g>
 
     <!-- Slot numbering -->
@@ -205,13 +205,13 @@
 
     <!-- 7 slots -->
     <g fill="#b8c6d6" stroke="#2f5179" stroke-width="0.8">
-      <rect x="180.95" y="361.49" width="78.10" height="9.6"/>
-      <g transform="rotate(51.43 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
-      <g transform="rotate(102.86 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
-      <g transform="rotate(154.29 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
-      <g transform="rotate(205.71 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
-      <g transform="rotate(257.14 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
-      <g transform="rotate(308.57 220 290)"><rect x="180.95" y="361.49" width="78.10" height="9.6"/></g>
+      <rect x="186.34" y="361.49" width="67.32" height="9.6"/>
+      <g transform="rotate(51.43 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
+      <g transform="rotate(102.86 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
+      <g transform="rotate(154.29 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
+      <g transform="rotate(205.71 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
+      <g transform="rotate(257.14 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
+      <g transform="rotate(308.57 220 290)"><rect x="186.34" y="361.49" width="67.32" height="9.6"/></g>
     </g>
 
     <!-- Slot numbering -->
