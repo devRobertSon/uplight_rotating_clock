@@ -36,12 +36,12 @@
 
 ## 3. Phase 2 상세 (진행 중)
 
-### 3.1 진행 현황 (스냅샷 2026-04-26)
+### 3.1 진행 현황 (스냅샷 2026-04-27)
 
 | Part Studio / 산출물 | 상태 | 비고 |
 |---|---|---|
 | `Clock Config` Variable Studio | ✅ 완료 | 26개 변수 (drumDiameter_90/60, slotLength, hubBossHeight 등) |
-| `01 Drum ∅90 Caps` Part Studio | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss / M3 Hole / Configuration Checkbox `hasMagnet` / 자석 포켓 모두 적용 |
+| `01 Drum ∅90 Caps` Part Studio | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss 12 mm / M3 Hole / Configuration Checkbox `hasMagnet` / 자석 포켓 모두 적용. 1차 프린트 후 보스 6→12 mm 상향 (D25), 샤프트 75→100 mm (D26) 변수 갱신 필요 |
 | `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성, 가공 업체에 인그레이빙+커팅 가능 여부 문의 중 |
 | `03 Shaft & Bearing` | ⏳ 대기 | Phase 2 §5 절차 |
 | `04 Coupler` (헬리컬 빔) | ⏳ 대기 | 다음 세션 |
@@ -65,14 +65,15 @@
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
 - **세부 작업 지시서**: [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md)
 
-### 3.3 Phase 2 진행 중 결정·정정 (D22~D25)
+### 3.3 Phase 2 진행 중 결정·정정 (D22~D26)
 
 | ID | 결정 | 발생 시점 |
 |---|---|---|
 | D22 | 드럼 간격 10 → 15 mm | Phase 2 시작 직후 |
 | D23 | 슬롯 길이 = `2·(apothem-slotWidth)·tan(180°/n) - 0.5`, 패널 폭 = 슬롯 - 0.2 (∅90: 25.03 / ∅60: 22.24) | CAD Step 6 슬롯 비겹침 발견 |
 | D24 | 슬롯 깊이 상부 3 Blind / 하부 6 Through | CAD Step 5 |
-| D25 | 허브 보스 ∅20 × 6 mm 위로 돌출, M3 홀 자리 확보 | CAD Step 7 (M3 홀 z 자리 부족 문제) |
+| D25 | 허브 보스 ∅20 × **12 mm** 위로 돌출, M3 홀 자리 확보 (1차 6 mm 시도 후 12 mm로 상향) | CAD Step 7 (M3 홀 z 자리 부족) + 1차 프린트 검증 |
+| D26 | 샤프트 75 → **100 mm** 신규 발주 (75 mm × 10개 폐기) | D25 보스 12 mm 후 스택 97~99 mm로 75 mm 부족 |
 
 ---
 
@@ -82,6 +83,8 @@
 |---|---|---|
 | 슬롯 공차 3.2 mm 불일치 | 중 | 1개 테스트 프린트 후 ±0.1 mm 조정 |
 | 아크릴 가공 업체 인그레이빙+커팅 가능 여부 | **중·미확정** | **현재 발주 문의 중** — 불가 시 다른 업체 또는 분리 발주 |
+| 75 mm 샤프트 10개 폐기 비용 (D26) | 하 | 다른 용도로 활용 또는 매각 |
+| Frame 측면 기둥 140 mm 부족 가능 (스택 ~149 mm) | 중 | §7 Frame Section 모델링 시 150~155 mm로 상향 또는 모터 매립 |
 | 28BYJ-48 스텝 누적 오차 | 중 | 하프 스텝 + 매시 정각 홈 복귀 |
 | Mega 8KB RAM 한계 | 중 | 기상청 JSON 스트리밍 파싱 |
 | ESP8266 AT 펌웨어 버전 차이 | 중 | WiFiEspAT 라이브러리 채택 |
@@ -121,7 +124,7 @@
 
 - 입고 점검
 - DS3231 R5 (200 Ω) 저항 제거 (인두 1분 작업)
-- 샤프트 75 mm 실측 → Variable Studio `shaftLength` 보정
+- ∅5 × **100 mm** 샤프트 신규 발주 (D26, 기존 75 mm 폐기) → 입고 후 실측 → `shaftLength` 변수 보정
 
 ### 5.4 펌웨어 스켈레톤 선행 (선택)
 
