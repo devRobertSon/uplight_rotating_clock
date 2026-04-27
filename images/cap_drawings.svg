@@ -153,8 +153,8 @@
     <rect x="332.5" y="605" width="196.5" height="30" fill="#d0dae7" stroke="#5a7aa0" stroke-width="1.2"/>
 
     <!-- Hub boss (∅20 × 6mm) above cap top, centered. Scale 5px/mm → 100px wide × 30px tall -->
-    <rect x="270" y="575" width="100" height="30" fill="#c3d1e3" stroke="#5a7aa0" stroke-width="1.2"/>
-    <text x="320" y="568" class="lbl" text-anchor="middle">허브 보스 ∅20 × 6</text>
+    <rect x="270" y="545" width="100" height="60" fill="#c3d1e3" stroke="#5a7aa0" stroke-width="1.2"/>
+    <text x="320" y="538" class="lbl" text-anchor="middle">허브 보스 ∅20 × 12</text>
 
     <!-- Slot labels above (moved up since boss covers original area) -->
     <text x="103" y="598" class="lbl" text-anchor="middle">슬롯 0</text>
@@ -164,9 +164,9 @@
     <line x1="320" y1="540" x2="320" y2="675" stroke="#444" stroke-width="7"/>
     <text x="334" y="555" class="dim">축 ∅5</text>
 
-    <!-- M3 heat insert hole through boss midheight (z=9, y=590 in drawing) -->
-    <rect x="295" y="585" width="50" height="10" fill="#fffbe7" stroke="#333" stroke-width="0.8"/>
-    <text x="350" y="593" class="note">M3 홀 (보스 중앙 z=9)</text>
+    <!-- M3 heat insert hole through boss midheight (z=12, y=575 in drawing) -->
+    <rect x="295" y="570" width="50" height="10" fill="#fffbe7" stroke="#333" stroke-width="0.8"/>
+    <text x="350" y="578" class="note">M3 홀 (보스 중앙 z=12)</text>
 
     <!-- Magnet pocket (hatched, on underside) -->
     <!-- R30 from center = 150px at scale 5px/mm → x=170 -->
@@ -309,8 +309,8 @@
     <rect x="332.5" y="595" width="137.5" height="30" fill="#d0dae7" stroke="#5a7aa0" stroke-width="1.2"/>
 
     <!-- Hub boss (∅18 × 6mm) above cap -->
-    <rect x="275" y="565" width="90" height="30" fill="#c3d1e3" stroke="#5a7aa0" stroke-width="1.2"/>
-    <text x="320" y="558" class="lbl" text-anchor="middle">허브 보스 ∅18 × 6</text>
+    <rect x="275" y="535" width="90" height="60" fill="#c3d1e3" stroke="#5a7aa0" stroke-width="1.2"/>
+    <text x="320" y="528" class="lbl" text-anchor="middle">허브 보스 ∅18 × 12</text>
 
     <text x="178" y="588" class="lbl" text-anchor="middle">슬롯 0</text>
     <text x="460" y="588" class="note" text-anchor="middle">(반대쪽 벽재)</text>
@@ -318,9 +318,9 @@
     <!-- Shaft (extended through boss) -->
     <line x1="320" y1="530" x2="320" y2="670" stroke="#444" stroke-width="7"/>
 
-    <!-- M3 insert hole through boss midheight (z=9, y=580) -->
-    <rect x="297" y="575" width="46" height="10" fill="#fffbe7" stroke="#333" stroke-width="0.8"/>
-    <text x="350" y="582" class="note">M3 (z=9)</text>
+    <!-- M3 insert hole through boss midheight (z=12, y=565) -->
+    <rect x="297" y="560" width="46" height="10" fill="#fffbe7" stroke="#333" stroke-width="0.8"/>
+    <text x="350" y="568" class="note">M3 (z=12)</text>
 
     <!-- Magnet pocket at R15 = 75px from center → x=245 -->
     <rect x="235" y="615" width="20" height="10" fill="#2d2d2d" stroke="#000" stroke-width="0.5"/>
