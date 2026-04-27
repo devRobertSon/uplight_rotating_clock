@@ -7,7 +7,7 @@
 ## 현재 상태 (2026-04-26 기준)
 
 - **Phase 0 (요구·치수 확정)** ✅ 완료
-- **Phase 1 (핵심 설계 결정 27건)** ✅ 완료 (D22~D27 Phase 2 진행 중 추가)
+- **Phase 1 (핵심 설계 결정 28건)** ✅ 완료 (D22~D28 Phase 2 진행 중 추가)
 - **Phase 2 (프로토 1자리 CAD)** 🔄 **진행 중**
   - ✅ `Clock Config` Variable Studio (26개 변수)
   - ✅ `01 Drum ∅90 Caps` Part Studio (Step 1~11 전부)
@@ -24,7 +24,7 @@
 | 항목 | 값 |
 |---|---|
 | 드럼 구성 | 요일 ∅60 · HH·MM ∅90 × 4 · 날씨 ∅60 (총 6개) |
-| 총폭 × 깊이 × 높이 | 590 × 95 × 160 mm (D27) |
+| 총폭 × 깊이 × 높이 | 590 × 95 × 140 mm (D28 — 하부 보스를 드럼 내부로) |
 | 패널 | ∅90 드럼 25.03 × 55 × 3 / ∅60 드럼 22.24 × 55 × 3 (D23) |
 | MCU | Arduino Mega 2560 WiFi R3 (ATmega2560 + ESP8266) |
 | 로직 전압 | 5V 통일 (레벨 시프터 불필요) |
@@ -53,7 +53,7 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | 문서 | 내용 |
 |---|---|
 | [docs/spec.md](docs/spec.md) | 기구 · 전자 · 인터페이스 사양 |
-| [docs/decisions.md](docs/decisions.md) | 설계 의사결정 로그 (D01~D27) |
+| [docs/decisions.md](docs/decisions.md) | 설계 의사결정 로그 (D01~D28) |
 | [docs/bom.md](docs/bom.md) | 자재 명세서 (구매 완료 / 보유 / 외주) |
 | [docs/wbs.md](docs/wbs.md) | WBS · Phase 진행 스냅샷 · 리스크 · 다음 작업 |
 | [docs/context.md](docs/context.md) | Phase 0·1 전체 컨텍스트 핸드오프 원문 |
