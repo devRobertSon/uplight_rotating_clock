@@ -85,5 +85,5 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 
 1. **아크릴 업체 회신 확인** — 인그레이빙+컷 가능 여부, 단가, 리드타임
 2. **Onshape Phase 2 잔여 Part Studio** — `cad/phase2-onshape-brief.md` §5~§9 순서대로 (Shaft·Bearing → Motor Mount → Hall Bracket → Frame Section → Coupler → Assembly)
-3. 부품 입고 후 점검 + DS3231 R5 저항 제거 + 샤프트 75 mm 실측 보정
+3. **샤프트 신규 발주** — ∅5 SUS304 × **100 mm** × 10개 (D26, 기존 75 mm 폐기). 입고 후 점검 + DS3231 R5 저항 제거
 4. (선택) 펌웨어 스켈레톤 선행 — `firmware/proto/`
