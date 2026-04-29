@@ -36,7 +36,7 @@
 | D26 | 샤프트 길이 | 75 mm → **100 mm** 신규 발주 (75 mm × 10개 폐기) | D25 양 보스 12 mm 적용으로 스택 12+12+6+44+6+12+5 = 97 mm. 75 mm로는 22 mm 부족, 100 mm로 약 3 mm 마진 |
 | D27 | Frame 측면 기둥 높이 | 140 mm → **160 mm** (D28에 의해 140 mm로 회복) | D25/D26 후 전체 envelope 재계산: 모터 19 + 커플러 25 + 보스 12 + 캡 6 + 드럼 44 + 캡 6 + 보스 12 + 베어링 5 + 상하 plate ≈ 147 mm. 160 mm로 상향해 약 13 mm 조립 버퍼 확보 (시계 외형 높이 590 × 95 × 160) |
 | D28 | 하부 보스 방향 | 하부 캡의 보스를 **드럼 내부 방향(위)** 으로 배치, 드럼 가시 영역(R<10 중심부)과 높이 공유. 양 캡 모두 M3 heat insert + set screw 사용 (접착제 X) — 하부 캡은 조립 단계 ②(패널 삽입 전)에서 set screw 잠그고, 이후 드럼 닫히면서 M3 홀이 드럼 내부로 갇혀 외부 접근 불가. 결과적으로 분해 불가 (의도된 영구 잠금) | 보스 24 mm 외부 추가 → 12 mm 절감. envelope 147 → 127 mm. Frame 측면 기둥 160 → 140 mm 회복. 상부 캡은 보스 외부 유지 → M3 접근·패널 교체 가능 (D13 탈착 반복 부합). CAD 모델 변경 없음 (조립 방향만 변경 — 하부 캡을 뒤집지 않음) |
-| D29 | 패널 폭 freeze | `panelWidth_90` = **25.03 mm**, `panelWidth_60` = **22.24 mm** 고정. 변수 의존 방향 반전: slot ← panel (slotLength = panelWidth + 0.2). drumDiameter·drumFaces·slotWidth 변경 시 panelWidth는 변하지 않음 | 외주 가공 업체에 패널 사양으로 발주 완료. 사후 변경 불가. 향후 어떤 설계 변경도 패널 폭에 영향 주면 안 됨 — drumDiameter 변경 시 panel ≤ chord 조건 검증 필요 (∅82 미만 시 panel이 chord 초과) |
+| D29 | 패널 폭 freeze | `panelWidth_90` = **25.03 mm**, `panelWidth_60` = **22.24 mm** 고정. 변수 의존 방향 반전: slot ← panel (slotLength = panelWidth + 0.2). drumDiameter·drumFaces·slotWidth 변경 시 panelWidth는 변하지 않음. **유도 근거** (D29 freeze 시점): ∅90/10면 → `2·(apothem_90 - slotWidth)·tan(180°/10) - 0.5` = `2·(42.80-3.2)·tan(18°) - 0.5` = 25.23 슬롯, 패널 = 슬롯 - 0.2 = **25.03**. ∅60/7면 → `2·(27.02-3.2)·tan(180°/7) - 0.5` = 22.44 슬롯, 패널 = **22.24** | 외주 가공 업체에 패널 사양으로 발주 완료. 사후 변경 불가. 향후 어떤 설계 변경도 패널 폭에 영향 주면 안 됨 — drumDiameter 변경 시 panel ≤ chord 조건 검증 필요 (∅82 미만 시 panel이 chord 초과) |
 
 ---
 
