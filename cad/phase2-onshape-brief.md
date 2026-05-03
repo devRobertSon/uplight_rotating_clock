@@ -693,50 +693,33 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 
 ### 5.7.3 Feature tree
 
-#### Step 1 — Sketch "outer body" (Top plane)
+#### Step 1 — Sketch "coupler outline" (Top plane)
+
+베어링과 동일 방식 — 동심원 2개로 ring 스케치.
 
 | 항목 | 값 |
 |---|---|
 | 평면 | Top |
-| 도구 | Center point circle |
-| 중심 | 원점 (Coincident) |
-| Diameter | `#couplerOD` (= 19) |
+| 도구 | Center point circle × **2** (동심원) |
+| 중심 (둘 다) | 원점 (Coincident) |
+| 외측 Diameter | `#couplerOD` (= 19) |
+| 내측 Diameter | `#shaftDiameter` (= 5) |
 
 → Sketch 종료.
 
-#### Step 2 — Extrude "coupler body"
+#### Step 2 — Extrude "coupler ring"
 
 | 칸 | 값 |
 |---|---|
-| Profile | Step 1 sketch |
+| Profile | 두 원 사이 **ring(annulus) 영역만** 선택 (가운데 작은 원 안쪽 X) |
 | Type | **New** (새 솔리드 파트) |
-| End | Blind |
+| End | **Blind** |
 | Depth | `#couplerLength` (= 25) |
 | Direction | +Z |
 
-→ ∅19 × 25 mm 원기둥.
+→ ∅19 외경 / ∅5 내경 × 25 mm ring (양쪽 통과 보어 자동).
 
-#### Step 3 — Sketch "shaft bore" (top face)
-
-원기둥 윗면 클릭 → New Sketch.
-
-| 항목 | 값 |
-|---|---|
-| 도구 | Center point circle |
-| 중심 | 원점 (Coincident) |
-| Diameter | `#shaftDiameter` (= 5) |
-
-→ Sketch 종료.
-
-#### Step 4 — Extrude Cut "through bore"
-
-| 칸 | 값 |
-|---|---|
-| Profile | Step 3 sketch |
-| Type | **Remove** |
-| End | **Through all** |
-
-→ 양쪽 ∅5 관통 보어. 한쪽엔 모터 샤프트, 반대쪽엔 드럼 샤프트.
+> ring 영역이 한 번에 안 잡히면 두 영역(ring + 가운데 disc) 모두 New 추가 후 별도 Extrude Remove로 가운데 disc 빼기.
 
 ### 5.7.4 파트 이름 정리
 
