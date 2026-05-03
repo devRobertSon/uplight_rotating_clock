@@ -43,12 +43,13 @@
 | `Clock Config` Variable Studio | ✅ 완료 | 26개 변수 (drumDiameter_90/60, slotLength, hubBossHeight 등) |
 | `01 Drum ∅90 Caps` Part Studio | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss 12 mm / M3 Hole / Configuration Checkbox `hasMagnet` / 자석 포켓 모두 적용. 1차 프린트 후 보스 6→12 mm 상향 (D25), 샤프트 75→100 mm (D26) 변수 갱신 필요 |
 | `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성, 가공 업체에 인그레이빙+커팅 가능 여부 문의 중 |
-| `03 Shaft & Bearing` | ⏳ 대기 | Phase 2 §5 절차 |
-| `04 Coupler` (헬리컬 빔) | ⏳ 대기 | 다음 세션 |
-| `05 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
-| `06 Hall Bracket` (A3144) | ⏳ 대기 | |
-| `07 Frame Section` (1자리, 105mm) | ⏳ 대기 | |
-| `08 Drum ∅60 Caps` (선택) | ⏳ 보류 | Phase 6 본편에서 ∅90 Caps 복제 + `_90` → `_60` 치환 |
+| `03 Shaft` | ⏳ 대기 | Phase 2 §5 (Shaft·Bearing 분리됨) |
+| `04 Bearing 625ZZ` | ⏳ 대기 | Phase 2 §5.5 |
+| `05 Coupler` (헬리컬 빔) | ⏳ 대기 | 다음 세션 |
+| `06 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
+| `07 Hall Bracket` (A3144) | ⏳ 대기 | |
+| `08 Frame Section` (1자리, 105mm) | ⏳ 대기 | |
+| `09 Drum ∅60 Caps` (선택) | ⏳ 보류 | Phase 6 본편에서 ∅90 Caps 복제 + `_90` → `_60` 치환 |
 | Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
 
 ### 3.2 Sub-task 진행 매핑
@@ -115,11 +116,12 @@
 
 | 다음 작업 | 브리프 위치 | 예상 순공수 |
 |---|---|---|
-| `03 Shaft & Bearing` Part Studio | §5 | 15분 |
-| `05 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
-| `06 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
-| `07 Frame Section` (1자리, 105 mm 폭) | §8 | 1시간 |
-| `04 Coupler` (3D 프린트 헬리컬 빔) | (브리프 미상세) | 1시간 |
+| `03 Shaft` Part Studio | §5 | 10분 |
+| `04 Bearing 625ZZ` | §5.5 | 10분 |
+| `06 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
+| `07 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
+| `08 Frame Section` (1자리, 105 mm 폭) | §8 | 1시간 |
+| `05 Coupler` (3D 프린트 헬리컬 빔) | (브리프 미상세) | 1시간 |
 | Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
 | Export STEP / STL × 6 / DXF | §11 | 15분 |
 
