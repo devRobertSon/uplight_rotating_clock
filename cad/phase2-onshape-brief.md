@@ -672,18 +672,128 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 
 ## 6. Part Studio "06 Motor Mount"
 
-### 28BYJ-48 치수 참조
-- 본체 ∅28 × H19 mm (기어부)
-- 마운트 플랜지: 2개 M4(실제 ∅3) 홀, 중심 간 35mm, 샤프트 중심 오프셋 약 8mm
-- 샤프트 돌출: ∅5 × L8
+### 28BYJ-48 마운팅 기하 (이해)
 
-### Feature tree (플레이트 브라켓)
-1. **Sketch** 50 × 40 직사각형 (드럼 바닥 프레임 고정용 플레이트)
-2. **Extrude** 3mm
-3. **Sketch** 모터 샤프트 통과 홀 (∅6 여유) + M4×2 홀 (35mm 간격)
-4. **Extrude** 관통 빼기
-5. **Sketch** 프레임 고정 볼트 홀 4개 (M3) 모서리에
-6. **Extrude** 관통 빼기
+```
+[측면도]
+                         ↑ 모터 샤프트 (∅5 D-cut, 8mm 돌출)
+                         │
+       ┌──플랜지──┐      │
+       │  ●     ● │   ← 마운팅 홀 (∅3, 중심간 35mm), 샤프트 중심 ±17.5
+       └─────────┘
+              ↓
+       ┌─────────┐
+       │         │   ← 모터 본체 ∅28 × H19 (기어 박스)
+       │         │      ↑ 본체 중심은 샤프트에서 +X로 ~8mm 어긋남
+       └─────────┘
+```
+
+> **샤프트와 모터 본체 중심이 일치하지 않음**. 마운트 플레이트 좌표는 **샤프트 중심**을 원점으로.
+
+### 6.1 Part Studio 생성 + Variable 연결
+
+1. 탭바 `+` → **Part Studio**, 이름 `06 Motor Mount`
+2. `Feature ▾` → **Variable Studio** → `Clock Config`
+3. 본 단계는 새 변수 추가 없음 (리터럴 값 직접 입력)
+
+### 6.2 Feature tree
+
+#### Step 1 — Sketch "base plate" (Top plane)
+
+| 항목 | 값 |
+|---|---|
+| 평면 | Top |
+| 도구 | Center point rectangle |
+| 중심 | 원점 (Coincident) |
+| Width (X) | **50 mm** (마운트 홀 정렬축) |
+| Depth (Y) | **40 mm** |
+
+→ Sketch 종료.
+
+#### Step 2 — Extrude "plate body"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 1 sketch |
+| Type | **New** (새 솔리드 파트) |
+| End | Blind |
+| Depth | **3 mm** |
+| Direction | +Z |
+
+→ 50 × 40 × 3 mm 플레이트.
+
+#### Step 3 — Sketch "shaft + motor mount holes" (top face)
+
+플레이트 윗면(z=3) 클릭 → New Sketch. 원 3개:
+
+| 홀 | 위치 (X, Y) | Diameter |
+|---|---|---|
+| 모터 샤프트 통과 | (0, 0) | **6 mm** (∅5 + 1 clearance) |
+| 모터 마운트 좌 | (-17.5, 0) | **3.2 mm** (M3 clearance) |
+| 모터 마운트 우 | (+17.5, 0) | 3.2 mm |
+
+> 정렬은 X축 위 한 줄. Y축은 마운트 홀에서 사용 안 함.
+
+#### Step 4 — Extrude Cut "shaft + mount holes"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 3 sketch (3개 원) |
+| Type | **Remove** |
+| End | **Through all** |
+
+→ ∅6 1개 + ∅3.2 2개 관통.
+
+#### Step 5 — Sketch "frame fix holes" (4 corners)
+
+플레이트 윗면 → New Sketch. 4 모서리:
+
+| 홀 | 위치 (X, Y) | Diameter |
+|---|---|---|
+| 좌상 | (-20, +15) | 3.2 mm |
+| 우상 | (+20, +15) | 3.2 mm |
+| 좌하 | (-20, -15) | 3.2 mm |
+| 우하 | (+20, -15) | 3.2 mm |
+
+> 코너에서 5mm 안쪽. Sketch Mirror 또는 Linear pattern으로 1개 → 4개 자동 가능.
+
+#### Step 6 — Extrude Cut "frame holes"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 5 sketch (4개 원) |
+| Type | **Remove** |
+| End | **Through all** |
+
+→ 4모서리 M3 관통.
+
+### 6.3 파트 이름 정리
+
+Parts 패널 → `Part 1` Rename → **`Motor Mount`**.
+
+### 6.4 검증
+
+| 확인 | 기대 |
+|---|---|
+| 플레이트 외형 | 50 × 40 × 3 mm |
+| 중앙 ∅6 (모터 샤프트) | 1개 |
+| ∅3.2 모터 마운트 (35 mm 간격) | 2개 (X축) |
+| ∅3.2 프레임 고정 (코너) | 4개 |
+| 총 홀 수 | 7개 |
+
+### 6.5 STL 출력 설정
+
+| 설정 | 값 |
+|---|---|
+| 재료 | PETG |
+| Layer | 0.2 mm |
+| Infill | 40% |
+| 출력 방향 | 평면이 베드와 평행 (지지대 불필요) |
+
+### 6.6 주의사항
+
+- 모터 샤프트가 본체 중심에서 8mm 어긋남 → 모터 본체는 플레이트 중심에서 한쪽(+X 또는 -X)으로 치우쳐 매달림. **§8 Frame Section** 설계 시 이 비대칭 반영.
+- 마운트 홀 정렬 축(X)을 드럼 면 방향과 일치시킬지 직각으로 둘지는 Frame Section에서 결정.
 
 ---
 
