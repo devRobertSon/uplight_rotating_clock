@@ -120,6 +120,8 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | `bearingOD` | Length | `16 mm` | 625ZZ 외경 |
 | `bearingID` | Length | `5 mm` | |
 | `bearingWidth` | Length | `5 mm` | |
+| `couplerOD` | Length | `19 mm` | B02 보유 커플러 외경 (실측, 보유품 freeze) |
+| `couplerLength` | Length | `25 mm` | B02 보유 커플러 길이 (실측). 내경은 `#shaftDiameter` 재사용 |
 
 ### 2.4 Part Studio에서 변수 참조하기
 
@@ -674,22 +676,20 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 
 보유 커플러 (B02, ∅5↔∅5 유연 × 10) 사용. CAD에서는 **간섭 체크용 placeholder**만 모델링. 헬리컬 슬롯·M3 set screw 홀 등 디테일은 모델 생략.
 
-### 5.7.1 사전 — 보유 커플러 실측
+### 5.7.1 보유 커플러 사양 (실측 freeze)
 
-칼리퍼스로 측정 (placeholder는 ±0.5 mm 허용):
-
-| 항목 | 일반 범위 | 측정값 입력 |
+| 항목 | 값 | 변수 |
 |---|---|---|
-| 외경 (OD) | ∅14~16 mm | (실측값) |
-| 길이 (L) | 25~30 mm | (실측값) |
+| 외경 (OD) | ∅19 mm | `#couplerOD` |
+| 길이 (L) | 25 mm | `#couplerLength` |
+| 내경 | ∅5 mm | `#shaftDiameter` (재사용) |
 
-> 측정 못하면 일단 ∅14 × 25 mm로 진행 후 부품 입고 시 재조정.
+§2.3 변수 표에 `couplerOD = 19 mm`, `couplerLength = 25 mm` 추가 필요. 다른 보유품과 마찬가지로 freeze.
 
 ### 5.7.2 Part Studio 생성 + Variable 연결
 
 1. 탭바 `+` → **Part Studio**, 이름 `05 Coupler`
 2. `Feature ▾` → **Variable Studio** → `Clock Config`
-3. 본 단계는 새 변수 추가 없음 (실측값 리터럴 입력)
 
 ### 5.7.3 Feature tree
 
@@ -700,7 +700,7 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 | 평면 | Top |
 | 도구 | Center point circle |
 | 중심 | 원점 (Coincident) |
-| Diameter | **14 mm** (실측값으로 교체) |
+| Diameter | `#couplerOD` (= 19) |
 
 → Sketch 종료.
 
@@ -711,10 +711,10 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 | Profile | Step 1 sketch |
 | Type | **New** (새 솔리드 파트) |
 | End | Blind |
-| Depth | **25 mm** (실측값으로 교체) |
+| Depth | `#couplerLength` (= 25) |
 | Direction | +Z |
 
-→ ∅14 × 25 mm 원기둥.
+→ ∅19 × 25 mm 원기둥.
 
 #### Step 3 — Sketch "shaft bore" (top face)
 
@@ -746,7 +746,7 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 | 확인 | 기대 |
 |---|---|
-| 외형 | ∅14 × 25 (또는 실측값) |
+| 외형 | ∅19 × 25 |
 | 관통 보어 | ∅5 |
 | Parts 패널 | 1개 (`Coupler (placeholder)`) |
 
