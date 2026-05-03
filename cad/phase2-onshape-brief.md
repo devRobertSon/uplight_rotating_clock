@@ -43,7 +43,7 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 ├── 🔧 Part Studio: "02 Acrylic Panel 90"    (27.8 × 55 × 3mm 단일파트)
 ├── 🔧 Part Studio: "03 Shaft"               (Ø5×100mm 연마봉)
 ├── 🔧 Part Studio: "04 Bearing 625ZZ"       (∅16/∅5×5mm)
-├── 🔧 Part Studio: "05 Coupler"             (3D프린트 헬리컬 빔)
+├── 🔧 Part Studio: "05 Coupler"             (보유 placeholder, 3D 프린트는 Phase 6 옵션)
 ├── 🔧 Part Studio: "06 Motor Mount"         (28BYJ-48 브라켓)
 ├── 🔧 Part Studio: "07 Hall Bracket"        (A3144 + 풀업)
 ├── 🔧 Part Studio: "08 Frame Section"       (1자리 폭 프레임)
@@ -670,6 +670,106 @@ Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
 
 ---
 
+## 5.7 Part Studio "05 Coupler"
+
+보유 커플러 (B02, ∅5↔∅5 유연 × 10) 사용. CAD에서는 **간섭 체크용 placeholder**만 모델링. 헬리컬 슬롯·M3 set screw 홀 등 디테일은 모델 생략.
+
+### 5.7.1 사전 — 보유 커플러 실측
+
+칼리퍼스로 측정 (placeholder는 ±0.5 mm 허용):
+
+| 항목 | 일반 범위 | 측정값 입력 |
+|---|---|---|
+| 외경 (OD) | ∅14~16 mm | (실측값) |
+| 길이 (L) | 25~30 mm | (실측값) |
+
+> 측정 못하면 일단 ∅14 × 25 mm로 진행 후 부품 입고 시 재조정.
+
+### 5.7.2 Part Studio 생성 + Variable 연결
+
+1. 탭바 `+` → **Part Studio**, 이름 `05 Coupler`
+2. `Feature ▾` → **Variable Studio** → `Clock Config`
+3. 본 단계는 새 변수 추가 없음 (실측값 리터럴 입력)
+
+### 5.7.3 Feature tree
+
+#### Step 1 — Sketch "outer body" (Top plane)
+
+| 항목 | 값 |
+|---|---|
+| 평면 | Top |
+| 도구 | Center point circle |
+| 중심 | 원점 (Coincident) |
+| Diameter | **14 mm** (실측값으로 교체) |
+
+→ Sketch 종료.
+
+#### Step 2 — Extrude "coupler body"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 1 sketch |
+| Type | **New** (새 솔리드 파트) |
+| End | Blind |
+| Depth | **25 mm** (실측값으로 교체) |
+| Direction | +Z |
+
+→ ∅14 × 25 mm 원기둥.
+
+#### Step 3 — Sketch "shaft bore" (top face)
+
+원기둥 윗면 클릭 → New Sketch.
+
+| 항목 | 값 |
+|---|---|
+| 도구 | Center point circle |
+| 중심 | 원점 (Coincident) |
+| Diameter | `#shaftDiameter` (= 5) |
+
+→ Sketch 종료.
+
+#### Step 4 — Extrude Cut "through bore"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 3 sketch |
+| Type | **Remove** |
+| End | **Through all** |
+
+→ 양쪽 ∅5 관통 보어. 한쪽엔 모터 샤프트, 반대쪽엔 드럼 샤프트.
+
+### 5.7.4 파트 이름 정리
+
+Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
+
+### 5.7.5 검증
+
+| 확인 | 기대 |
+|---|---|
+| 외형 | ∅14 × 25 (또는 실측값) |
+| 관통 보어 | ∅5 |
+| Parts 패널 | 1개 (`Coupler (placeholder)`) |
+
+### 5.7.6 placeholder 모델 한계
+
+실제 커플러는:
+- 헬리컬 슬롯 (유연성)
+- 양쪽 끝 M3 set screw 홀 (샤프트 잠금)
+
+이 디테일은 모델 생략. Assembly에서 **외형 envelope·길이 간섭 체크용**으로만 사용.
+
+### 5.7.7 (선택) 3D 프린트 헬리컬 커플러 — Phase 6 본편
+
+자체 출력 시 추가 작업 (Onshape 중급, 30분):
+1. **Helix feature** (Curves 메뉴) — 축, pitch 8 mm, 길이 16 mm
+2. 작은 직사각형 단면 sketch (1 mm × 5 mm)
+3. **Sweep Cut** (단면을 helix 따라 스윕)
+4. 양쪽 끝 솔리드 영역에 M3 (∅3.2 또는 `#insertHole` for heat insert) 측면 홀
+
+본 브리프엔 미상세. 필요 시 별도 절차.
+
+---
+
 ## 6. Part Studio "06 Motor Mount"
 
 ### 28BYJ-48 마운팅 기하 (이해)
@@ -916,7 +1016,7 @@ cad/
 | 4 | 02 Acrylic Panel | 15분 |
 | 5 | 03 Shaft | 10분 |
 | 6 | 04 Bearing 625ZZ | 10분 |
-| 7 | 05 Coupler (다음 세션) | 1h |
+| 7 | 05 Coupler (placeholder) | 10분 |
 | 8 | 06 Motor Mount | 45분 |
 | 9 | 07 Hall Bracket | 30분 |
 | 10 | 08 Frame Section | 1h |

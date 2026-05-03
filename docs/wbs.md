@@ -45,7 +45,7 @@
 | `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성, 가공 업체에 인그레이빙+커팅 가능 여부 문의 중 |
 | `03 Shaft` | ⏳ 대기 | Phase 2 §5 (Shaft·Bearing 분리됨) |
 | `04 Bearing 625ZZ` | ⏳ 대기 | Phase 2 §5.5 |
-| `05 Coupler` (헬리컬 빔) | ⏳ 대기 | 다음 세션 |
+| `05 Coupler` (placeholder) | ⏳ 대기 | Phase 2 §5.7 — 보유품 placeholder 모델 |
 | `06 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
 | `07 Hall Bracket` (A3144) | ⏳ 대기 | |
 | `08 Frame Section` (1자리, 105mm) | ⏳ 대기 | |
@@ -121,7 +121,7 @@
 | `06 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
 | `07 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
 | `08 Frame Section` (1자리, 105 mm 폭) | §8 | 1시간 |
-| `05 Coupler` (3D 프린트 헬리컬 빔) | (브리프 미상세) | 1시간 |
+| `05 Coupler` (placeholder) | §5.7 | 10분 |
 | Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
 | Export STEP / STL × 6 / DXF | §11 | 15분 |
 
