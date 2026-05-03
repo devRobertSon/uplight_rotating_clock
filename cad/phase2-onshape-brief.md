@@ -41,11 +41,12 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 ├── 📐 Variable Studio: "Clock Config"        (글로벌 변수 정의)
 ├── 🔧 Part Studio: "01 Drum ∅90 Caps"       (상·하부 캡 2파트, variant)
 ├── 🔧 Part Studio: "02 Acrylic Panel 90"    (27.8 × 55 × 3mm 단일파트)
-├── 🔧 Part Studio: "03 Shaft & Bearing"     (Ø5×75, 625ZZ)
-├── 🔧 Part Studio: "04 Coupler"             (3D프린트 헬리컬 빔)
-├── 🔧 Part Studio: "05 Motor Mount"         (28BYJ-48 브라켓)
-├── 🔧 Part Studio: "06 Hall Bracket"        (A3144 + 풀업)
-├── 🔧 Part Studio: "07 Frame Section"       (1자리 폭 프레임)
+├── 🔧 Part Studio: "03 Shaft"               (Ø5×100mm 연마봉)
+├── 🔧 Part Studio: "04 Bearing 625ZZ"       (∅16/∅5×5mm)
+├── 🔧 Part Studio: "05 Coupler"             (3D프린트 헬리컬 빔)
+├── 🔧 Part Studio: "06 Motor Mount"         (28BYJ-48 브라켓)
+├── 🔧 Part Studio: "07 Hall Bracket"        (A3144 + 풀업)
+├── 🔧 Part Studio: "08 Frame Section"       (1자리 폭 프레임)
 └── 🗂 Assembly: "Proto 1-Digit"
 ```
 
@@ -541,14 +542,14 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 
 ---
 
-## 4.5 Part Studio "08 Drum ∅60 Caps" (선택, Phase 6 본편용)
+## 4.5 Part Studio "09 Drum ∅60 Caps" (선택, Phase 6 본편용)
 
 Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 분리가 잘 작동하는지 미리 검증하려면 ∅60 캡도 만들어 두는 게 안전.
 
 ### 가장 간단한 방법 — Part Studio 복사 후 `_90` → `_60` 치환
 
 1. 문서 하단 탭바에서 `01 Drum ∅90 Caps` **우클릭** → **Duplicate** (또는 Copy & Paste)
-2. 복사본 이름 → `08 Drum ∅60 Caps`
+2. 복사본 이름 → `09 Drum ∅60 Caps`
 3. 복사본의 Feature 트리에서 각 피처를 더블클릭하여 편집, 아래 표대로 변수만 일괄 교체:
 
 | 변수 (∅90) | 교체 (∅60) | 사용 위치 |
@@ -582,19 +583,94 @@ Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 �
 
 ---
 
-## 5. Part Studio "03 Shaft & Bearing"
+## 5. Part Studio "03 Shaft"
 
-### Shaft
-1. **Sketch** Ø`#shaftDiameter`, Extrude `#shaftLength`
-2. Fillet 양 끝단 R0.3 (모따기 대체)
+샤프트 단일 파트만 모델링. 베어링은 §5.5에서 별도 Part Studio로.
 
-### Bearing 625ZZ (간략 모델)
-1. **Sketch** OD `#bearingOD / 2`, ID `#bearingID / 2`, Extrude `#bearingWidth`
-2. 링 형태. 실제 내부 볼 생략 (단순 placeholder)
+### 5.1 Part Studio 생성 + Variable 연결
+
+1. 탭바 `+` → **Part Studio**, 이름 `03 Shaft`
+2. `Feature ▾` → **Variable Studio** → `Clock Config`
+
+### 5.2 Feature tree
+
+#### Step 1 — Sketch on Top plane
+
+| 항목 | 값 |
+|---|---|
+| 평면 | Top |
+| 도구 | Center point circle |
+| 중심 | 원점 (Coincident) |
+| Diameter | `#shaftDiameter` (= 5) |
+
+→ Sketch 종료.
+
+#### Step 2 — Extrude "Shaft"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 1 sketch |
+| Type | **New** (새 솔리드 파트) |
+| End | **Blind** |
+| Depth | `#shaftLength` (= 100) |
+| Direction | +Z (위쪽) |
+
+→ ∅5 × 100 mm 원기둥.
+
+#### Step 3 (선택) — Chamfer 양 끝
+
+조립 시 끼움 용이하게 양 끝 edge에 0.3 mm Chamfer (또는 Fillet).
+- 실제 SUS304 연마봉은 보통 모따기 되어 있어 생략 가능.
+
+### 5.3 파트 이름 정리
+Parts 패널의 `Part 1` 우클릭 → Rename → **`Shaft`**.
 
 ---
 
-## 6. Part Studio "05 Motor Mount"
+## 5.5 Part Studio "04 Bearing 625ZZ"
+
+베어링도 단일 파트만. 샤프트와 별개 Part Studio.
+
+### 5.5.1 Part Studio 생성 + Variable 연결
+1. 탭바 `+` → **Part Studio**, 이름 `04 Bearing 625ZZ`
+2. `Feature ▾` → **Variable Studio** → `Clock Config`
+
+### 5.5.2 Feature tree
+
+#### Step 1 — Sketch on Top plane
+
+| 항목 | 값 |
+|---|---|
+| 평면 | Top |
+| 도구 | Center point circle × **2** (동심원) |
+| 중심 (둘 다) | 원점 (Coincident) |
+| 외측 Diameter | `#bearingOD` (= 16) |
+| 내측 Diameter | `#bearingID` (= 5) |
+
+→ Sketch 종료.
+
+#### Step 2 — Extrude "Bearing 625ZZ"
+
+| 칸 | 값 |
+|---|---|
+| Profile | 두 원 사이 **ring(annulus) 영역만** 선택 (가운데 작은 원 안쪽 X) |
+| Type | **New** |
+| End | **Blind** |
+| Depth | `#bearingWidth` (= 5) |
+| Direction | +Z |
+
+→ ∅16 외경 / ∅5 내경 × 5 mm ring 1개.
+
+> ring 영역이 한 영역으로 안 잡히면: 두 영역 모두 New 추가 후 별도 Extrude Remove로 가운데 disc 빼기.
+
+### 5.5.3 파트 이름 정리
+Parts 패널의 `Part 1` → Rename → **`Bearing 625ZZ`**.
+
+> 실제 부품은 내부 볼·실드 있으나 모델은 외형 ring만 (간섭 체크 충분).
+
+---
+
+## 6. Part Studio "06 Motor Mount"
 
 ### 28BYJ-48 치수 참조
 - 본체 ∅28 × H19 mm (기어부)
@@ -611,7 +687,7 @@ Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 �
 
 ---
 
-## 7. Part Studio "06 Hall Bracket"
+## 7. Part Studio "07 Hall Bracket"
 
 ### A3144 치수
 - TO-92 패키지: 4 × 3.2 × 1.5mm + 리드 3개
@@ -628,7 +704,7 @@ Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 �
 
 ---
 
-## 8. Part Studio "07 Frame Section" (1자리 분)
+## 8. Part Studio "08 Frame Section" (1자리 분)
 
 1자리 폭 = 드럼 ∅90 + 좌우 여유 7.5mm씩 (내부 간격 15mm의 절반) = **105 mm**
 
@@ -716,7 +792,7 @@ cad/
 
 - Phase 3: 부품 입고 후 실측 → Variable Studio 값 조정 (실제 샤프트 길이, 베어링 폭 편차 등)
 - Phase 4: 이 어셈블리를 실제 조립하며 공차 검증 → 슬롯 폭·허브 크기 재조정
-- Phase 6: `01 Drum ∅90 Caps` Part Studio 복제 → `08 Drum ∅60 Caps`로 개명 → 모든 `_90` 참조를 `_60`로 치환 → 프레임 6자리로 확장
+- Phase 6: `01 Drum ∅90 Caps` Part Studio 복제 → `09 Drum ∅60 Caps`로 개명 → 모든 `_90` 참조를 `_60`로 치환 → 프레임 6자리로 확장
 
 ---
 
@@ -728,12 +804,13 @@ cad/
 | 2 | 01 Caps (상부 먼저) | 1h |
 | 3 | Configuration으로 하부 자석 포켓 추가 | 30분 |
 | 4 | 02 Acrylic Panel | 15분 |
-| 5 | 03 Shaft & Bearing | 15분 |
-| 6 | 04 Coupler (다음 세션) | 1h |
-| 7 | 05 Motor Mount | 45분 |
-| 8 | 06 Hall Bracket | 30분 |
-| 9 | 07 Frame Section | 1h |
-| 10 | Assembly + 간섭 체크 | 1.5h |
-| 11 | Export (STEP/STL/DXF) | 15분 |
+| 5 | 03 Shaft | 10분 |
+| 6 | 04 Bearing 625ZZ | 10분 |
+| 7 | 05 Coupler (다음 세션) | 1h |
+| 8 | 06 Motor Mount | 45분 |
+| 9 | 07 Hall Bracket | 30분 |
+| 10 | 08 Frame Section | 1h |
+| 11 | Assembly + 간섭 체크 | 1.5h |
+| 12 | Export (STEP/STL/DXF) | 15분 |
 
 **총 예상**: 약 7시간 (WBS Phase 2 순공수와 일치)
