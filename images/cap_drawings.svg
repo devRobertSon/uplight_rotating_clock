@@ -88,7 +88,7 @@
     <!-- Slot width call-out -->
     <line x1="290" y1="413.6" x2="350" y2="395" stroke="#2255aa" stroke-width="0.5"/>
     <text x="355" y="394" class="dim">슬롯</text>
-    <text x="355" y="406" class="dim">3.2 × 25.23</text>
+    <text x="355" y="406" class="dim">3.2 × 25.232</text>
     <text x="355" y="418" class="note">10개 / 36° 피치</text>
     <text x="355" y="430" class="note">(radial × tangential)</text>
 
@@ -251,7 +251,7 @@
     <!-- Slot call-out -->
     <line x1="285" y1="366" x2="350" y2="375" stroke="#2255aa" stroke-width="0.5"/>
     <text x="355" y="373" class="dim">슬롯</text>
-    <text x="355" y="385" class="dim">3.2 × 22.44</text>
+    <text x="355" y="385" class="dim">3.2 × 22.451</text>
     <text x="355" y="397" class="note">7개 / 51.43° 피치</text>
     <text x="355" y="409" class="note">(radial × tangential)</text>
 

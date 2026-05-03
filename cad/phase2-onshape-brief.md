@@ -79,7 +79,7 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 
 > 드럼 직경·면 수는 ∅90과 ∅60이 다르므로 **둘 다 별개 변수로** 등록.
 >
-> **🔒 D29 freeze**: `panelWidth_90` (25.03) / `panelWidth_60` (22.24) 는 외주 발주 완료로 **변경 금지**. 슬롯 길이는 패널에서 유도. drumDiameter·drumFaces 변경 시 패널이 폴리곤 변(chord)보다 작아야 함을 검증 (∅90: panel ≤ 27.81 chord ✓, ∅60: panel ≤ 26.04 chord ✓).
+> **🔒 D29 freeze**: `panelWidth_90` (25.032) / `panelWidth_60` (22.251) 는 외주 발주 완료로 **변경 금지**. 슬롯 길이는 패널에서 유도. drumDiameter·drumFaces 변경 시 패널이 폴리곤 변(chord)보다 작아야 함을 검증 (∅90: panel ≤ 27.812 chord ✓, ∅60: panel ≤ 26.033 chord ✓).
 
 | Name | Type | Value | Description |
 |---|---|---|---|
@@ -95,10 +95,10 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | `apothem_90` | Length | `#drumDiameter_90 / 2 * cos(180 deg / #drumFaces_90)` | 자동 계산: 42.80 mm (변 중심 거리) |
 | `apothem_60` | Length | `#drumDiameter_60 / 2 * cos(180 deg / #drumFaces_60)` | 자동 계산: 27.02 mm |
 | `slotWidth` | Length | `#panelThickness + 0.2 mm` | 슬롯 radial 폭 = 3.2 mm (FDM 공차) |
-| `panelWidth_90` | Length | `25.03 mm` | **🔒 Freeze (D29)** — 외주 발주 완료. 원래 유도식 (∅90, n=10): slot 비겹침 한계 `2·(apothem-slotWidth)·tan(180°/n) - 0.5` = 2·(42.80-3.2)·tan(18°) - 0.5 = 25.23, 패널은 그보다 0.2 mm 작음 → **25.03**. drumDiameter 변경되어도 이 값은 변하지 않음 (literal) |
-| `panelWidth_60` | Length | `22.24 mm` | **🔒 Freeze (D29)** — 외주 발주 완료. 원래 유도식 (∅60, n=7): 2·(27.02-3.2)·tan(180°/7) - 0.5 = 22.44, 패널 = 슬롯 - 0.2 → **22.24** |
-| `slotLength_90` | Length | `#panelWidth_90 + 0.2 mm` | 패널에서 유도: 25.23 mm (양쪽 0.1 clearance) |
-| `slotLength_60` | Length | `#panelWidth_60 + 0.2 mm` | 패널에서 유도: 22.44 mm |
+| `panelWidth_90` | Length | `25.032 mm` | **🔒 Freeze (D29)** — 외주 발주 완료. 원래 유도식 (∅90, n=10): slot 비겹침 한계 `2·(apothem-slotWidth)·tan(180°/n) - 0.5` = 2·(42.798-3.2)·tan(18°) - 0.5 = 25.232, 패널은 그보다 0.2 mm 작음 → **25.032**. drumDiameter 변경되어도 이 값은 변하지 않음 (literal) |
+| `panelWidth_60` | Length | `22.251 mm` | **🔒 Freeze (D29)** — 외주 발주 완료. 원래 유도식 (∅60, n=7): 2·(27.029-3.2)·tan(180°/7) - 0.5 = 22.451, 패널 = 슬롯 - 0.2 → **22.251** |
+| `slotLength_90` | Length | `#panelWidth_90 + 0.2 mm` | 패널에서 유도: 25.232 mm (양쪽 0.1 clearance) |
+| `slotLength_60` | Length | `#panelWidth_60 + 0.2 mm` | 패널에서 유도: 22.451 mm |
 | `slotDepth_top` | Length | `3 mm` | 상부 캡 슬롯 깊이 (관통 X) |
 | `slotDepth_bottom` | Length | `#capThickness` | 하부 캡 슬롯 깊이 = 6 mm (관통 O) |
 | `hubBossHeight` | Length | `12 mm` | 캡 위로 돌출되는 허브 보스 높이 (M3 인서트 위·아래 4 mm 여유 확보, 1차 프린트 시 6 mm가 타이트해 12 mm로 상향) |
@@ -141,7 +141,7 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | 외형 | 정**십각형** (꼭짓점 외접원 ∅90) | "원"으로 그리지 말 것. 정다각형 도구 사용 |
 | 두께 | 6 mm 평판 (보스 없음) | Extrude 한 번 |
 | 허브 보스 | ∅20 × **12 mm** 원기둥, 캡 위로 돌출 | M3 인서트 홀이 슬롯과 겹치지 않게 별도 피처로 추가, 인서트 위·아래 4 mm 여유 |
-| 슬롯 | 3.2(radial) × 25.23(tangential) × 10개 | 폴리곤 변에 평행, 변에서 안쪽으로 3.2 깊이. 길이 = 비겹침 한계 (panel chord 27.81 보다 2.6 짧음). **상부 캡 깊이 3 mm (블라인드)**, 하부 캡 6 mm 관통 |
+| 슬롯 | 3.2(radial) × 25.232(tangential) × 10개 | 폴리곤 변에 평행, 변에서 안쪽으로 3.2 깊이. 길이 = 비겹침 한계 (panel chord 27.812 보다 2.58 짧음). **상부 캡 깊이 3 mm (블라인드)**, 하부 캡 6 mm 관통 |
 | 축 홀 | ∅5.2 관통 (+0.2/-0) | 캡 중심 |
 | M3 세트스크류 | **외주 → 허브 → 축 수평 관통** | 캡 두께 중심선 (z = 3mm)에 ∅4.2 가로 홀 |
 | 자석 포켓 | ∅4.1 × 깊이 2.1, R30, 2개 | 하부 캡 한정 (Configuration variant) |
@@ -226,7 +226,7 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
   1. **수평 정렬**: 직사각형 중심점을 Y축에 **Coincident** (또는 X = 0 치수)
   2. **외측 변 정렬**: 직사각형의 외측 긴 변(아래쪽)을 폴리곤의 -Y 변에 **Coincident**
 - 직사각형 두 치수 명시:
-  - **Width (X 방향, tangential)** = `#slotLength_90` (≈ 25.23 mm) ← **긴 변**
+  - **Width (X 방향, tangential)** = `#slotLength_90` (= 25.232 mm) ← **긴 변**
   - **Height (Y 방향, radial)** = `#slotWidth` (= 3.2 mm) ← **짧은 변**
 - 결과: 슬롯 중심이 자동으로 (0, -(`#apothem_90` - `#slotWidth`/2)) ≈ (0, -41.2)에 위치, 외측 긴 변이 폴리곤 -Y 변과 겹쳐짐 (폴리곤 변 27.81 보다 슬롯이 약 2.6 mm 짧아 vertex 양쪽에 ~1.3 mm 솔리드 띠 남음 — 인접 슬롯과 겹침 방지).
 - ✅ 검증: 슬롯이 "폴리곤 한 변과 평행한 작은 띠" 모양인지 눈으로 확인. "캡 중심을 향해 깊숙이 박힌 막대"면 잘못 (이건 패널 *높이* 방향과 혼동한 것).
@@ -415,7 +415,7 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 
 ## 4. Part Studio "02 Acrylic Panel 90"
 
-패널 1장 모델링 (각인은 업체 처리). 결과: **25.03 × 55 × 3 mm 직육면체** + 발주용 DXF 1장.
+패널 1장 모델링 (각인은 업체 처리). 결과: **25.032 × 55 × 3 mm 직육면체** + 발주용 DXF 1장.
 
 ### 4.1 Part Studio 생성 + Variable 연결
 
@@ -431,7 +431,7 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 | 작업 평면 | **Front plane** (XZ — 패널이 세워진 자세, 두께가 Y로 빠짐) |
 | 도구 | Center point rectangle |
 | 중심점 | 원점 (Coincident) |
-| 가로 (X) | `#panelWidth_90` (≈ 25.03) |
+| 가로 (X) | `#panelWidth_90` (= 25.032) |
 | 세로 (Z) | `#panelLength` (= 55) |
 
 → fully-defined 확인 (모든 선 검은색) 후 Sketch 종료.
@@ -445,7 +445,7 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 | End condition | **Symmetric** (양방향) — 또는 Blind 한 방향 |
 | Depth | `#panelThickness` (= 3) |
 
-→ 25.03 × 55 × 3 mm 직육면체 1개.
+→ 25.032 × 55 × 3 mm 직육면체 1개.
 
 #### Step 3 (선택) — 각인 영역 가이드
 
@@ -456,7 +456,7 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 
 ### 4.3 DXF 추출 (각인 발주용 — 단일 패널)
 
-1. 패널 **앞면(25.03 × 55 평면)** 우클릭 → **Export as DXF/DWG**
+1. 패널 **앞면(25.032 × 55 평면)** 우클릭 → **Export as DXF/DWG**
 2. 파일명: `panel_90_blank.dxf` → `cad/dxf/` 에 저장
 3. 발주처 요청: "각인 폰트로 숫자 0~9 입력 후 각 1장씩 출력" (40장)
 
@@ -493,10 +493,10 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 #### Step 2 — Sketch 격자 (Front plane, 2행 × 5열)
 
 1. Front plane → New Sketch
-2. 좌상단에 첫 사각형 1개: `#panelWidth_90` × `#panelLength` (25.03 × 55)
+2. 좌상단에 첫 사각형 1개: `#panelWidth_90` × `#panelLength` (25.032 × 55)
 3. **Sketch Linear Pattern** (Toolbar):
    - 패턴 대상: 사각형 4변
-   - 방향 1: X축, 거리 30.03 (= 25.03 + 5 mm 간격), 5개
+   - 방향 1: X축, 거리 30.032 (= 25.032 + 5 mm 간격), 5개
    - 방향 2: Y축, 거리 60 (= 55 + 5 mm 간격), 2개
    - → 10개 사각형 격자
 4. 시트 전체 크기: 145.15 × 115 mm (300 × 200 일반 기판에 적합)
@@ -529,7 +529,7 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 #### Step 6 — 발주 사양 텍스트 (DXF 함께 보낼 문서)
 
 ```
-아크릴 3 mm 투명, 25.03 × 55 패널 컷 + 각인
+아크릴 3 mm 투명, 25.032 × 55 패널 컷 + 각인
 각 패널 수량:
   0·1·2 — 각 4장
   3·4·5 — 각 3장
@@ -567,8 +567,8 @@ Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 �
 | 항목 | ∅60 자동값 |
 |---|---|
 | 폴리곤 면 수 | 7 (heptagon) |
-| 패널 폭 | 22.24 mm |
-| 슬롯 길이 | 22.44 mm |
+| 패널 폭 | 22.251 mm |
+| 슬롯 길이 | 22.451 mm |
 | 슬롯 피치 | 360° / 7 ≈ 51.43° |
 | 자석 위치 | R = 15 mm |
 | 보스 외경 | ∅18 |
