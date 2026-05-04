@@ -48,7 +48,7 @@
 | `05 Coupler` (placeholder) | ⏳ 대기 | Phase 2 §5.7 — 보유품 placeholder 모델 |
 | `06 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
 | `07 Hall Bracket` (A3144) | ⏳ 대기 | |
-| `08 Frame Section` (1자리, 105mm) | ⏳ 대기 | |
+| `08a Frame Top Plate` + `08b Frame Bottom Plate` | ⏳ 대기 | Option C: 2 plate + M5 봉 4 (BOM 추가) |
 | `09 Drum ∅60 Caps` (선택) | ⏳ 보류 | Phase 6 본편에서 ∅90 Caps 복제 + `_90` → `_60` 치환 |
 | Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
 
@@ -120,7 +120,7 @@
 | `04 Bearing 625ZZ` | §5.5 | 10분 |
 | `06 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
 | `07 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
-| `08 Frame Section` (1자리, 105 mm 폭) | §8 | 1시간 |
+| `08a Frame Top Plate` + `08b Frame Bottom Plate` (Option C) | §8 | 1시간 |
 | `05 Coupler` (placeholder) | §5.7 | 10분 |
 | Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
 | Export STEP / STL × 6 / DXF | §11 | 15분 |
