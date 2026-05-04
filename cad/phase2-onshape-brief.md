@@ -906,18 +906,128 @@ Parts 패널 → `Part 1` Rename → **`Motor Mount`**.
 
 ## 7. Part Studio "07 Hall Bracket"
 
-### A3144 치수
-- TO-92 패키지: 4 × 3.2 × 1.5mm + 리드 3개
-- 감지 거리: 자석과 5mm 이내 권장
-- 브라켓은 센서를 드럼 하부 캡 자석 궤적 바로 아래에 배치
+### 핵심 설계 고려사항
 
-### Feature tree
-1. **Sketch** 20 × 15 플레이트
-2. **Extrude** 2mm (PETG)
-3. **Sketch** TO-92 슬롯 (1.5×4mm)
-4. **Extrude** 관통 빼기
-5. **Sketch** 프레임 고정 M3 홀 × 2
-6. **Extrude** 관통 빼기
+#### A3144 (TO-92) 감지 원리
+- TO-92 패키지의 **인쇄(branded) 면**이 감지면
+- 감지면에 **수직** 방향 자기장에 반응
+- 자석 축이 수직(Z) → A3144 감지면도 Z 방향, **인쇄면이 위(+Z)를 향해야** 함
+- TO-92를 **눕혀서** 인쇄면이 위로 가게 배치
+
+#### 위치
+- 자석 궤적 R = 30 mm (∅90 드럼) 또는 R = 15 mm (∅60)
+- 자석 ↔ 센서 거리: 1~2 mm (1차 시험), 5 mm 이내 권장
+
+#### 고정 방식
+- 브라켓은 단순 플레이트 + M3 홀 2개
+- A3144는 핫글루 또는 양면테이프로 위에 부착 (인쇄면 위)
+- (선택) 얕은 recess로 위치 가이드
+
+### 7.1 Part Studio 생성 + Variable 연결
+
+1. 탭바 `+` → **Part Studio**, 이름 `07 Hall Bracket`
+2. `Feature ▾` → **Variable Studio** → `Clock Config`
+3. 본 단계는 새 변수 추가 없음 (리터럴 입력)
+
+### 7.2 Feature tree
+
+#### Step 1 — Sketch "base plate" (Top plane)
+
+| 항목 | 값 |
+|---|---|
+| 평면 | Top |
+| 도구 | Center point rectangle |
+| 중심 | 원점 (Coincident) |
+| Width (X) | **20 mm** |
+| Depth (Y) | **15 mm** |
+
+→ Sketch 종료.
+
+#### Step 2 — Extrude "plate body"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 1 sketch |
+| Type | **New** (새 솔리드 파트) |
+| End | Blind |
+| Depth | **2 mm** |
+| Direction | +Z |
+
+→ 20 × 15 × 2 mm 플레이트.
+
+#### Step 3 (선택) — Sketch "sensor recess" (top face)
+
+A3144 위치 가이드용 얕은 recess. 안 만들어도 무방 (핫글루로 직접 부착).
+
+| 항목 | 값 |
+|---|---|
+| 평면 | top face (z=2) |
+| 도구 | Center point rectangle |
+| 중심 | 원점 |
+| Width (X) | **4.5 mm** (TO-92 폭 ~4 + 0.5 여유) |
+| Depth (Y) | **3.5 mm** (TO-92 두께 ~3 + 0.5) |
+
+#### Step 4 (선택) — Extrude Cut "recess"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 3 sketch |
+| Type | **Remove** |
+| End | Blind, Depth **0.5 mm** |
+| Direction | -Z (플레이트 안쪽) |
+
+→ 얕은 recess (관통 X), 센서 본체 위치 가이드.
+
+#### Step 5 — Sketch "mount holes" (top face)
+
+플레이트 윗면 → New Sketch.
+
+| 홀 | 위치 (X, Y) | Diameter |
+|---|---|---|
+| 좌 | (-7, 0) | **3.2 mm** (M3 clearance) |
+| 우 | (+7, 0) | 3.2 mm |
+
+> 마운트 홀 간 14 mm, 양 끝에서 3 mm 안쪽.
+
+#### Step 6 — Extrude Cut "mount holes"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 5 sketch (2개 원) |
+| Type | **Remove** |
+| End | **Through all** |
+
+→ 양쪽 ∅3.2 관통.
+
+### 7.3 파트 이름 정리
+
+Parts 패널 → `Part 1` Rename → **`Hall Bracket`**.
+
+### 7.4 검증
+
+| 확인 | 기대 |
+|---|---|
+| 플레이트 외형 | 20 × 15 × 2 mm |
+| (선택) 센서 recess | 4.5 × 3.5 × 0.5 (중앙) |
+| ∅3.2 마운트 홀 (×2) | X = ±7, Y = 0 |
+| 총 관통 홀 | 2개 |
+
+### 7.5 STL 출력 설정
+
+| 설정 | 값 |
+|---|---|
+| 재료 | PETG |
+| Layer | 0.2 mm |
+| Infill | 30% |
+| 출력 방향 | 평면 위로 (지지대 불필요) |
+
+### 7.6 조립 시 주의
+
+- A3144 본체를 recess (또는 plate 중앙)에 **인쇄면 위로** 향하게 부착
+- 핫글루 또는 양면테이프로 고정
+- 리드 3개는 plate 옆으로 빼서 dupont 커넥터로 ULN2003·MCU에 연결
+- Frame 조립 후 자석 ↔ 센서 거리 1~2 mm 확보 (실측·미세 조정)
+- 자석 궤적 R 위치에 정확히 정렬되도록 §8 Frame Section에서 bracket 부착 위치 결정
 
 ---
 
