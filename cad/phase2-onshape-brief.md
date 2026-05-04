@@ -122,6 +122,12 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | `bearingWidth` | Length | `5 mm` | |
 | `couplerOD` | Length | `19 mm` | B02 보유 커플러 외경 (실측, 보유품 freeze) |
 | `couplerLength` | Length | `25 mm` | B02 보유 커플러 길이 (실측). 내경은 `#shaftDiameter` 재사용 |
+| `frameWidth` | Length | `105 mm` | Frame 외곽 폭 (드럼 ∅90 + 좌우 7.5씩) |
+| `frameHeight` | Length | `140 mm` | Frame 외곽 높이 (D28) |
+| `frameDepth` | Length | `95 mm` | Frame 외곽 깊이 (예산 한계) |
+| `frameBarThickness` | Length | `10 mm` | Frame 두께 (전후 방향) |
+| `frameBarHeight` | Length | `12 mm` | 상·하부 바 단면 높이 |
+| `frameSideWidth` | Length | `5 mm` | 측면 기둥 폭 |
 
 ### 2.4 Part Studio에서 변수 참조하기
 
@@ -1033,13 +1039,194 @@ Parts 패널 → `Part 1` Rename → **`Hall Bracket`**.
 
 ## 8. Part Studio "08 Frame Section" (1자리 분)
 
-1자리 폭 = 드럼 ∅90 + 좌우 여유 7.5mm씩 (내부 간격 15mm의 절반) = **105 mm**
+> **Phase 2 베이스라인** — 가장 iterative한 파트. 1차 출력 후 부품 fit 확인하며 치수 조정 (2~3회 반복 예상).
 
-### 상부 바 + 하부 바 + 측면 기둥
-- 상부 바: 단면 12 × 10 mm, 길이 105, 중앙에 베어링 마운트 홀 (∅16 + M3 고정)
-- 하부 바: 단면 12 × 10, 길이 105, 중앙에 커플러/모터 통과 구멍
-- 측면 기둥 × 2: 폭 5 × 깊이 10, **높이 140** (D28 — 하부 보스를 드럼 내부 방향으로 배치하여 드럼과 높이 공유, envelope 127mm + 13mm 버퍼)
-- LED 바 홀더: 하부 바 전면에 ∅10 장공 2개로 LED 바 안착
+### 핵심 요건
+
+Frame이 잡아야 할 것:
+
+| 부품 | 위치 | 인터페이스 |
+|---|---|---|
+| 베어링 (625ZZ) | 상부 바 | ∅16 시트 + ∅5.2 샤프트 관통 |
+| 드럼 (회전체) | 중앙 (ring 안쪽) | 간섭 X (공간만) |
+| 모터 마운트 플레이트 | 하부 바 위 | 4× M3 (코너) — plate +Y 11에 shaft 정렬 |
+| Hall Bracket | 하부 바, R=30 | 2× M3 (간격 14) |
+| LED 바 | 하부 바 전면 | 슬롯 또는 양면테이프 |
+
+총 envelope: **`#frameWidth × #frameDepth × #frameHeight`** = 105 × 95 × 140 mm (D27/D28).
+
+### 권장 설계 — 사각 프레임 (4 bar)
+
+전면 뷰 사각 ring. 드럼은 ring 안에 위치, 전면 열려 있어 패널 가시.
+
+```
+[전면도]
+┌─────────────────────┐  ← 상부 바 (frameBarHeight 12)
+│  ●               ●  │      ★ 베어링 시트 ∅16
+├─────┐         ┌─────┤
+│ 측  │         │ 측  │
+│ 면  │ [드럼]  │ 면  │  ← 측면 기둥 (frameSideWidth 5)
+│ 기  │         │ 기  │
+│ 둥  │         │ 둥  │
+├─────┘         └─────┤
+│  ●               ●  │  ← 하부 바
+└─────────────────────┘      ★ 모터 마운트 4× M3 + LED 슬롯 + Hall M3
+   105 (W)
+```
+
+### 8.1 Part Studio 생성 + Variable 연결
+
+1. 탭바 `+` → **Part Studio**, 이름 `08 Frame Section`
+2. `Feature ▾` → **Variable Studio** → `Clock Config` (위 frame 변수 6개 추가 후)
+
+### 8.2 Feature tree
+
+#### Step 1 — Sketch "frame ring outline" (Front plane)
+
+전면 뷰 사각 ring을 한 sketch로:
+
+| 요소 | 치수 |
+|---|---|
+| 외곽 직사각형 (Center point rect, 원점 중심) | `#frameWidth` × `#frameHeight` (105 × 140) |
+| 내곽 직사각형 | `(#frameWidth - 2 × #frameSideWidth)` × `(#frameHeight - 2 × #frameBarHeight)` (95 × 116) |
+
+→ 외곽 - 내곽 = ring 영역. Sketch 종료.
+
+#### Step 2 — Extrude "frame ring"
+
+| 칸 | 값 |
+|---|---|
+| Profile | Step 1 ring 영역 (외곽과 내곽 사이) |
+| Type | **New** (새 솔리드 파트) |
+| End | **Symmetric** (양쪽 ±, 가운데 정렬) |
+| Depth | `#frameBarThickness` (= 10) |
+
+→ 105 × 140 외곽, 두께 10 mm 사각 ring frame.
+
+#### Step 3 — Sketch "bearing seat + shaft hole" (top bar 윗면)
+
+상부 바 윗면 클릭 → New Sketch. 동심원 2개:
+
+| 홀 | 위치 (X, Y) | Diameter |
+|---|---|---|
+| 베어링 시트 | (0, 0)<sup>*</sup> | `#bearingOD` (= 16) |
+| 샤프트 통과 | (0, 0) | `#shaftHole` (= 5.2) |
+
+<sup>*</sup> 상부 바 윗면 sketch의 원점은 frame 중앙 X에 정렬되도록 sketch plane 설정. (드럼 샤프트 라인 = frame X 중앙)
+
+#### Step 4 — Extrude Cut "bearing seat" (Blind 5mm)
+
+| 칸 | 값 |
+|---|---|
+| Profile | 베어링 ∅16 ring 영역 (외측 - 내측 사이) |
+| Type | **Remove** |
+| End | Blind, Depth = `#bearingWidth` (= 5) |
+| Direction | -Z (바 안쪽으로) |
+
+→ 베어링 시트 5 mm 깊이.
+
+#### Step 5 — Extrude Cut "shaft hole" (Through)
+
+| 칸 | 값 |
+|---|---|
+| Profile | 샤프트 ∅5.2 원 (가운데 disc) |
+| Type | **Remove** |
+| End | **Through all** |
+
+→ 샤프트 ∅5.2 관통.
+
+#### Step 6 — Sketch "motor mount fix holes" (bottom bar 윗면)
+
+하부 바 윗면(드럼 쪽 면) 클릭 → New Sketch.
+
+> **Motor mount plate 위치**: plate 중앙은 frame 좌표에서 X=0, Y=하부 바 중앙. plate의 shaft 홀(plate local +Y 11)이 drum shaft 라인(frame X=0, Y=하부 바 중앙 + 11mm)과 일치하려면, **plate 중심을 frame 좌표에서 Y_plate_center = -11**(drum shaft 기준)로 설정. 즉 plate 코너 (±20, plate_y±15) → frame 좌표 (±20, -11±15) = (±20, +4) and (±20, -26).
+
+4개 원 — 모터 마운트 플레이트 코너에 맞추기:
+
+| 모터 마운트 코너 홀 | 위치 (X, Y) frame coord | Diameter |
+|---|---|---|
+| 좌상 | (-20, +4) | 3.2 mm |
+| 우상 | (+20, +4) | 3.2 mm |
+| 좌하 | (-20, -26) | 3.2 mm |
+| 우하 | (+20, -26) | 3.2 mm |
+
+#### Step 7 — Extrude Cut "motor mount holes"
+
+- Type: Remove
+- End: Through all
+
+→ 4× ∅3.2 관통.
+
+#### Step 8 — Sketch "Hall bracket holes" (bottom bar 윗면)
+
+자석 궤적 R=30 위치에 hall bracket 마운트.
+
+> Hall bracket의 마운트 홀 간격 14 mm, 센서가 자석 궤적 R=30 아래에 위치. Frame 좌표 기준 sensor center 위치 = (0, +30) 또는 (+30, 0) — drum 정면 방향과 일치하는 축으로 결정. 보통 자석은 drum -Y에 위치 (slot 0 방향) → sensor도 (0, -30 in drum coord) → frame coord로 환산.
+
+본 베이스라인은 **drum 정면(slot 0) = frame -Y 방향** 가정:
+- Hall sensor 중심: drum coord (0, -30) = frame coord (0, -30 + drum_center_y_in_frame)
+- drum_center_y_in_frame = 0 (drum이 frame ring 중앙) 가정
+- 따라서 hall sensor 중심: frame (0, -30)
+
+Hall bracket의 마운트 홀 2개 (간격 14, 센서 중심 ±7):
+
+| 홀 | 위치 (X, Y) | Diameter |
+|---|---|---|
+| 좌 | (-7, -30) | 3.2 mm |
+| 우 | (+7, -30) | 3.2 mm |
+
+> Step 6 motor mount holes과 충돌 가능성 검토 — Y=-30이 motor mount Y=-26 코너에 4mm 차이로 매우 가까움. 충돌 시 hall bracket을 motor mount plate 위 또는 별도 위치로 이동.
+
+#### Step 9 — Extrude Cut "Hall holes"
+Through all.
+
+#### Step 10 — Sketch "LED bar slot" (bottom bar 전면)
+
+LED 바 안착용 슬롯. LED 바 치수 실측 (보통 50 × 10 × 5 mm 단면).
+
+- 평면: 하부 바 전면 (Y = +frameDepth/2 또는 ring 전면)
+- 슬롯: 50 × 10 mm 직사각형, 중앙
+- 위치: drum shaft line 아래 (X=0)
+
+#### Step 11 — Extrude Cut "LED slot"
+- Type: Remove
+- Depth: 5 mm 또는 Through all (LED 바 옆으로 삽입 가능하도록)
+
+### 8.3 파트 이름 정리
+
+Parts 패널 → `Part 1` Rename → **`Frame Section`**.
+
+### 8.4 검증
+
+| 확인 | 기대 |
+|---|---|
+| 외형 | 105 × 95<sup>*</sup> × 140 mm |
+| 상부 베어링 시트 | ∅16 × 깊이 5 + ∅5.2 샤프트 관통 |
+| 모터 마운트 4× M3 | (±20, +4) and (±20, -26) |
+| Hall bracket 2× M3 | R=30 위치 (간격 14) |
+| LED 바 슬롯 | 50 × 10 |
+
+<sup>*</sup> Ring 형태이므로 깊이 95는 frame 자체 두께(10mm)와 별개 — 드럼 깊이 envelope 의미. 본 step에선 frame 두께 10mm만 모델링, 95mm는 envelope 상한 reference.
+
+### 8.5 STL 출력
+
+| 설정 | 값 |
+|---|---|
+| 재료 | PETG |
+| Layer | 0.2 mm |
+| Infill | 30% |
+| 출력 방향 | 가장 큰 면이 베드 위 (105 × 140 평면) |
+| 예상 출력 시간 | 6~10 시간 |
+
+### 8.6 주의·iteration
+
+- 본 §8은 **베이스라인**. 1차 출력 후 부품 fit 확인하며 치수 조정:
+  - 베어링 시트 ∅16 너무 빡빡하면 +0.1 mm
+  - 모터 마운트 위치 미세 조정 (실제 shaft 정렬 확인)
+  - Hall bracket 위치 (자석 거리 1~2 mm 실측)
+  - LED 바 슬롯 (실 LED 바 단면 확인)
+- 측면 기둥 폭 5 mm는 강성에 빠듯할 수 있음 — 필요 시 7~8 mm로 증가
+- Phase 6 본편 6자리 프레임은 본 §8을 좌우로 4번 더 확장 (총 6자리, 각 자리 105mm 폭) + 측면·중간 spacer 배플 통합
 
 ---
 
