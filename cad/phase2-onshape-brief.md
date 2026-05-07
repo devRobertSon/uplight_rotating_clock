@@ -143,27 +143,70 @@ FDM 정밀도 한계(±0.3mm)로 사다리꼴 도브테일은 fit 어려움 → 
 
 **B section이 모든 tongue을 받는 "허브" 역할**. A·C는 양 끝에 tongue 1개씩.
 
-#### M3 Cross-screw 위치
+#### M3 Cross-screw 위치 — 모두 **내부 face** (외부 visible 차단)
 
-각 split line 양쪽에 2개씩 (총 4개) 위치.
+> **원칙**: 외부에서 보이는 볼트 헤드 0개. 모든 cross-screw는 조립 후 드럼·plate·박스 cavity로 가려지는 내부 face에서 진입한다.
 
-| 부품 | Y 위치 (split 양쪽) | Z 위치 |
-|---|---|---|
-| 07 Bottom Plate (5 두께) | Y = ±40 (드럼·홀 회피) | Z 중앙 |
-| 09 Top Plate (5 두께) | Y = ±40 | Z 중앙 |
-| 06 Bottom Box (80 높이) | Y = ±40 (벽) | Z = +20, +60 (상·하 2개) |
-| 08 Front/Back Panel (3 두께, 90 높이) | (split 양쪽 plate 결합 시 plate 자체에 잠금) | Z = +20, +70 (상·하 2개) |
+| 부품 | 볼트 진입 face (내부) | 외부 = 가시 면 (clean) | 은폐 메커니즘 |
+|---|---|---|---|
+| 06 Bottom Box | **Cavity 내부** (수평 X방향, 내부 보스) | 박스 외측 4면 + 바닥 | Bottom Plate가 cavity 위 덮음 |
+| 07 Bottom Plate | **Top face** (드럼 측, 수직 Z↓) | Plate 하면 (박스 cavity 천장) | 드럼·모터·Hall이 위 가림 |
+| 09 Top Plate | **Bottom face** (드럼 측, 수직 Z↑) | Plate 윗면 (시계 천장) | 드럼·베어링이 아래 가림 |
+| 08 Front/Back/Left/Right Panel | **(제거됨)** — cross-screw 없음 | 패널 외부 4면 모두 매끄러움 | Plate 둘레 홈 클램핑만으로 ring 고정 |
 
-각 위치:
+각 cross-screw 결합 (제거된 panel 제외):
 - 한쪽 section: ∅3.2 clearance 홀 (M3 통과)
 - 다른쪽 section: heat insert 홀 (`#insertHole` = 4.2)
-- M3 볼트 6mm로 결합
+- M3 6mm 볼트로 잠금
 
-> Plate 5mm 두께에서는 M3 cross-screw가 Y 방향(plate 면 안에 평행)으로 들어감 — 즉 plate 옆면에서 진입. 단, 5mm 두께에 ∅3.2 holes는 빡빡하므로 **side flange (plate 아래에 작은 ridge 추가)** 권장:
-- Section A 우측 끝 plate 하면에 5mm 두께 × 10mm 폭 flange 추가 (X 방향 5mm 더 돌출)
-- Flange에 M3 ∅3.2 clearance 홀 (위 → 아래 방향)
-- Section B 좌측 끝 plate 위에 heat insert 홀
-- 조립 시 flange가 B plate 아래로 슬라이드 → 위에서 M3 볼트로 잠금
+##### Plate (07/09): Side ridge 방향 — 모두 **드럼 측으로**
+
+5mm 두께 plate에 직접 X·Y 방향 cross-screw 어렵 → 한쪽 section 끝에 **ridge (under-flange)** 부착, Z방향 볼트 사용. 두 plate 모두 ridge가 **드럼 측 (= 내부)** 으로 향함:
+
+```
+[07 Bottom Plate split 단면 — X방향]
+
+       Section A          Section B
+   ┌──────────────┐  ┌──────────────────┐  ← Top face (드럼 측, 내부)
+   │   plate 5    │  │    plate 5       │
+   └────┬─────────┘  └──────────────────┘  ← Bottom face (외부 = 가시)
+        │ridge below A│        ↑ bolt from TOP↓
+        │extends to   │        (B's plate top
+        │X=-93 (under │         → B's plate 5
+        │ B's plate)  │         → A's ridge below B's plate)
+        └─────────────┘  heat insert in A's ridge
+                         **Bolt head on B's TOP face = 내부, 가려짐**
+
+[09 Top Plate split 단면 — X방향]
+
+   Bottom face (드럼 측, 내부)  ← bolt from BELOW↑
+        ↑                                      ↑
+   ┌────┴─────────┐  ┌──────────────────┐
+   │   plate 5    │  │    plate 5       │
+   └──────────────┘  └──────────────────┘     ← Top face (외부 = 시계 천장, 가시)
+        │ridge below A│
+        │extends under│       Bolt: B's bottom↑ → B's plate 5 → A's ridge
+        │ B's plate   │       **Bolt head on B's BOTTOM face = 드럼 측, 가려짐**
+        └─────────────┘
+```
+
+요약:
+- **두 plate 모두 ridge가 plate 아래쪽 (-Z)** 으로 5mm 돌출.
+- Bottom Plate의 ridge는 박스 cavity 안에 위치, Top Plate의 ridge는 드럼 영역 안에 위치 — 둘 다 내부.
+- **Bottom Plate**: 볼트 위→아래 (Top face = 드럼 측이 헤드)
+- **Top Plate**: 볼트 아래→위 (Bottom face = 드럼 측이 헤드)
+- 결과: Bottom Plate **하면**과 Top Plate **윗면** = 외부 = 매끄러운 볼트-없음 표면.
+
+##### 06 Bottom Box: Cavity 내부 cross-screw
+
+박스 벽 5mm가 얇아 외벽에 직접 cross-screw 어렵 + 외부 visible → 각 section의 **cavity 내부에 보스(rib)** 부착하여 X방향 수평 cross-screw로 결합:
+
+- Section A 우측 끝 (X=-103): cavity 안쪽 (Y=0, Z=+20·+60 두 위치)에 보스 8 × 8 × 8mm 추가, X방향으로 +4mm 오버행 (split 너머 4mm 돌출 → tongue과 같은 방향).
+- Section B 좌측 끝 (X=-103): 매칭 자리에 8 × 8 × 4mm 패임 (보스 슬라이드 자리).
+- A의 보스에 ∅3.2 clearance, B의 매칭 자리 안쪽에 heat insert.
+- Bolt: cavity 안에서 X방향 (수평)으로 삽입, 헤드는 A 보스의 cavity 측면에 안착. 박스 위가 Bottom Plate로 덮이면 외부 visible 차단.
+
+> **사전 조립 필수** (§9 참조): plate/box 각 sections는 본 조립 전에 작업대에서 **사전 결합 (sub-assembly)** 하여 cross-screw 잠금. 이 단계에서 plate를 뒤집거나 cavity를 위로 향해 두면 내부 face에서 볼트 접근이 가능.
 
 ### Onshape 모델링 옵션
 
@@ -1065,10 +1108,14 @@ Parts 패널 → Rename → **`Bottom Box`**.
    - Extrude → **Add (merge)**, Blind, Depth `#splitTongueDepth` (= 4) → +X 방향
    - → Section A 우측 끝에서 +X로 4mm 돌출 tongue
 
-4. **Cross-screw 홀** (tongue 위치 회피, Y = ±40):
-   - 우측 X = -103 면 (또는 plate 옆면)에 sketch
-   - 2개 ∅3.2 clearance 홀, Y = +40 / Y = -40, Z 중앙(40)에서 ±20mm
-   - Extrude Cut, Through (X 방향으로 박스 본체 안으로 관통, 깊이 ~10mm)
+4. **Cross-screw 보스 (cavity 내부, 외부 visible 차단)** — §1.5 hidden-bolt 규칙 적용:
+   - Section A의 cavity 안쪽 (Y=0 근처, Z = +20·+60 두 위치) 면에 sketch:
+     - Center rectangle 8 × 8 (Y × Z), cavity 내벽에서 +X 방향으로 시작
+   - Extrude Add, **Depth 12 mm** (= 8mm 보스 본체 + 4mm split 너머 오버행), +X 방향
+     → A 우측 끝(X=-103)에서 +X로 4mm 돌출하는 보스 2개 (Z = +20, +60)
+   - 각 보스에 ∅3.2 clearance 홀, X방향 관통 (cavity 면 → +X 방향)
+   - Extrude Cut, Through 보스
+   - **Bolt 진입 face = cavity 안쪽 (내부)**, 박스 외부에서 invisible
 
 5. 박스 내부 cavity, DC잭 홀 등은 §6.2 그대로 (단, X 범위 -310 ~ -103)
 
@@ -1084,10 +1131,14 @@ Parts 패널 → Rename → **`Bottom Box`**.
      - Extrude Cut, Blind, Depth 4.2 (= `#splitTongueDepth + 0.2`) → -X 방향 (groove 안쪽으로 패임)
    - 우측 X = +103 면 동일하게 groove (반대 방향)
 
-4. **Cross-screw heat insert 홀**:
-   - 양 끝 면에 Y = ±40, Z = +20, +60 위치에 sketch (총 8개)
-   - Extrude Cut, Blind, Depth 6 (insert 길이 4 + 여유 2)
-   - Diameter `#insertHole` (= 4.2)
+4. **Cross-screw 매칭 자리 + heat insert (cavity 내부)** — §1.5 hidden-bolt 규칙:
+   - Section B 양 끝 (X = ±103) cavity 안쪽 면 (Y=0, Z = +20·+60)에 sketch:
+     - 8 × 8 mm 사각형 (보스 슬라이드 자리)
+   - Extrude Cut, Blind, Depth 4mm (-X 또는 +X 방향, A·C section 보스 오버행 4mm와 일치)
+     → 양 끝에 보스 자리 4개 패임 (좌측 2 + 우측 2)
+   - 각 자리 안쪽 끝 면에 ∅`#insertHole` (= 4.2) heat insert 홀, Blind 6mm (X 방향, cavity 안쪽으로)
+   - Heat insert는 cavity 안쪽에 매립 → A 보스의 clearance와 정렬 시 X방향 볼트 통로 형성
+   - **Bolt head는 A 보스의 cavity 측면 = 내부 face**, 외부 invisible
 
 #### Step S3 — Section C (우) 모델링
 
@@ -1189,18 +1240,27 @@ Plate 가로 620mm → **3 sections (A/B/C, 각 ~207mm)**. 분할선 X = ±103.
 2. Extrude New, Blind, Depth `#plateThickness` (= 5)
 3. 모터·Hall·LED·둘레 홈은 §7.2와 같으나 X 범위 -310 ~ -103 한정 (D1, D2 드럼만)
 4. **Tongue**: 우측 X = -103 면 → Sketch 사각형 8 × 5 (`splitTongueWidth × plateThickness`) → Extrude Add, Depth 4 (+X 방향)
-5. **Cross-screw 홀**:
-   - Plate 두께 5mm는 측면 직접 cross-screw 어려움 → **Side flange 사용** (§1.5 권장)
-   - Plate 하면에 작은 ridge 추가: Sketch on bottom face, X = -113 ~ -103 영역 × Y 폭 30 (또는 둘레 홈 안쪽 영역) → Extrude Add, Depth 5 (-Z), 즉 plate 아래로 5mm 돌출
-   - Ridge에 ∅3.2 clearance 홀 2개 (Y = ±40, Z = -2.5 = ridge 중앙)
-   - Through Z 방향 (위→아래)
+5. **Cross-screw용 ridge (under-flange) — §1.5 hidden-bolt 규칙**:
+   - Plate 두께 5mm 직접 cross-screw 어려움 → **drum 측 (= 내부)에서 Z방향으로 볼트 잠금**, 한쪽 section에 ridge 부착하여 결합부 형성
+   - Plate **하면**에 ridge 추가: Sketch on bottom face, X = **-113 ~ -93** (= split 너머 +10mm, B section 아래로 연장) × Y 폭 30 (둘레 홈 안쪽 영역, 모터·홀 회피)
+   - Extrude Add, Depth 5 (-Z), plate 아래로 5mm 돌출
+   - → Ridge가 split 지나 B section plate 아래까지 연장되어 받침
+   - Ridge에 heat insert 홀 2개 (Y = ±40, ridge 상면에서 sketch): ∅`#insertHole` (= 4.2), Blind Depth 5 (-Z, ridge 안으로)
+   - **B section 쪽** (다음 S2 단계): plate에 ∅3.2 clearance 홀, Through Z (위→아래)
+   - **조립**: B's plate를 A's ridge 위에 정렬 → **B의 top face (드럼 측 = 내부)에서 ↓로 M3 볼트 삽입** → B's plate 5mm 통과 → A's ridge 안 heat insert에 박힘
+   - **Bolt head는 B's plate 윗면 = 드럼 측 = 내부, 가시 영역 아님**
 
 #### Step S2 — Section B (중)
 1. Top plane → Sketch 206 × 120, 원점 중심
 2. Extrude New, Blind, Depth 5
 3. D3·D4 드럼 위치의 모터·Hall·LED·둘레 홈
 4. **Groove 양 끝**: 양 X = ±103 면에 sketch 8.4 × 5 → Extrude Cut, Depth 4.2 (-X 또는 +X 방향)
-5. **Heat insert 홀**: plate 윗면, X = ±103 근처 (양 끝), Y = ±40, ∅`#insertHole` (= 4.2) Through (또는 Blind 4)
+5. **Cross-screw clearance** (§1.5 hidden-bolt — heat insert는 A·C ridge에, B는 clearance만):
+   - Plate 윗면 (드럼 측, 내부)에 sketch
+   - 양 끝 (X = -100, +100 — split 안쪽 3mm 위치) × Y = ±40, 총 4개
+   - ∅3.2 clearance, Through Z (위→아래) — 5mm plate 관통
+   - 조립 시 A·C section의 ridge가 B's plate 아래로 연장되어 받침. B의 top face에서 ↓ M3 볼트 삽입.
+   - **Bolt head는 B's top face = 드럼 측 = 내부**
 
 #### Step S3 — Section C (우)
 Section A 거울. X 범위 +103 ~ +310, D5·D6 드럼 부분.
@@ -1316,15 +1376,16 @@ Section A 거울. X 범위 +103 ~ +310, D5·D6 드럼 부분.
 4. Tongue / Groove 추가:
    - Tongue: 우측 끝 면(X = -103 또는 +103)에 sketch 8 × 90 → Extrude Add, Depth 4 (+X 또는 -X)
    - Groove: 끝 면에 sketch 8.4 × 90 → Extrude Cut, Depth 4.2
-5. **Cross-screw 홀** (Z = +20, +70 두 위치, Y는 panel 두께 방향):
-   - Tongue/groove 영역 위·아래에서 panel 두께를 관통하는 ∅3.2 (또는 heat insert ∅4.2)
-   - 또는 panel 옆면에 ∅3.2 clearance through (panel 내부에서 +Y 또는 -Y로)
-   - 3mm panel 얇아 panel 자체에 cross-screw 어려움 → **Bottom Plate의 둘레 홈에 끼웠을 때 plate가 panel을 잡아주므로 panel 자체 cross-screw 생략** 가능
+
+> **Cross-screw 없음** (§1.5 hidden-bolt 규칙). 3mm 얇은 panel에 cross-screw를 박으면 외부 visible + 약한 결합. 대신:
+> - Tongue-groove로 X·Y 정렬
+> - 상·하 둘레 홈 (07 Bottom Plate의 윗면 둘레 홈 + 09 Top Plate의 아랫면 둘레 홈)이 panel ring 전체를 위·아래에서 클램핑
+> - 결과: panel 외부 4면 모두 매끄러운 볼트-없음 표면.
 
 #### Back Panel
-Front와 동일 구조, 디지트 창 없음.
+Front와 동일 구조, 디지트 창 없음. Cross-screw 없음.
 
-> 측면 panel은 plate 둘레 홈에 끼움으로써 자연 정렬·고정 → **panel split joint는 tongue/groove만으로 충분** (cross-screw 옵션). Plate에서 ring 전체를 잡아줌.
+> 측면 panel ring은 plate 둘레 홈에 끼움으로써 정렬·고정 → **panel split joint는 tongue/groove만으로 충분**. Cross-screw 없음 → 외부 visible 0.
 
 ### 8.5 STL 출력
 - 각 패널 분리 출력
@@ -1381,19 +1442,27 @@ Front와 동일 구조, 디지트 창 없음.
 ### 8.5.3 파트 이름 정리
 Parts 패널 → Rename → **`Top Plate`**.
 
-### 8.5.4 분할 설계 (§1.5 적용)
+### 8.5.4 분할 설계 (§1.5 적용) — **외부 visible 차단 (시계 천장)**
 
 **07 Bottom Plate와 같은 구조·같은 X 위치 분할**. 3 sections (A/B/C, X = ±103):
 - Section A: 베어링 시트 D1·D2 (drumX_1, drumX_2), 우측 X=-103에 tongue
 - Section B: D3·D4 (drumX_3, drumX_4), 양 끝 X=±103에 groove
 - Section C: D5·D6 (drumX_5, drumX_6), 좌측 X=+103에 tongue
 
-각 section 모델링은 §7.4와 동일 (Step S1~S3) — 차이점:
+각 section 모델링은 §7.4와 거의 동일 — 차이점 (외부 visible 차단):
 - Plate 윗면 대신 **아랫면**에 둘레 홈 (Top Plate는 측면 ring 위에 덮어씀)
 - 각 베어링 시트는 §8.5.2 Step 3·4·5 그대로 (∅16 Blind 5 + ∅5.2 Through)
-- Side flange + cross-screw도 §7.4 방식 (plate 5mm 한계로 ridge 추가)
+- **Cross-screw 방향 거꾸로** (Bottom Plate와 반대):
+  - Ridge: §7.4와 동일하게 plate **하면**에 부착 (-Z, 5mm 돌출, X=-113~-93)
+    → **Ridge가 드럼 영역 (= 내부) 안으로** 향함 (Top Plate의 plate-아래 = 드럼 측)
+  - Heat insert: A·C section의 ridge **하면**에서 sketch (ridge 바닥에서 위로 ↑) → ∅`#insertHole` Blind Depth 5 (+Z 방향, ridge 안으로)
+  - Clearance: B section plate에 ∅3.2 Through Z (위 ↔ 아래)
+  - **조립**: Top Plate를 뒤집은 채로 (윗면이 아래로) 사전 조립. 이 자세에서 ridge는 위로 향함, B's plate 하면이 위에 보임. **Bolt를 B's bottom face (현재 위로 향함, 드럼 측)에서 ↓로 삽입** (실질 +Z) → A's ridge 안 heat insert에 박힘.
+  - 조립 후 plate를 정상 자세로 뒤집으면 **bolt head는 plate 아랫면 = 드럼 측 = 내부**, 외부 (시계 천장)는 매끄러움.
 
 > Top Plate split이 Bottom Plate split과 X 정확 일치 → 측면 panel ring이 두 plate 사이에서 수직 alignment 자연 보장. 조립 시 panel 둘레 홈에 정확히 들어감.
+>
+> **요약**: Bottom Plate ridge는 박스 cavity 측, Top Plate ridge는 드럼 영역 측. 둘 다 plate 아래로 돌출하지만 "아래"의 의미가 다름 (조립 후 wrt 시계). 외부 visible 차단을 위해 두 plate의 ridge·bolt 방향이 시계 중심 기준으로 **대칭**.
 
 ### 8.5.5 STL 출력
 - PETG, Layer 0.2 mm, Infill 30%
@@ -1406,19 +1475,43 @@ Parts 패널 → Rename → **`Top Plate`**.
 
 > D28 캡 방향: 하부 캡·상부 캡 모두 CAD 그대로 (보스 위로). 하부 캡은 조립 중 M3 잠금 후 영구 고정.
 
-1. **06 Bottom Box** 출력 후 내부에 Mega 2560 + ULN2003 × 6 + MOSFET + LED 바 와이어·전원 어댑터 잭 배치
-2. **07 Bottom Plate** 위 6 모터 마운트 (4× M3 each), Hall 센서 6개 (인쇄면 위), LED 바 6개 (양면테이프 또는 슬롯)
+#### Phase 0 — Plate·Box 사전 조립 (Sub-assembly, 작업대 위)
+
+> 각 split sections를 본 조립 전에 작업대 위에서 united로 만든다. 이 단계에서만 cross-screw 내부 face 접근이 가능 (§1.5 hidden-bolt 규칙). 본 조립 시작 후엔 plate가 닫혀 있어 접근 불가.
+
+0a. **07 Bottom Plate 사전 조립** (정상 방향, 드럼 측 = top face가 위로)
+   - 작업대에 A·B·C 3 sections를 X 순서대로 배치, top face 위로
+   - Tongue-groove 정렬 (A 우측 tongue → B 좌측 groove, C 좌측 tongue → B 우측 groove)
+   - A·C section의 ridge가 B section plate 아래로 미끄러져 들어감
+   - **B의 top face (드럼 측)에서 ↓로 M3 6mm 볼트 4개** 삽입 (Y=±40 × split 양쪽 = 4개)
+   - A·C ridge 안 heat insert에 박힘 → 3 sections united, bolt head는 모두 top face 내부 face
+0b. **09 Top Plate 사전 조립** (뒤집어서, 드럼 측 = bottom face가 위로)
+   - 작업대에 A·B·C를 **뒤집어** (윗면이 아래로) 배치 → ridge가 위로 향함
+   - Tongue-groove 정렬 동일
+   - **B의 bottom face (현재 위로 향함, 드럼 측)에서 ↓로 M3 6mm 볼트 4개** 삽입
+   - A·C ridge 안 heat insert에 박힘 → 3 sections united
+   - 정상 방향으로 다시 뒤집음 → bolt head는 plate 아랫면 (드럼 측, 내부)
+0c. **06 Bottom Box 사전 조립** (cavity가 위로 향한 정상 방향)
+   - 작업대에 A·B·C를 cavity 위로 향한 채로 배치
+   - Tongue-groove 정렬 (X 끝면)
+   - 각 split의 cavity 내부 보스 (Z=+20·+60 두 위치, 양 split 합 4개)에 X방향 ↔ M3 6mm 볼트 삽입
+   - Cavity 안에서 손이 닿음 (위가 열려있음). Bolt head는 cavity 내벽 = 내부 face
+
+#### Phase 1 — 본 조립
+
+1. 사전 조립 완료된 **06 Bottom Box** 내부에 Mega 2560 + ULN2003 × 6 + MOSFET + LED 바 와이어·전원 어댑터 잭 배치
+2. 사전 조립 완료된 **07 Bottom Plate** 위 6 모터 마운트 (4× M3 each), Hall 센서 6개 (인쇄면 위), LED 바 6개 (양면테이프 또는 슬롯)
 3. Plate 와이어를 박스 측 슬롯·홀로 통과시킴
-4. 07 Bottom Plate를 06 Bottom Box 위에 결합 (M3 + heat insert × 8)
+4. 07 Bottom Plate를 06 Bottom Box 위에 결합 (M3 + heat insert × 8) — 박스 cavity의 cross-screw 헤드가 plate에 의해 영구 은폐
 5. 각 모터축 (총 6개)에 **05 Coupler** 끼움
 6. 각 커플러에 **03 Shaft** (∅5×100) 삽입
 7. 각 샤프트에 **하부 캡** (D28 — 보스 위, 자석 아래) → **M3 set screw로 샤프트 잠금** (이후 분해 불가)
 8. 각 캡 슬롯에 **02 Acrylic Panel** 삽입 (∅90 = 10장, ∅60 = 7장)
 9. 각 샤프트에 **상부 캡** 슬라이드 (보스 위) → 임시로 위에 둠 (아직 잠금 X)
-10. **08 Side Panels** 4 piece 코너 tongue-groove로 결합 → 사각 ring 형성
+10. **08 Side Panels** 4 piece 코너 tongue-groove로 결합 → 사각 ring 형성 (cross-screw 없음, plate clamp만)
 11. Ring을 07 Bottom Plate 둘레 홈에 떨어뜨려 끼움 (위에서 ↓)
-12. **09 Top Plate**의 6 베어링 시트에 **04 Bearing 625ZZ** 6개 압입
-13. 09 Top Plate를 위에서 떨어뜨려 측면 판 ring 상단에 끼움 (둘레 홈 정렬)
+12. 사전 조립 완료된 **09 Top Plate**의 6 베어링 시트에 **04 Bearing 625ZZ** 6개 압입
+13. 09 Top Plate를 위에서 떨어뜨려 측면 판 ring 상단에 끼움 (둘레 홈 정렬) — top plate 하면의 cross-screw 헤드가 드럼 영역에 의해 영구 은폐
 14. 각 드럼의 보스가 베어링 안으로 들어가도록 정렬, 상부 캡의 M3 set screw 잠금 (역시 분해 시 풀어야 함)
 
 ### 분해 (패널 교체)
