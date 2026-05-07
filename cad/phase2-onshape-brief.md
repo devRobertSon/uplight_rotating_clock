@@ -1048,7 +1048,10 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 | Cavity X 범위 (B) | -100 ~ +100 | `splitX_1` + `bWT` ~ `splitX_2` - `bWT` |
 | Cavity X 범위 (C) | +106 ~ +307 | `splitX_2` + `bWT` ~ +`enclW`/2 - `bWT` |
 
-> **분할 면 (X=±103)에 3mm 벽**. 각 section의 split-end 외벽이 tongue/groove 결합부로 작동. 내부 공간은 split 벽으로 단절되지만, 와이어 통로 등 필요 시 추가 hole로 연결 가능.
+> **분할 면 (X=±103)에 3mm 벽 — H-shape 골격**. 벽은 tongue/groove 견고 유지의 최소치만 남기고 cable passthrough cut 적용:
+> - 남김: center 수직 strip (Y=±12, 24mm 폭, tongue/groove 지지) + top 림 (Z=-3~0, 강성) + back boss pad (Y=-57~-49, cross-screw 보스 지지) + 퍼리미터 strips (front/back/bottom 외벽)
+> - 자름: front 통로 (Y=+12~+57, Z=-77~-3, 3330 mm²) + back 통로 (Y=-49~-12, Z=-77~-3, 2738 mm²)
+> - 통로 총 ~6068 mm² → DC잭→Mega→6 ULN2003 드라이버 와이어 (~12-15 가닥) 통과 충분.
 
 #### 분할 영역
 
@@ -1141,6 +1144,30 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 3. Top 면 → Sketch "A_insert_holes": ∅`#insertHole` (= 4.2) 원 4개 (보스 중심)
 4. Extrude Cut, target = A, Blind 6, -Z → 인서트 홀 4개
 
+##### Step A10.5 — Split 벽 cable passthrough cuts (와이어 통로)
+
+A의 분할 벽(X=-106~-103, 3mm slab)에서 tongue·boss 지지 영역을 제외한 부분을 잘라 와이어 통로 형성. **벽은 tongue/groove 견고 유지의 최소치**.
+
+남기는 영역:
+- **Center 수직 strip** Y=-12~+12 (24mm 폭): tongue 지지
+- **Top 림** Z=-3~0: center strip ↔ 퍼리미터 연결, 강성
+- **Bottom strip** Z=-77~-80: section 바닥 벽 (자동)
+- **Front strip** Y=+57~+60, **Back strip** Y=-60~-57: section 전·후 벽 (자동)
+
+자르는 영역 (cable passthrough):
+
+1. A 우측 면 (X=-103) 클릭 → Sketch "A_split_passthrough":
+   - 사각형 2개 (Y × Z 평면):
+     - **Front 통로**: 중심 (Y=+34.5, Z=-40), 치수 45 × 74
+       (Y 범위 +12~+57, Z 범위 -77~-3)
+     - **Back 통로**: 중심 (Y=-30.5, Z=-40), 치수 37 × 74
+       (Y 범위 -49~-12, Z 범위 -77~-3)
+2. Extrude Cut, target = A, **Through** (3mm 벽 관통), -X 방향
+   - → 분할 벽이 H-shape에 가까운 골격 형태로 변신
+   - 통로 총 면적 ≈ 6068 mm² (Mega↔A 드라이버 12-15 wire 통과 충분)
+
+> **Back 통로는 cross-screw 보스 영역(Y=-57~-49) 회피** (Y=-49까지만 cut). 보스 main의 X=-106~-103 부분이 split 벽과 일체로 유지됨 (Step A14 검증 필요).
+
 ##### Step A11·A12 — Tongue (우측 분할 면)
 
 A의 분할 벽 (X=-106 ~ -103) 외측 면(X=-103)에서 +X로 돌출.
@@ -1205,6 +1232,19 @@ A의 분할 벽 (X=-106 ~ -103) 외측 면(X=-103)에서 +X로 돌출.
 2. Extrude Add, target = B, Blind 12, -Z
 3. Top 면 → Sketch "B_insert_holes": ∅4.2 원 4개
 4. Extrude Cut, target = B, Blind 6, -Z
+
+##### Step B11.5 — Split 벽 cable passthrough cuts (양측)
+
+B의 양 분할 벽 (좌·우)에 동일 cable passthrough 패턴 적용. §A10.5와 동일 형상 — center strip (24mm 폭) + top 림 (3mm) + back boss pad 유지, 나머지 cut.
+
+1. 좌측 X=-103 면 → Sketch "B_split_passthrough_L":
+   - Front 통로: 중심 (Y=+34.5, Z=-40), 치수 45 × 74
+   - Back 통로: 중심 (Y=-30.5, Z=-40), 치수 37 × 74
+2. Extrude Cut, target = B, Through 3mm, **+X** 방향 (벽 안쪽으로)
+3. 우측 X=+103 면 → Sketch "B_split_passthrough_R": 동일 좌표
+4. Extrude Cut, target = B, Through 3mm, **-X** 방향
+
+> 양 split 벽 모두 H-shape 골격. 와이어가 B의 cavity 안에서 자유롭게 좌우로 이동.
 
 ##### Step B12·B13 — Grooves 양측
 
@@ -1281,7 +1321,9 @@ Parts 패널에서 mirror 결과 파트 → Rename → **`Bottom Box C`**.
 | A split clearance ∅3.2 (X-관통) ↔ B 좌 매칭 insert ∅4.2 | 동축 |
 | Rim bosses 12개 전체 inner 벽 flush | abutment 정상 |
 | Cavity 분리 (각 section) | A: X=-307~-106, B: X=-100~+100, C: X=+106~+307 |
-| 분할 벽 (X=±103 양측) | 각 section의 split-end 외벽 3mm — tongue/groove 결합부 |
+| 분할 벽 H-shape | center strip (Y=±12) + top 림 (Z=-3~0) + back boss pad — 최소 골격 |
+| Cable passthrough | A↔B 1쌍, B↔C 1쌍 (front+back 통로) — 통로 ~6000 mm²/side |
+| Mega 2560 fit | B cavity 200×114×77 ⊃ Mega 102×53×16 — 권장 위치 B |
 
 ### 6.5 STL 출력
 
