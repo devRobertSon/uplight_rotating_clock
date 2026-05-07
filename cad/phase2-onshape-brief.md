@@ -1042,19 +1042,23 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 | 좌표 원점 | 박스 윗면 중심 (Z=0) | - |
 | 바닥 | Z = -80 | -`bottomBoxHeight` |
 | 외벽 두께 | 3 mm | `boxWallThickness` |
-| Cavity 통합 X 범위 | -307 ~ +307 | (-`enclW`/2 + `bWT`) ~ (+`enclW`/2 - `bWT`) |
-| Cavity 통합 Y 범위 | -57 ~ +57 | (-`enclD`/2 + `bWT`) ~ (+`enclD`/2 - `bWT`) |
-| Cavity 통합 Z 범위 | -77 ~ 0 (윗면 open) | -`bbH`+`bWT` ~ 0 |
+| Cavity Y 범위 | -57 ~ +57 (모든 section 공통) | (-`enclD`/2 + `bWT`) ~ (+`enclD`/2 - `bWT`) |
+| Cavity Z 범위 | -77 ~ 0 (윗면 open) | -`bbH`+`bWT` ~ 0 |
+| Cavity X 범위 (A) | -307 ~ -106 | -`enclW`/2 + `bWT` ~ `splitX_1` - `bWT` |
+| Cavity X 범위 (B) | -100 ~ +100 | `splitX_1` + `bWT` ~ `splitX_2` - `bWT` |
+| Cavity X 범위 (C) | +106 ~ +307 | `splitX_2` + `bWT` ~ +`enclW`/2 - `bWT` |
 
-> **분할 면 (X=±103)에는 외벽 없음** — cavity가 그대로 통과. 각 section 외벽은 자기 외측 끝(±310)·전·후·바닥 4면만.
+> **분할 면 (X=±103)에 3mm 벽**. 각 section의 split-end 외벽이 tongue/groove 결합부로 작동. 내부 공간은 split 벽으로 단절되지만, 와이어 통로 등 필요 시 추가 hole로 연결 가능.
 
 #### 분할 영역
 
-| Section | X 범위 | 길이 | 외측 외벽 |
+| Section | Outline X | 길이 | 외측 외벽 |
 |---|---|---|---|
-| A (좌) | -310 ~ -103 | 207 | 좌(-310) + 후·전·바닥 |
-| B (중) | -103 ~ +103 | 206 | 후·전·바닥 (양 분할 면 open) |
-| C (우) | +103 ~ +310 | 207 | 우(+310) + 후·전·바닥 |
+| A (좌) | -310 ~ -103 | 207 | 좌(-310) + **분할(-103)** + 후·전·바닥 |
+| B (중) | -103 ~ +103 | 206 | **양 분할(±103)** + 후·전·바닥 |
+| C (우) | +103 ~ +310 | 207 | 우(+310) + **분할(+103)** + 후·전·바닥 |
+
+> 모든 section이 6면 (4 외측 + 바닥 + 분할 벽) 닫힌 box. 윗면만 open (plate가 덮음).
 
 #### 기능 분배
 
@@ -1113,13 +1117,13 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 2. Extrude **New Solid**, Blind Depth `#bottomBoxHeight` (= 80), -Z
    - → Bottom Box A 솔리드 207 × 120 × 80
 
-##### Step A3·A4 — Cavity (분할 면 X=-103은 open)
+##### Step A3·A4 — Cavity (분할 면 X=-103에 3mm 벽 유지)
 
 1. Top plane → Sketch "A_cavity":
-   - Center point rectangle, 중심 (**-205**, 0), 치수 **204 × 114** (X × Y)
-   - X 범위 -307 ~ -103 (좌 외벽 3mm + 분할 면 그대로 노출)
+   - Center point rectangle, 중심 (**-206.5**, 0), 치수 **201 × 114** (X × Y)
+   - X 범위 -307 ~ -106 (좌 외벽 3mm + 분할 벽 3mm)
 2. Extrude Cut, **target = A solid only**, Blind Depth 77 (= `#bottomBoxHeight - #boxWallThickness`), -Z
-   - → A 내부 cavity. 분할 면(X=-103)은 cavity 측으로 그대로 open.
+   - → A 내부 cavity. 분할 면(X=-103)에 3mm 벽 유지 (X=-106 ~ -103, full Y·Z 솔리드) — tongue·groove·split 보스 결합부로 작동.
 
 ##### Step A5·A6 — DC jack
 
@@ -1139,26 +1143,30 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 ##### Step A11·A12 — Tongue (우측 분할 면)
 
+A의 분할 벽 (X=-106 ~ -103) 외측 면(X=-103)에서 +X로 돌출.
+
 1. A 우측 면 (X = -103) 클릭 → Sketch "A_tongue":
    - Center rectangle, 중심 (Y=0, Z=-40), 치수 `#splitTongueWidth` × `#bottomBoxHeight` (= 8 × 80)
 2. Extrude Add, target = A, Blind `#splitTongueDepth` (= 4), +X
    - → A 우측 끝에서 +X로 4mm tongue 돌출 (Y=-4~+4, Z=-80~0)
+   - **Tongue 전체 8×80 면이 분할 벽 솔리드(Y=-4~+4 ⊂ Y=-60~+60, Z=-80~0 풀)와 접촉** → 부유 없음, 견고히 부착
 
 ##### Step A13·A14 — Split cross-screw 보스 (cavity 내부, ×2)
 
-목표: A의 split 보스가 cavity 안쪽으로 6mm + split 너머 4mm = 10mm 돌출, 중심에 ∅3.2 X-관통 clearance. B의 매칭 보스가 X=-99 위치에서 heat insert로 받음.
+목표: A의 split 보스가 cavity 안쪽으로 3mm + split 벽 안 3mm + split 너머 4mm = 10mm 돌출, 중심에 ∅3.2 X-관통 clearance. B의 매칭 보스가 X=-99 위치에서 heat insert로 받음.
 
 1. A의 후면벽 cavity 측 inner 면 (Y=-57, A 영역) 클릭 → Sketch "A_split_boss_main":
    - 사각형 2개, 6 × 8 (X × Z), 중심 (X=-106, Z=-20) / (X=-106, Z=-60)
-   - X 범위 -109 ~ -103 (각 보스 6mm 폭, A solid 안에 머무름)
+   - X 범위 -109 ~ -103: -109 ~ -106이 cavity, -106 ~ -103이 split 벽 안에 매립 (Onshape Add는 기존 솔리드와 자동 merge)
 2. Extrude Add, target = A, Blind 8, +Y
    - → 보스 main body 2개, 6×8×8 mm (X×Y×Z), Y=-57 ~ -49
+   - **X=-106 ~ -103 영역은 split 벽과 동일 material — 추가 변화 없음 (이미 솔리드)**. 실질 cavity 돌출 부분은 X=-109 ~ -106 (3mm).
 
 3. 위 보스 main body의 +X 면 (X=-103, Y=-57~-49, Z=-24~-16 / Z=-64~-56) 각각 클릭 → Sketch "A_split_overhang":
    - 8 × 8 (Y × Z) 사각형으로 면 전체 덮음
 4. Extrude Add, target = A, Blind 4, +X
    - → 각 보스에 4mm overhang 추가 (X=-103 ~ -99, B 영역으로 돌출하지만 A solid에 merged)
-   - 최종 split 보스 A: 10×8×8 mm, X=-109 ~ -99, ×2
+   - 최종 split 보스 A: 10×8×8 mm 통합 영역, X=-109 ~ -99, ×2 (그 중 X=-106 ~ -103는 split 벽과 일체)
 
 ##### Step A15·A16 — Split cross-screw clearance 홀
 
@@ -1176,9 +1184,11 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 1. Top plane → Sketch "B_outline": 중심 (0, 0), 치수 206 × 120
 2. Extrude New Solid, Blind 80, -Z → Bottom Box B 솔리드 206×120×80
 
-##### Step B3·B4 — Cavity (양 분할 면 open)
-1. Sketch "B_cavity": 중심 (0, 0), 치수 **206 × 114** (X 그대로 — 양 분할 면 외벽 없음, Y만 외벽 차감)
+##### Step B3·B4 — Cavity (양 분할 면에 3mm 벽 유지)
+1. Sketch "B_cavity": 중심 (0, 0), 치수 **200 × 114** (X·Y 모두 외벽 차감)
+   - X 범위 -100 ~ +100 (양 분할 벽 3mm씩 유지)
 2. Extrude Cut, target = B, Blind 77, -Z
+   - → B 내부 cavity. 양 분할 면(X=±103)에 3mm 벽 유지 — groove·매칭 보스 결합부.
 
 ##### Step B5·B6·B7 — Vent slots ×10
 
@@ -1198,9 +1208,12 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 ##### Step B12·B13 — Grooves 양측
 
+B의 양 분할 벽 (X=-103~-100 좌, X=+100~+103 우) 외측 면에 groove cut.
+
 1. 좌측 X=-103 면 → Sketch "B_groove_L": center rect 중심 (Y=0, Z=-40), 치수 `#splitTongueWidth + 0.4` × `#bottomBoxHeight` (= 8.4 × 80)
-2. Extrude Cut, target = B, Blind 4.2 (= `#splitTongueDepth + 0.2`), -X
-3. 우측 X=+103 면 동일 → groove, +X 방향 cut
+2. Extrude Cut, target = B, Blind 4.2 (= `#splitTongueDepth + 0.2`), **+X** (벽 안쪽으로 파임)
+   - Cut 범위 X=-103 ~ -98.8: 분할 벽 (3mm) + cavity 1.2mm 진입. 벽 부분(3mm)이 실제 groove로 작동, cavity 부분은 빈 공간이라 영향 없음.
+3. 우측 X=+103 면 동일 → 중심 (Y=0, Z=-40), 8.4×80 → Extrude Cut, **-X** 방향 4.2mm
 
 ##### Step B14·B15 — Split cross-screw 매칭 보스 + heat insert (×4)
 
@@ -1267,8 +1280,8 @@ Parts 패널에서 mirror 결과 파트 → Rename → **`Bottom Box C`**.
 | A split 보스 끝 X=-99 ↔ B 좌 매칭 보스 시작 X=-99 | abutting |
 | A split clearance ∅3.2 (X-관통) ↔ B 좌 매칭 insert ∅4.2 | 동축 |
 | Rim bosses 12개 전체 inner 벽 flush | abutment 정상 |
-| Cavity 통합 (A+B+C 합) | X=-307~+307, Y=±57, Z=-77~0 |
-| 분할 면 X=±103 외벽 없음 | cavity 통합 |
+| Cavity 분리 (각 section) | A: X=-307~-106, B: X=-100~+100, C: X=+106~+307 |
+| 분할 벽 (X=±103 양측) | 각 section의 split-end 외벽 3mm — tongue/groove 결합부 |
 
 ### 6.5 STL 출력
 
