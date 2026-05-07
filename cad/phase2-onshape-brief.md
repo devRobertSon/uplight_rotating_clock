@@ -1061,7 +1061,7 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 | 기능 | A | B | C |
 |---|---|---|---|
 | Outer shell + cavity | ✓ | ✓ | ✓ |
-| DC jack hole (X=-200, Z=-40, ∅8) | ✓ | - | - |
+| DC jack hole (X=∓200, Z=-40, ∅8) | ✓ (X=-200) | - | ✓ (X=+200, mirror 결과 — 예비) |
 | Vent slots ×10 (X=0 중심 80mm long, Z=-65~-11) | - | ✓ | - |
 | Rim bosses + insert holes (12개 분배) | 4 | 4 | 4 |
 | Split tongue (분할 면 8×80, 4mm 돌출) | 우측 (+X) | - | 좌측 (-X) |
@@ -1224,7 +1224,7 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 #### 6.4.3 Section C — 우측 (A의 Mirror로 생성)
 
-A를 모델링한 후 **Mirror feature**로 YZ-plane (X=0) 기준 복사. A 절차 재실행 불필요.
+A를 모델링한 후 **Mirror feature**로 YZ-plane (X=0) 기준 통째 복사. A 절차 재실행 불필요.
 
 ##### Step C1 — Mirror feature 추가
 
@@ -1233,21 +1233,9 @@ A를 모델링한 후 **Mirror feature**로 YZ-plane (X=0) 기준 복사. A 절�
 3. Parts to mirror: **`Bottom Box A` 솔리드**만 선택 (B는 제외)
 4. Confirm → C 솔리드 생성
 
-→ A의 모든 features (cavity, DC잭, rim bosses, tongue, split 보스 main+overhang, clearance 홀)가 X 부호 반전되어 자동 복제. C 위치·치수는 §6.2 기능 분배 표와 일치.
+→ A의 **모든 features 통째 mirror** (cavity, DC잭, rim bosses, tongue, split 보스 main+overhang, clearance 홀). DC잭 hole도 X=+200 위치에 그대로 복제됨 — 의도적으로 유지 (필요 시 패스스루·예비 잭으로 활용).
 
-##### Step C2 — DC잭 hole 제거 (C는 잭 없음)
-
-Mirror 결과 C에도 DC잭 hole이 복사됨 (X=+200, Y=-60 외측). 이를 제거:
-
-1. Feature tree에서 Step C1 Mirror feature 클릭 → **Edit**
-2. **Features to mirror** 옵션 → A의 DC잭 sketch·extrude cut feature **체크 해제**
-3. 또는 Mirror 후 별도 Boolean으로 DC잭 hole 메우기:
-   - C의 후면 외측 면 (Y=-60, X=+200 근처)에 sketch ∅8 원
-   - Extrude Add, target = C, Blind 3, +Y → DC잭 자리 메움
-
-> **Onshape Mirror 옵션 권장**: "Features" 모드로 mirror하면 어떤 feature를 mirror할지 선택 가능. DC잭만 제외하고 mirror 가능. "Parts" 모드로 통째 mirror 후 추가 작업으로 메우는 것보다 깔끔.
-
-##### Step C3 — 파트 이름 정리
+##### Step C2 — 파트 이름 정리
 
 Parts 패널에서 mirror 결과 파트 → Rename → **`Bottom Box C`**.
 
@@ -1258,13 +1246,14 @@ Parts 패널에서 mirror 결과 파트 → Rename → **`Bottom Box C`**.
 | Outline 중심 X | +206.5 |
 | Cavity X 범위 | +103 ~ +307 |
 | Rim boss X 중심 | +301, +120 |
-| Tongue 위치 | 좌측 X=+103, **-X 4mm 돌출** (mirror로 자동 반전) |
+| Tongue 위치 | 좌측 X=+103, **-X 4mm 돌출** (mirror 자동 반전) |
 | Split 보스 main X 범위 | +103 ~ +109 |
 | Split 보스 overhang | X=+99 ~ +103, **-X 4mm** (mirror 자동 반전) |
 | Clearance ∅3.2 진입 면 | X=+109 (cavity 안쪽) |
-| DC잭·vents | 없음 (DC잭은 mirror 시 제외) |
+| **DC잭** | **있음 — X=+200 후면벽 외측** (예비/패스스루) |
+| Vents | 없음 (B에만) |
 
-> Mirror feature는 A의 후속 변경 시 C가 자동 갱신되는 **parametric link**. A의 boss 위치·크기 수정하면 C도 즉시 반영. 단, DC잭 mirror 제외 옵션은 유지.
+> Mirror feature는 A의 후속 변경 시 C가 자동 갱신되는 **parametric link**. A의 boss 위치·크기 수정하면 C도 즉시 반영.
 
 ---
 
