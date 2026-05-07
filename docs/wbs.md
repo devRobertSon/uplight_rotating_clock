@@ -51,6 +51,7 @@
 | `08 Side Panels` × 4 (D30) | ⏳ 대기 | 전·후·좌·우, 코너 tongue-groove |
 | `09 Top Plate` (D30) | ⏳ 대기 | 6 베어링 시트 + 둘레 홈 |
 | `10 Drum ∅60 Caps` (D30 — 6자리 필수) | ⏳ 대기 | ∅90 Caps 복제 + `_90` → `_60` 치환 |
+| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | ⏳ 대기 | 22.251 × 55 × 3, 요일·날씨 14장 |
 | Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
 
 ### 3.2 Sub-task 진행 매핑
@@ -125,6 +126,7 @@
 | `08 Side Panels` × 4 (D30) | §8 | 1.5h |
 | `09 Top Plate` (D30) | §8.5 | 1h |
 | `10 Drum ∅60 Caps` (D30 필수) | §4.5 | 30분 |
+| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | §4.6 | 30분 |
 | `05 Coupler` (placeholder) | §5.7 | 10분 |
 | Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
 | Export STEP / STL × 6 / DXF | §11 | 15분 |
