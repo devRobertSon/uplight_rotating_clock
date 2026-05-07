@@ -1021,231 +1021,256 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 ---
 
-## 6. Part Studio "06 Bottom Box"
+## 6. Part Studio "06 Bottom Box" (3 sections)
 
-전자부 enclosure. 뚜껑 없는 상자 형태로, **07 Bottom Plate** 가 뚜껑 역할.
+전자부 enclosure. 뚜껑 없는 상자 형태 — 07 Bottom Plate가 뚜껑 역할. 베드 200mm 한계 → **§1.5 Option B 채택**: 처음부터 3 sections (A·B·C)를 같은 Part Studio 안 별도 파트로 모델링.
 
 ### 6.1 Part Studio 생성 + Variable 연결
 
 1. 탭바 `+` → **Part Studio**, 이름 `06 Bottom Box`
 2. `Feature ▾` → **Variable Studio** → `Clock Config`
 
-### 6.2 Feature tree
+### 6.2 기준 형상 spec (참조 — 직접 모델링 없음)
 
-#### Step 1 — Sketch "outer shell" (Top plane)
+3 section을 결합했을 때 만들어져야 하는 통합 형상. 본 §6.2는 **검증·참조용 spec**일 뿐, 실제 모델링은 §6.4에서 각 section 별도로 진행.
 
-| 항목 | 값 |
-|---|---|
-| 평면 | Top |
-| 도구 | Center point rectangle |
-| 중심 | 원점 |
-| Width (X) | `#enclosureWidth` (= 620) |
-| Depth (Y) | `#enclosureDepth` (= 120) |
+#### 좌표·치수
 
-#### Step 2 — Extrude "outer shell"
+| 항목 | 값 | 변수 |
+|---|---|---|
+| 외형 | 620 × 120 × 80 (X × Y × Z) | `enclosureWidth` × `enclosureDepth` × `bottomBoxHeight` |
+| 좌표 원점 | 박스 윗면 중심 (Z=0) | - |
+| 바닥 | Z = -80 | -`bottomBoxHeight` |
+| 외벽 두께 | 3 mm | `boxWallThickness` |
+| Cavity 통합 X 범위 | -307 ~ +307 | (-`enclW`/2 + `bWT`) ~ (+`enclW`/2 - `bWT`) |
+| Cavity 통합 Y 범위 | -57 ~ +57 | (-`enclD`/2 + `bWT`) ~ (+`enclD`/2 - `bWT`) |
+| Cavity 통합 Z 범위 | -77 ~ 0 (윗면 open) | -`bbH`+`bWT` ~ 0 |
 
-- Type: **New**
-- End: Blind, Depth `#bottomBoxHeight` (= 80)
-- Direction: -Z (아래로) — 원점이 박스 윗면에 위치하도록
+> **분할 면 (X=±103)에는 외벽 없음** — cavity가 그대로 통과. 각 section 외벽은 자기 외측 끝(±310)·전·후·바닥 4면만.
 
-→ 620 × 120 × 80 mm 솔리드 직육면체.
+#### 분할 영역
 
-#### Step 3 — Sketch "interior cavity" (Top plane)
+| Section | X 범위 | 길이 | 외측 외벽 |
+|---|---|---|---|
+| A (좌) | -310 ~ -103 | 207 | 좌(-310) + 후·전·바닥 |
+| B (중) | -103 ~ +103 | 206 | 후·전·바닥 (양 분할 면 open) |
+| C (우) | +103 ~ +310 | 207 | 우(+310) + 후·전·바닥 |
 
-박스 안쪽 공간을 빼낼 영역:
+#### 기능 분배
 
-| 항목 | 값 |
-|---|---|
-| 도구 | Center point rectangle |
-| 중심 | 원점 |
-| Width (X) | `#enclosureWidth - 2 * #boxWallThickness` (= 614) |
-| Depth (Y) | `#enclosureDepth - 2 * #boxWallThickness` (= 114) |
+| 기능 | A | B | C |
+|---|---|---|---|
+| Outer shell + cavity | ✓ | ✓ | ✓ |
+| DC jack hole (X=-200, Z=-40, ∅8) | ✓ | - | - |
+| Vent slots ×10 (X=0 중심 80mm long, Z=-65~-11) | - | ✓ | - |
+| Rim bosses + insert holes (12개 분배) | 4 | 4 | 4 |
+| Split tongue (분할 면 8×80, 4mm 돌출) | 우측 (+X) | - | 좌측 (-X) |
+| Split groove (분할 면 8.4×80, 4.2mm 패임) | - | 양측 | - |
+| Split cross-screw 보스 + clearance (cavity 내부 Z=-20·-60) | 우측 ×2 | - | 좌측 ×2 |
+| Split cross-screw 매칭 보스 + heat insert | - | 양측 ×4 | - |
 
-#### Step 4 — Extrude Cut "cavity"
+#### 12 Rim boss 좌표 (전체 — §6.4에서 section별 4개씩 작업)
 
-- Type: **Remove**
-- End: Blind, Depth `#bottomBoxHeight - #boxWallThickness` (= 77, 바닥 3mm 남김)
-- Direction: -Z
+| Section | X 중심 | Y 중심 | 우상단 모서리 |
+|---|---|---|---|
+| A 외측 후 | -301 | -51 | (-295, -45) |
+| A 외측 전 | -301 | +51 | (-295, +57) |
+| A 분할안쪽 후 | -120 | -51 | (-114, -45) |
+| A 분할안쪽 전 | -120 | +51 | (-114, +57) |
+| B 좌 후 | -85 | -51 | (-79, -45) |
+| B 좌 전 | -85 | +51 | (-79, +57) |
+| B 우 후 | +85 | -51 | (+91, -45) |
+| B 우 전 | +85 | +51 | (+91, +57) |
+| C 분할안쪽 후 | +120 | -51 | (+126, -45) |
+| C 분할안쪽 전 | +120 | +51 | (+126, +57) |
+| C 외측 후 | +301 | -51 | (+307, -45) |
+| C 외측 전 | +301 | +51 | (+307, +57) |
 
-→ 박스 내부 공간. 측벽 3 mm + 바닥 3 mm.
-
-#### Step 5 — Sketch "DC jack hole" (후면벽 외측 면, Y = -60)
-
-DC 바렐잭 (M2.1 panel-mount) 통과 홀.
-
-1. 후면벽 외측 면 (Y = -`#enclosureDepth`/2 = -60) 클릭 → New Sketch
-2. ∅`#dcJackDiameter` (= 8) 원 1개
-3. 위치: X = `#dcJackX` (= -200), Z = `#dcJackZ` (= -`#bottomBoxHeight`/2 = -40)
-4. Sketch 종료
-
-> **주의**: Sketch 시 평면 좌표축은 X·Z (Y는 평면 normal). Onshape sketch에서는 sketch 평면의 horizontal/vertical 두 축으로 표시됨.
-
-#### Step 6 — Extrude Cut "DC jack" (벽 두께만 관통, **Through all 사용 금지**)
-
-- Type: **Remove**
-- End: **Blind**, Depth `#boxWallThickness` (= 3)
-- Direction: +Y (후면벽 외측에서 cavity 안쪽으로 3mm)
-
-> **Through all을 쓰면 반대편 전면벽까지 뚫림** (실제 발생). Blind + 벽 두께만 정확히. 잭 본체는 cavity 안에 위치, 후면벽 외측에 너트로 고정.
-
-#### Step 7 — Sketch "ventilation slots" (측면 외측 면)
-
-발열 통기를 위해 측벽에 가로 슬롯 패턴 10개. 박스 한쪽 측면 (예: 후면 Y = -60 또는 좌우 단면 X = -310 / +310 면 — 본 절차는 **후면 Y = -60 외측**을 예시).
-
-> **선택**: 후면벽은 DC잭이 X=-200에 이미 있으므로 vent slot은 X=0 중앙 영역 (X = -40 ~ +40)에 두어 충돌 회피. 또는 다른 면에 두어도 됨.
-
-1. 후면벽 외측 면 (Y = -60) 클릭 → New Sketch
-2. **첫 슬롯**: Center point rectangle
-   - Width (X) = `#ventSlotLength` (= 80)
-   - Height (Z) = `#ventSlotWidth` (= 2)
-   - 중심 (X=0, Z=`#ventSlotZStart` = -65) — 박스 바닥(Z=-80)에서 15mm 위
-3. Sketch 종료
-
-#### Step 8 — Extrude Cut "first vent slot"
-
-- Type: Remove
-- End: **Blind**, Depth `#boxWallThickness` (= 3)
-- Direction: +Y (후면벽 외측에서 cavity 안쪽으로)
-
-#### Step 8.5 — Linear Pattern "vent slots × 10"
-
-- Feature toolbar → **Linear Pattern**
-- Entities to pattern: Step 8 Extrude Cut feature
-- Direction: +Z 축 (Top plane 위쪽)
-- Count: `#ventSlotCount` (= 10)
-- Spacing: `#ventSlotPitch` (= 6 mm)
-- → 슬롯 10개 Z 중심: -65, -59, -53, -47, -41, -35, -29, -23, -17, -11
-  - 마지막 슬롯 상단 가장자리: Z = -10 (박스 top edge Z=0에서 10mm 아래로 안전 마진)
-- 결과: 9 × 6 = 54mm 영역에 슬롯 stack 형성
-
-> **검증**: 박스 cavity는 Z = -77 ~ 0 범위. 슬롯 stack -66 ~ -10이 cavity 안. ✓ 슬롯 ↔ 보스 (Z = 0 ~ -12, 다음 Step 9~10 추가) 충돌 가능성 — 슬롯 상단 -10 vs 보스 하단 -12, **2mm 여유**. 빠듯하면 `ventSlotZStart`를 -67로 내려 추가 마진.
-
-#### Step 9 — Sketch "rim bosses" (top edge 면, Z = 0) — **§1.5 hidden-bolt 강화**
-
-박스 5mm 벽 + ∅4.2 인서트 = 잔여 0.4mm → **cavity 안쪽에 보강 보스 12개** 추가 (3 sections × 4 = 12). 분할(D30) 후 각 box section이 독립적으로 plate에 잠겨야 함.
-
-**좌표 원칙**: 12×12 사각형이 박스 inner 벽(X=±307, Y=±57 — 외벽 ±310/±60 - 두께 3)에 정확히 flush로 붙도록, 사각형 한 변이 inner 면과 일치. 사각형 중심은 inner 면에서 ±6 안쪽.
-
-1. 박스 top 면 (Z = 0) 클릭 → New Sketch
-2. 12개 사각형 (`#rimBossWidth` × `#rimBossWidth` = 12 × 12 mm), 중심 위치:
-
-| Section | X 중심 | Y 중심 | 우상단 모서리 | Flush 내벽 |
-|---|---|---|---|---|
-| A 외측 후면 | -301 | -51 | (-295, -45) | X=-307 (좌) + Y=-57 (후) |
-| A 외측 전면 | -301 | +51 | (-295, +57) | X=-307 + Y=+57 (전) |
-| A 분할안쪽 후 | -120 | -51 | (-114, -45) | Y=-57만 |
-| A 분할안쪽 전 | -120 | +51 | (-114, +57) | Y=+57만 |
-| B 좌 후면 | -85 | -51 | (-79, -45) | Y=-57만 |
-| B 좌 전면 | -85 | +51 | (-79, +57) | Y=+57만 |
-| B 우 후면 | +85 | -51 | (+91, -45) | Y=-57만 |
-| B 우 전면 | +85 | +51 | (+91, +57) | Y=+57만 |
-| C 분할안쪽 후 | +120 | -51 | (+126, -45) | Y=-57만 |
-| C 분할안쪽 전 | +120 | +51 | (+126, +57) | Y=+57만 |
-| C 외측 후면 | +301 | -51 | (+307, -45) | X=+307 (우) + Y=-57 (후) |
-| C 외측 전면 | +301 | +51 | (+307, +57) | X=+307 + Y=+57 |
-
-좌표 도출:
-- Y 중심 ±51 = inner 면 Y=±57 - 6 (사각형 절반) → 한 변 Y=±57이 inner 후·전 벽에 정확히 abutting.
-- 외측 코너 X 중심 ±301 = inner 단면 X=±307 - 6 → 두 변(X=±307 + Y=±57)이 두 내벽에 동시 flush.
-- 분할 안쪽 X 중심 ±120 = split (X=±103) + 17mm → tongue·groove (4mm) + cross-screw 보스 (X=±103 영역) 회피.
-- B section X 중심 ±85 = split + 18mm → 동일 회피.
-
-3. Sketch 종료
-
-> **Onshape Boolean Add 주의**: 12×12 abutment(선/면 접촉)은 정상 작동하지만, 부동소수점 오차로 merge 실패 가능. 실패 시 **사각형을 1mm 확장** (예: 외측 코너는 13×13, 중심 (-301.5, -51.5))하여 벽과 1mm 겹침 보장. 본 절차는 12×12 abutment 우선 시도.
-
-#### Step 9.5 — Extrude "rim bosses" (Add)
-
-- Type: **Add (merge to box)**
-- End: Blind, Depth `#rimBossHeight` (= 12)
-- Direction: -Z (top edge에서 cavity 안쪽 아래로)
-- → 12개 보스: Z = 0 ~ -12 영역, 각 12 × 12 × 12 mm 정육면체가 벽에 융합
-
-#### Step 9.7 — Sketch "insert holes" (top edge 면, Z = 0)
-
-1. Top 면 (Z = 0) 클릭 → New Sketch
-2. 12개 ∅`#insertHole` (= 4.2) 원, 각 보스 중심 (X·Y는 Step 9 표와 동일)
-3. Sketch 종료
-
-#### Step 10 — Extrude Cut "insert holes"
-
-- Type: **Remove**
-- End: **Blind**, Depth 6 mm (인서트 길이 4 + 여유 2)
-- Direction: -Z (top edge에서 보스 안으로)
-- → 12개 ∅4.2 holes Z = 0 ~ -6 (벽 두께 5 + 보스 잠식 1)
-
-> **조립**: 07 Bottom Plate가 위에 안착 → plate top face에서 ↓ M3 6mm 볼트 12개 → 보스 안 heat insert에 박힘. **Bolt head는 plate top face = 드럼 측 = 내부 face** (§1.5 hidden-bolt 규칙).
+> 각 12×12 사각형이 박스 inner 벽(X=±307, Y=±57)에 정확히 flush. 좌표 도출은 이전 절차 §6.2 Step 9 동일 (PR #54).
 
 ### 6.3 파트 이름 정리
-Parts 패널 → Rename → **`Bottom Box`**.
 
-### 6.4 분할 설계 + 결합 (§1.5 적용)
+같은 Part Studio "06 Bottom Box" 안 3 솔리드 (Parts 패널):
+- `Bottom Box A` (좌)
+- `Bottom Box B` (중)
+- `Bottom Box C` (우)
 
-박스 가로 620mm → **3 sections (A/B/C) Onshape에서 별도 파트로**. 결합은 **사각 tongue-groove + M3 cross-screw**.
+> 같은 Part Studio에 두면 변수·좌표 일관 + Assembly에서 한 번에 import. 별도 Part Studio (`06a Box A`, `06b`, `06c`) 분리도 가능하나 변수 sync 부담.
 
-#### Step S1 — Section A (좌) 모델링
+### 6.4 각 Section 모델링 절차
+
+**원칙**: 각 section은 별도 New Solid로 시작. 후속 Extrude Add/Remove는 **Merge scope** 또는 **Boolean target**으로 해당 section만 지정. 다른 section과 절대 merge 안 함.
+
+---
+
+#### 6.4.1 Section A — 좌측 (DC잭 포함)
+
+##### Step A1·A2 — Outer shell
 
 1. Top plane → Sketch "A_outline":
-   - Center point rectangle, 중심 (-206.5, 0)에 207 × 120 ([-310, -103] × [-60, +60] 영역)
-   - Sketch 종료
-2. Extrude → New Solid → Blind, Depth `#bottomBoxHeight` (= 80), -Z
+   - Center point rectangle, 중심 (-206.5, 0), 치수 207 × 120 (X × Y)
+   - X 범위 -310 ~ -103, Y 범위 -60 ~ +60
+2. Extrude **New Solid**, Blind Depth `#bottomBoxHeight` (= 80), -Z
+   - → Bottom Box A 솔리드 207 × 120 × 80
 
-3. **Tongue 추가** (우측 끝 X = -103):
-   - 우측 X = -103 면 클릭 → New Sketch
-   - Center point rectangle, 중심 (Y=0, Z=중앙)에 `#splitTongueWidth` × `#bottomBoxHeight` (8 × 80)
-   - Extrude → **Add (merge)**, Blind, Depth `#splitTongueDepth` (= 4) → +X 방향
-   - → Section A 우측 끝에서 +X로 4mm 돌출 tongue
+##### Step A3·A4 — Cavity (분할 면 X=-103은 open)
 
-4. **Cross-screw 보스 (cavity 내부, 외부 visible 차단)** — §1.5 hidden-bolt 규칙 적용:
-   - Section A의 cavity 안쪽 (Y=0 근처, Z = **-20·-60** 두 위치 — 박스 cavity Z=-77~0 범위 안) 면에 sketch:
-     - Center rectangle 8 × 8 (Y × Z), cavity 내벽에서 +X 방향으로 시작
-   - Extrude Add, **Depth 12 mm** (= 8mm 보스 본체 + 4mm split 너머 오버행), +X 방향
-     → A 우측 끝(X=-103)에서 +X로 4mm 돌출하는 보스 2개 (Z = -20, -60)
-   - 각 보스에 ∅3.2 clearance 홀, X방향 관통 (cavity 면 → +X 방향)
-   - Extrude Cut, Through 보스
-   - **Bolt 진입 face = cavity 안쪽 (내부)**, 박스 외부에서 invisible
+1. Top plane → Sketch "A_cavity":
+   - Center point rectangle, 중심 (**-205**, 0), 치수 **204 × 114** (X × Y)
+   - X 범위 -307 ~ -103 (좌 외벽 3mm + 분할 면 그대로 노출)
+2. Extrude Cut, **target = A solid only**, Blind Depth 77 (= `#bottomBoxHeight - #boxWallThickness`), -Z
+   - → A 내부 cavity. 분할 면(X=-103)은 cavity 측으로 그대로 open.
 
-5. 박스 내부 cavity, DC잭 홀 등은 §6.2 그대로 (단, X 범위 -310 ~ -103)
+##### Step A5·A6 — DC jack
 
-#### Step S2 — Section B (중) 모델링
+1. 후면벽 외측 면 (Y=-60, A 영역 내) 클릭 → Sketch "A_DC_jack":
+   - ∅`#dcJackDiameter` (= 8) 원
+   - 중심 (X = `#dcJackX` = -200, Z = `#dcJackZ` = -40)
+2. Extrude Cut, target = A, Blind Depth `#boxWallThickness` (= 3), +Y
+   - **Through all 금지** — 전면벽까지 뚫림 사고
 
-1. Top plane → Sketch "B_outline":
-   - Center point rectangle, 중심 (0, 0)에 206 × 120
-2. Extrude → New, Blind, Depth 80, -Z
+##### Step A7~A10 — Rim bosses 4개 + insert holes
 
-3. **Groove 양 끝**:
-   - 좌측 X = -103 면 sketch:
-     - Center rectangle, 중심 (Y=0, Z=중앙)에 `8.4 × 80` (= 8 + 0.4 clearance)
-     - Extrude Cut, Blind, Depth 4.2 (= `#splitTongueDepth + 0.2`) → -X 방향 (groove 안쪽으로 패임)
-   - 우측 X = +103 면 동일하게 groove (반대 방향)
+1. Top 면 (Z=0, A solid) 클릭 → Sketch "A_rim_bosses": 12×12 mm 사각형 4개:
+   - (-301, -51), (-301, +51), (-120, -51), (-120, +51)
+2. Extrude Add, target = A, Blind 12, -Z → 보스 4개 fused
+3. Top 면 → Sketch "A_insert_holes": ∅`#insertHole` (= 4.2) 원 4개 (보스 중심)
+4. Extrude Cut, target = A, Blind 6, -Z → 인서트 홀 4개
 
-4. **Cross-screw 매칭 자리 + heat insert (cavity 내부)** — §1.5 hidden-bolt 규칙:
-   - Section B 양 끝 (X = ±103) cavity 안쪽 면 (Y=0, Z = **-20·-60** — A·C section 보스 위치와 정렬)에 sketch:
-     - 8 × 8 mm 사각형 (보스 슬라이드 자리)
-   - Extrude Cut, Blind, Depth 4mm (-X 또는 +X 방향, A·C section 보스 오버행 4mm와 일치)
-     → 양 끝에 보스 자리 4개 패임 (좌측 2 + 우측 2)
-   - 각 자리 안쪽 끝 면에 ∅`#insertHole` (= 4.2) heat insert 홀, Blind 6mm (X 방향, cavity 안쪽으로)
-   - Heat insert는 cavity 안쪽에 매립 → A 보스의 clearance와 정렬 시 X방향 볼트 통로 형성
-   - **Bolt head는 A 보스의 cavity 측면 = 내부 face**, 외부 invisible
+##### Step A11·A12 — Tongue (우측 분할 면)
 
-#### Step S3 — Section C (우) 모델링
+1. A 우측 면 (X = -103) 클릭 → Sketch "A_tongue":
+   - Center rectangle, 중심 (Y=0, Z=-40), 치수 `#splitTongueWidth` × `#bottomBoxHeight` (= 8 × 80)
+2. Extrude Add, target = A, Blind `#splitTongueDepth` (= 4), +X
+   - → A 우측 끝에서 +X로 4mm tongue 돌출 (Y=-4~+4, Z=-80~0)
 
-Section A의 거울 (좌우 반전):
-- X 범위 +103 ~ +310 (중심 +206.5)
-- Tongue은 좌측 끝 X = +103에서 -X로 돌출
+##### Step A13·A14 — Split cross-screw 보스 (cavity 내부, ×2)
 
-#### Step S4 — Tongue과 Groove 정렬 검증
+목표: A의 split 보스가 cavity 안쪽으로 6mm + split 너머 4mm = 10mm 돌출, 중심에 ∅3.2 X-관통 clearance. B의 매칭 보스가 X=-99 위치에서 heat insert로 받음.
 
-Onshape Assembly 또는 Boolean 시뮬:
-- Section A의 tongue X 범위: -103 ~ -99 (4mm 돌출)
-- Section B의 -X groove: -103 ~ -99 (4mm 패임)
-- 일치 → 조립 시 tongue이 groove에 정확히 들어가야 함
-- B의 외측 면 (X = -103)과 A의 외측 면 (X = -103)이 일치 (tongue/groove 영역에서만 안쪽으로 들어감)
+1. A의 후면벽 cavity 측 inner 면 (Y=-57, A 영역) 클릭 → Sketch "A_split_boss_main":
+   - 사각형 2개, 6 × 8 (X × Z), 중심 (X=-106, Z=-20) / (X=-106, Z=-60)
+   - X 범위 -109 ~ -103 (각 보스 6mm 폭, A solid 안에 머무름)
+2. Extrude Add, target = A, Blind 8, +Y
+   - → 보스 main body 2개, 6×8×8 mm (X×Y×Z), Y=-57 ~ -49
+
+3. 위 보스 main body의 +X 면 (X=-103, Y=-57~-49, Z=-24~-16 / Z=-64~-56) 각각 클릭 → Sketch "A_split_overhang":
+   - 8 × 8 (Y × Z) 사각형으로 면 전체 덮음
+4. Extrude Add, target = A, Blind 4, +X
+   - → 각 보스에 4mm overhang 추가 (X=-103 ~ -99, B 영역으로 돌출하지만 A solid에 merged)
+   - 최종 split 보스 A: 10×8×8 mm, X=-109 ~ -99, ×2
+
+##### Step A15·A16 — Split cross-screw clearance 홀
+
+1. 각 split 보스의 -X 끝 면 (X=-109, cavity 측) → Sketch "A_split_clearance":
+   - ∅3.2 원 1개, 보스 중심 (Y=-53, Z=-20 / -60)
+2. Extrude Cut, target = A, Blind 10 (= 보스 X 길이 -109~-99), +X
+   - → 각 보스에 X-관통 ∅3.2 clearance
+   - **Bolt head 진입 면 = X=-109 (cavity 안쪽)** = 내부 face
+
+---
+
+#### 6.4.2 Section B — 중앙 (vent slots 포함)
+
+##### Step B1·B2 — Outer shell
+1. Top plane → Sketch "B_outline": 중심 (0, 0), 치수 206 × 120
+2. Extrude New Solid, Blind 80, -Z → Bottom Box B 솔리드 206×120×80
+
+##### Step B3·B4 — Cavity (양 분할 면 open)
+1. Sketch "B_cavity": 중심 (0, 0), 치수 **206 × 114** (X 그대로 — 양 분할 면 외벽 없음, Y만 외벽 차감)
+2. Extrude Cut, target = B, Blind 77, -Z
+
+##### Step B5·B6·B7 — Vent slots ×10
+
+1. 후면벽 외측 (Y=-60, B 영역) → Sketch "B_vent_slot1":
+   - Center rectangle, 중심 (X=0, Z=`#ventSlotZStart` = -65), 치수 `#ventSlotLength` × `#ventSlotWidth` (= 80 × 2)
+2. Extrude Cut, target = B, Blind `#boxWallThickness` (= 3), +Y
+3. Linear Pattern (feature toolbar): 전 단계 Extrude Cut feature 선택, +Z 방향, Count `#ventSlotCount` (= 10), Spacing `#ventSlotPitch` (= 6)
+   - → 슬롯 10개 Z 중심: -65, -59, …, -11
+
+##### Step B8~B11 — Rim bosses 4개 + insert holes
+
+1. Top 면 → Sketch "B_rim_bosses": 12×12 사각형 4개:
+   - (-85, -51), (-85, +51), (+85, -51), (+85, +51)
+2. Extrude Add, target = B, Blind 12, -Z
+3. Top 면 → Sketch "B_insert_holes": ∅4.2 원 4개
+4. Extrude Cut, target = B, Blind 6, -Z
+
+##### Step B12·B13 — Grooves 양측
+
+1. 좌측 X=-103 면 → Sketch "B_groove_L": center rect 중심 (Y=0, Z=-40), 치수 `#splitTongueWidth + 0.4` × `#bottomBoxHeight` (= 8.4 × 80)
+2. Extrude Cut, target = B, Blind 4.2 (= `#splitTongueDepth + 0.2`), -X
+3. 우측 X=+103 면 동일 → groove, +X 방향 cut
+
+##### Step B14·B15 — Split cross-screw 매칭 보스 + heat insert (×4)
+
+목표: B에 4개 보스 (좌·우 split 각 2개), A·C의 split 보스 overhang(X=-99 좌, X=+99 우)이 도달하는 위치에서 heat insert로 받음.
+
+1. B의 후면벽 cavity 측 inner 면 (Y=-57, B 영역) → Sketch "B_split_match_main":
+   - 사각형 4개, 6 × 8 (X × Z):
+     - 좌측 매칭: 중심 (X=-96, Z=-20) / (X=-96, Z=-60) — X 범위 -99 ~ -93
+     - 우측 매칭: 중심 (X=+96, Z=-20) / (X=+96, Z=-60) — X 범위 +93 ~ +99
+2. Extrude Add, target = B, Blind 8, +Y
+   - → B에 보스 4개 6×8×8 mm
+
+3. 각 보스의 분할 측 끝 면 (좌측 매칭은 -X 면 X=-99, 우측 매칭은 +X 면 X=+99) → Sketch "B_split_insert":
+   - ∅`#insertHole` (= 4.2) 원 1개, 보스 중심 (Y=-53, Z=-20 / -60)
+4. Extrude Cut, target = B, Blind 6, +X (좌측) / -X (우측, 보스 안으로)
+   - → 4개 heat insert 홀 (인서트 6mm 매립)
+
+> **조립 정렬 검증**: A 보스 overhang 끝 X=-99 ↔ B 매칭 보스 -X 면 X=-99 정확히 abutting. M3 8mm 볼트가 A 보스 -X 면(X=-109)에서 들어가 A 10mm + 매칭 보스 인서트 0~6mm 영역까지 진입. 6mm 정도 engagement ≈ M3 6mm 분이 인서트와 결합. 우측 동일.
+
+---
+
+#### 6.4.3 Section C — 우측 (A의 거울)
+
+A 절차를 X 부호 반전. 모든 X 좌표 부호 뒤집기, +X / -X 방향 모두 반전.
+
+| 항목 | A 값 | C 값 (X 부호 반전) |
+|---|---|---|
+| Outline 중심 X | -206.5 | **+206.5** |
+| Cavity 중심 X | -205 | **+205** |
+| Cavity X 범위 | -307 ~ -103 | **+103 ~ +307** |
+| Rim boss X 중심 | -301, -120 | **+301, +120** |
+| Tongue 위치 | 우측 X=-103 (+X 4mm) | **좌측 X=+103 (-X 4mm)** |
+| Split 보스 main 중심 | (-106, Z=-20/-60) | **(+106, Z=-20/-60)** |
+| Split 보스 main X 범위 | -109 ~ -103 | **+103 ~ +109** |
+| Split 보스 overhang +X 면 | X=-103 → -X 4mm | **X=+103 → +X 4mm**? wait |
+
+> 정정: C의 split 보스는 B와 결합되는 면이 좌측(X=+103)이므로 main 보스가 X=+103 ~ +109 (B 측 시작)이고, overhang은 -X 방향으로 X=+103에서 X=+99까지 돌출.
+>
+> 즉 C 보스 main: 중심 (X=+106, Z=-20/-60), X=+103 ~ +109, +Y 방향 8mm.
+> C 보스 overhang: X=+99 ~ +103, +Y 방향 8mm, -X 방향 4mm 추가.
+> Clearance ∅3.2: 보스 +X 면(X=+109)에서 들어가 -X 방향 10mm 관통 → bolt head 진입 면 = cavity 안쪽 (+X 외벽 X=+307이 막혀 있고, X=+109는 cavity 안쪽). ✓
+
+DC잭·vents 없음. Rim boss 4개만.
+
+---
+
+#### 6.4.4 정렬 검증 (모델링 후)
+
+| 검증 | 기대 |
+|---|---|
+| A·B·C 3 솔리드 분리 | Parts 패널에 3개, 서로 미접촉 |
+| A 우측 끝 X=-103 ↔ B 좌측 끝 X=-103 | tongue/groove 위치 일치 |
+| A tongue X=-103~-99 ↔ B 좌 groove X=-103~-99 | 4mm 오버랩 |
+| A split 보스 끝 X=-99 ↔ B 좌 매칭 보스 시작 X=-99 | abutting |
+| A split clearance ∅3.2 (X-관통) ↔ B 좌 매칭 insert ∅4.2 | 동축 |
+| Rim bosses 12개 전체 inner 벽 flush | abutment 정상 |
+| Cavity 통합 (A+B+C 합) | X=-307~+307, Y=±57, Z=-77~0 |
+| 분할 면 X=±103 외벽 없음 | cavity 통합 |
 
 ### 6.5 STL 출력
-- 재료: PETG, Layer 0.2 mm, Infill 25%
-- 출력 방향: 윗면 트인 채로 베드 위 (서포트 최소)
-- 큰 부피라 분할 출력 필요할 수 있음 (3등분 도브테일)
+
+각 section은 **별도 STL 파일**:
+- `cad/stl/bottom_box_A.stl`
+- `cad/stl/bottom_box_B.stl`
+- `cad/stl/bottom_box_C.stl`
+
+설정:
+- 재료 PETG, Layer 0.2 mm, Infill 25%
+- 출력 방향: 윗면(Z=0) 트인 채로 베드 위 — 서포트 최소화
+- 베드 200mm 한계 내 (각 section 207mm는 빠듯) → 베드 중심 정렬, 필요 시 약간 회전 또는 베드 250mm 프린터 권장
 
 ---
 
