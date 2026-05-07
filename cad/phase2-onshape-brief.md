@@ -1162,7 +1162,8 @@ A의 분할 벽(X=-106~-103, 3mm slab)에서 tongue·boss 지지 영역을 제�
        (Y 범위 +12~+57, Z 범위 -77~-3)
      - **Back 통로**: 중심 (Y=-30.5, Z=-40), 치수 37 × 74
        (Y 범위 -49~-12, Z 범위 -77~-3)
-2. Extrude Cut, target = A, **Through** (3mm 벽 관통), -X 방향
+2. Extrude Cut, target = A, **Blind 3mm** (정확히 split 벽 두께만), -X 방향
+   - **Through all 금지** — sketch가 cavity (X=-106~-307) 통과 후 좌측 외벽 (X=-307~-310)도 뚫음. Blind 3mm이 안전.
    - → 분할 벽이 H-shape에 가까운 골격 형태로 변신
    - 통로 총 면적 ≈ 6068 mm² (Mega↔A 드라이버 12-15 wire 통과 충분)
 
@@ -1240,9 +1241,9 @@ B의 양 분할 벽 (좌·우)에 동일 cable passthrough 패턴 적용. §A10.
 1. 좌측 X=-103 면 → Sketch "B_split_passthrough_L":
    - Front 통로: 중심 (Y=+34.5, Z=-40), 치수 45 × 74
    - Back 통로: 중심 (Y=-30.5, Z=-40), 치수 37 × 74
-2. Extrude Cut, target = B, Through 3mm, **+X** 방향 (벽 안쪽으로)
+2. Extrude Cut, target = B, **Blind 3mm**, **+X** 방향 (벽 안쪽으로) — Through all 금지
 3. 우측 X=+103 면 → Sketch "B_split_passthrough_R": 동일 좌표
-4. Extrude Cut, target = B, Through 3mm, **-X** 방향
+4. Extrude Cut, target = B, **Blind 3mm**, **-X** 방향 — Through all 금지
 
 > 양 split 벽 모두 H-shape 골격. 와이어가 B의 cavity 안에서 자유롭게 좌우로 이동.
 
