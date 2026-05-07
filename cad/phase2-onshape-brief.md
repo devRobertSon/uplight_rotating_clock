@@ -1222,28 +1222,49 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 ---
 
-#### 6.4.3 Section C — 우측 (A의 거울)
+#### 6.4.3 Section C — 우측 (A의 Mirror로 생성)
 
-A 절차를 X 부호 반전. 모든 X 좌표 부호 뒤집기, +X / -X 방향 모두 반전.
+A를 모델링한 후 **Mirror feature**로 YZ-plane (X=0) 기준 복사. A 절차 재실행 불필요.
 
-| 항목 | A 값 | C 값 (X 부호 반전) |
-|---|---|---|
-| Outline 중심 X | -206.5 | **+206.5** |
-| Cavity 중심 X | -205 | **+205** |
-| Cavity X 범위 | -307 ~ -103 | **+103 ~ +307** |
-| Rim boss X 중심 | -301, -120 | **+301, +120** |
-| Tongue 위치 | 우측 X=-103 (+X 4mm) | **좌측 X=+103 (-X 4mm)** |
-| Split 보스 main 중심 | (-106, Z=-20/-60) | **(+106, Z=-20/-60)** |
-| Split 보스 main X 범위 | -109 ~ -103 | **+103 ~ +109** |
-| Split 보스 overhang +X 면 | X=-103 → -X 4mm | **X=+103 → +X 4mm**? wait |
+##### Step C1 — Mirror feature 추가
 
-> 정정: C의 split 보스는 B와 결합되는 면이 좌측(X=+103)이므로 main 보스가 X=+103 ~ +109 (B 측 시작)이고, overhang은 -X 방향으로 X=+103에서 X=+99까지 돌출.
->
-> 즉 C 보스 main: 중심 (X=+106, Z=-20/-60), X=+103 ~ +109, +Y 방향 8mm.
-> C 보스 overhang: X=+99 ~ +103, +Y 방향 8mm, -X 방향 4mm 추가.
-> Clearance ∅3.2: 보스 +X 면(X=+109)에서 들어가 -X 방향 10mm 관통 → bolt head 진입 면 = cavity 안쪽 (+X 외벽 X=+307이 막혀 있고, X=+109는 cavity 안쪽). ✓
+1. Feature toolbar → **Mirror**
+2. Mirror plane: **Right plane** (= YZ-plane, X=0 — 박스 중심선)
+3. Parts to mirror: **`Bottom Box A` 솔리드**만 선택 (B는 제외)
+4. Confirm → C 솔리드 생성
 
-DC잭·vents 없음. Rim boss 4개만.
+→ A의 모든 features (cavity, DC잭, rim bosses, tongue, split 보스 main+overhang, clearance 홀)가 X 부호 반전되어 자동 복제. C 위치·치수는 §6.2 기능 분배 표와 일치.
+
+##### Step C2 — DC잭 hole 제거 (C는 잭 없음)
+
+Mirror 결과 C에도 DC잭 hole이 복사됨 (X=+200, Y=-60 외측). 이를 제거:
+
+1. Feature tree에서 Step C1 Mirror feature 클릭 → **Edit**
+2. **Features to mirror** 옵션 → A의 DC잭 sketch·extrude cut feature **체크 해제**
+3. 또는 Mirror 후 별도 Boolean으로 DC잭 hole 메우기:
+   - C의 후면 외측 면 (Y=-60, X=+200 근처)에 sketch ∅8 원
+   - Extrude Add, target = C, Blind 3, +Y → DC잭 자리 메움
+
+> **Onshape Mirror 옵션 권장**: "Features" 모드로 mirror하면 어떤 feature를 mirror할지 선택 가능. DC잭만 제외하고 mirror 가능. "Parts" 모드로 통째 mirror 후 추가 작업으로 메우는 것보다 깔끔.
+
+##### Step C3 — 파트 이름 정리
+
+Parts 패널에서 mirror 결과 파트 → Rename → **`Bottom Box C`**.
+
+##### 검증 (mirror 후 자동 결과)
+
+| 항목 | 값 |
+|---|---|
+| Outline 중심 X | +206.5 |
+| Cavity X 범위 | +103 ~ +307 |
+| Rim boss X 중심 | +301, +120 |
+| Tongue 위치 | 좌측 X=+103, **-X 4mm 돌출** (mirror로 자동 반전) |
+| Split 보스 main X 범위 | +103 ~ +109 |
+| Split 보스 overhang | X=+99 ~ +103, **-X 4mm** (mirror 자동 반전) |
+| Clearance ∅3.2 진입 면 | X=+109 (cavity 안쪽) |
+| DC잭·vents | 없음 (DC잭은 mirror 시 제외) |
+
+> Mirror feature는 A의 후속 변경 시 C가 자동 갱신되는 **parametric link**. A의 boss 위치·크기 수정하면 C도 즉시 반영. 단, DC잭 mirror 제외 옵션은 유지.
 
 ---
 
