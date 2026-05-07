@@ -46,10 +46,11 @@
 | `03 Shaft` | ⏳ 대기 | Phase 2 §5 (Shaft·Bearing 분리됨) |
 | `04 Bearing 625ZZ` | ⏳ 대기 | Phase 2 §5.5 |
 | `05 Coupler` (placeholder) | ⏳ 대기 | Phase 2 §5.7 — 보유품 placeholder 모델 |
-| `06 Motor Mount` (28BYJ-48) | ⏳ 대기 | |
-| `07 Hall Bracket` (A3144) | ⏳ 대기 | |
-| `08a Frame Top Plate` + `08b Frame Bottom Plate` | ⏳ 대기 | Option C: 2 plate + M5 봉 4 (BOM 추가) |
-| `09 Drum ∅60 Caps` (선택) | ⏳ 보류 | Phase 6 본편에서 ∅90 Caps 복제 + `_90` → `_60` 치환 |
+| `06 Bottom Box` (D30) | ⏳ 대기 | 전자부 enclosure, 뚜껑 없음 |
+| `07 Bottom Plate` (D30) | ⏳ 대기 | 박스 뚜껑 + 6 모터·Hall·LED + 둘레 홈 |
+| `08 Side Panels` × 4 (D30) | ⏳ 대기 | 전·후·좌·우, 코너 tongue-groove |
+| `09 Top Plate` (D30) | ⏳ 대기 | 6 베어링 시트 + 둘레 홈 |
+| `10 Drum ∅60 Caps` (D30 — 6자리 필수) | ⏳ 대기 | ∅90 Caps 복제 + `_90` → `_60` 치환 |
 | Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
 
 ### 3.2 Sub-task 진행 매핑
@@ -66,7 +67,7 @@
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
 - **세부 작업 지시서**: [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md)
 
-### 3.3 Phase 2 진행 중 결정·정정 (D22~D29)
+### 3.3 Phase 2 진행 중 결정·정정 (D22~D30)
 
 | ID | 결정 | 발생 시점 |
 |---|---|---|
@@ -78,6 +79,7 @@
 | D27 | Frame 측면 기둥 높이 140 → **160 mm** (D28에 의해 140 mm로 회복) | D25·D26 후 envelope ≈ 147 mm, 13 mm 버퍼 확보 |
 | D28 | 하부 보스 드럼 **내부 방향**. 양 캡 모두 M3 set screw 사용 (접착제 X). 하부 캡 M3은 조립 중 잠근 후 드럼 닫혀 분해 불가. 상부 보스는 외부(M3 접근). Frame 160 → **140 mm** | 보스가 드럼과 높이 공유 → envelope 12 mm 절감, 상부 캡만 분리하여 패널 교체 가능 (D13 부합) |
 | D29 | 🔒 패널 폭 freeze 3자리 (∅90: 25.032, ∅60: 22.251). slot ← panel 의존 반전 | 외주 가공 발주 완료, 사후 변경 불가. drumDiameter 등 변경 시 panel은 보호됨 |
+| D30 | 통합 enclosure 구조, 6자리 직접 진입. **§6 Motor Mount + §7 Hall Bracket 제거**, 4개 신규 Part Studio (06 박스 + 07 하부 plate + 08 측면 4 piece + 09 상부 plate) | 단일 자리 프로토 의미 없음 (plate가 6자리 통합), 외관 깔끔, 격벽 자동 형성, 무도구 분해 |
 
 ---
 
@@ -118,9 +120,11 @@
 |---|---|---|
 | `03 Shaft` Part Studio | §5 | 10분 |
 | `04 Bearing 625ZZ` | §5.5 | 10분 |
-| `06 Motor Mount` (28BYJ-48 브라켓) | §6 | 45분 |
-| `07 Hall Bracket` (A3144 + 풀업) | §7 | 30분 |
-| `08a Frame Top Plate` + `08b Frame Bottom Plate` (Option C) | §8 | 1시간 |
+| `06 Bottom Box` (D30) | §6 | 1.5h |
+| `07 Bottom Plate` (D30) | §7 | 2h |
+| `08 Side Panels` × 4 (D30) | §8 | 1.5h |
+| `09 Top Plate` (D30) | §8.5 | 1h |
+| `10 Drum ∅60 Caps` (D30 필수) | §4.5 | 30분 |
 | `05 Coupler` (placeholder) | §5.7 | 10분 |
 | Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
 | Export STEP / STL × 6 / DXF | §11 | 15분 |
