@@ -63,6 +63,75 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 
 ---
 
+## 1.5 분할 출력 전략 (3D 프린터 베드 한계)
+
+베드 크기 가정 **200 × 200 mm** (가장 보수적, 일반 hobbyist 프린터). 가로 620mm 부품들은 분할 출력 필수.
+
+### 분할 대상 (X 방향 길이 > 200mm)
+
+| Part | 길이 | 분할 |
+|---|---|---|
+| 06 Bottom Box (620 × 120 × 80) | 620 | ✅ 3 sections |
+| 07 Bottom Plate (620 × 120 × 5) | 620 | ✅ 3 sections |
+| 08 Front Panel (614 × 90 × 3) | 614 | ✅ 3 sections |
+| 08 Back Panel (614 × 90 × 3) | 614 | ✅ 3 sections |
+| 09 Top Plate (620 × 120 × 5) | 620 | ✅ 3 sections |
+| 08 Left/Right Panel (114 mm) | 114 | ❌ 단일 출력 OK |
+| 캡·샤프트·베어링·커플러·드럼 60 등 | < 100 | ❌ 단일 |
+
+### 분할 위치 (5개 부품 모두 통일)
+
+X 방향으로 **±103 mm** 두 곳에서 절단 → 3 sections 각 ~207 mm:
+- Section A (좌): X = -310 ~ -103 (포함 D1 요일, D2 시십)
+- Section B (중): X = -103 ~ +103 (포함 D3 시일, 콜론, D4 분십)
+- Section C (우): X = +103 ~ +310 (포함 D5 분일, D6 날씨)
+
+> 모든 layer (box, bottom plate, side panels, top plate)가 **같은 X 위치에서 분할** → split line이 수직으로 일관, 조립 시 정렬 자연 보장.
+
+### 분할 위치 선정 근거
+
+드럼 X 좌표: -265, -170, -65, +65, +170, +265.
+분할선 ±103은 D2-D3 사이 ((−170 + −65)/2 = −117.5 근처) 와 D4-D5 사이 ((+65 + +170)/2 = +117.5 근처) 의 빈 영역. 드럼·홀과 겹치지 않음.
+
+### 분할 결합 방식
+
+1. **도브테일 tongue-groove** (정렬·자연 잠금)
+   - Section 양 끝에 사다리꼴 단면의 tongue (한쪽) + groove (반대쪽)
+   - tongue 폭 8 mm, 깊이 4 mm
+2. **M3 cross-screw** (구조 잠금)
+   - 각 split line 상하단 2개씩 M3 heat insert + 볼트
+   - 한쪽 section에 heat insert, 다른 쪽에서 clearance 홀
+
+### Onshape 모델링 옵션
+
+| 옵션 | 장단점 |
+|---|---|
+| **A. Slicer 분할** (모놀리식 모델 → Cura/PrusaSlicer로 분할) | 빠름. Joint 약함. 정렬 어려움. |
+| **B. Onshape에서 처음부터 3 section 모델링** ✅ | 도브테일·M3 fit 정밀. 시간 더 소요. |
+
+**B 권장**. 각 §6/§7/§8/§9 절차에 split section 별도 sketch + extrude 작업 추가.
+
+### 신규 변수 (§2.3에 추가)
+
+| Name | Value | 비고 |
+|---|---|---|
+| `splitX_1` | `-103 mm` | 좌측 split 위치 |
+| `splitX_2` | `+103 mm` | 우측 split 위치 |
+| `splitTongueWidth` | `8 mm` | 도브테일 tongue 폭 |
+| `splitTongueDepth` | `4 mm` | tongue 침투 깊이 |
+| `splitJointInsertHole` | `4.2 mm` | M3 heat insert (= insertHole) |
+
+### 출력 파일 명명 규칙
+
+각 부품 STL 분할 시:
+```
+bottom_plate_A.stl  ← 좌측 section
+bottom_plate_B.stl  ← 중간 section
+bottom_plate_C.stl  ← 우측 section
+```
+
+---
+
 ## 2. Variable Studio — 글로벌 변수
 
 ### 2.1 Variable Studio 탭 만들기
@@ -144,6 +213,10 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | `drumX_4` | Length | `+65 mm` | 분십 (∅90) |
 | `drumX_5` | Length | `+170 mm` | 분일 (∅90) |
 | `drumX_6` | Length | `+265 mm` | 날씨 (∅60) |
+| `splitX_1` | Length | `-103 mm` | 좌측 분할 위치 (베드 200mm 한계) |
+| `splitX_2` | Length | `+103 mm` | 우측 분할 위치 |
+| `splitTongueWidth` | Length | `8 mm` | 도브테일 tongue 폭 |
+| `splitTongueDepth` | Length | `4 mm` | tongue 침투 깊이 |
 
 ### 2.4 Part Studio에서 변수 참조하기
 
@@ -912,7 +985,39 @@ Through (측벽 두께 3 mm).
 ### 6.3 파트 이름 정리
 Parts 패널 → Rename → **`Bottom Box`**.
 
-### 6.4 STL 출력
+### 6.4 분할 설계 (베드 한계 200mm — §1.5 적용)
+
+박스 가로 620mm > 200mm → **3 sections로 분할**. Onshape에서 처음부터 3개의 별도 파트로 모델링 (옵션 B).
+
+#### Step S1 — 분할 면 sketch
+Front plane → New Sketch. 두 수직선:
+- X = `#splitX_1` (= -103)
+- X = `#splitX_2` (= +103)
+
+이 두 선을 **boundary로 사용해** Step 2 sketch의 외곽 사각형을 3개 직사각형으로 나눔. 각 section 외곽:
+
+| Section | X 범위 | 너비 |
+|---|---|---|
+| A (좌) | -310 ~ -103 | 207 mm |
+| B (중) | -103 ~ +103 | 206 mm |
+| C (우) | +103 ~ +310 | 207 mm |
+
+#### Step S2 — 각 section의 splitX 면에 도브테일
+
+각 section의 절단면에 도브테일 tongue 또는 groove sketch:
+- Section A 우측 면 (X = -103): tongue (사다리꼴 8 × 4 mm)
+- Section B 양 면 (X = ±103): groove (반대쪽 tongue가 끼워질 형태)
+- Section C 좌측 면 (X = +103): tongue
+
+각 section을 Onshape에서 **별도 New Solid**로 extrude. Parts 패널에 3개 파트 (`Bottom Box A/B/C`).
+
+#### Step S3 — Cross-screw 홀
+
+각 split line의 상·하 위치 (z = 5, z = 75 등)에 M3 cross-screw 홀:
+- 한쪽 section: heat insert hole (∅`#insertHole` = 4.2)
+- 다른 쪽 section: M3 clearance (∅3.2)
+
+### 6.5 STL 출력
 - 재료: PETG, Layer 0.2 mm, Infill 25%
 - 출력 방향: 윗면 트인 채로 베드 위 (서포트 최소)
 - 큰 부피라 분할 출력 필요할 수 있음 (3등분 도브테일)
@@ -982,7 +1087,22 @@ Parts 패널 → Rename → **`Bottom Box`**.
 ### 7.3 파트 이름 정리
 Parts 패널 → Rename → **`Bottom Plate`**.
 
-### 7.4 STL 출력
+### 7.4 분할 설계 (§1.5 적용)
+
+Plate 가로 620mm → **3 sections (A/B/C, 각 ~207mm)**. 분할선 X = ±103.
+
+각 section은 별도 Onshape 파트로 모델링:
+- Section A (좌): 드럼 D1·D2 모터·Hall·LED 홀 포함 (drumX_1 = -265, drumX_2 = -170)
+- Section B (중): D3·D4 (drumX_3 = -65, drumX_4 = +65) + 콜론 영역
+- Section C (우): D5·D6 (drumX_5 = +170, drumX_6 = +265)
+
+각 split line (X = ±103):
+- 도브테일 tongue/groove (`#splitTongueWidth` 8 × `#splitTongueDepth` 4)
+- M3 cross-screw 2개 (상하, Y = ±40)
+
+> 둘레 홈은 split line과 만나도 그대로 통과 (각 section의 perimeter groove가 독립적으로 이어짐).
+
+### 7.5 STL 출력
 - 재료: PETG, Layer 0.2 mm, Infill 30~40%
 - 분할 출력 (3등분 도브테일) 권장 — 일반 베드(200~250mm)에서 출력 가능
 - 분할 위치: 드럼 사이 빈 공간 (D2-D3 사이, D4-D5 사이)
@@ -1060,6 +1180,26 @@ Parts 패널 → Rename → **`Bottom Plate`**.
 | 좌·우 양 끝 tongue | 3 × 4 × 90 |
 | 4 piece 결합 시 ring 형성 | 614 × 114 외곽 |
 
+### 8.4 분할 설계 (§1.5 적용)
+
+**전·후면 패널만 분할**. 좌·우는 단일 출력 (114mm).
+
+| Side | 길이 | 분할 |
+|---|---|---|
+| Front | 614 | A·B·C 3 sections (X = ±103에서 절단) |
+| Back | 614 | A·B·C 3 sections |
+| Left | 114 | 단일 |
+| Right | 114 | 단일 |
+
+각 split line:
+- 도브테일 tongue/groove (수직 방향, 90 mm 높이 전체)
+- M3 cross-screw 2개 (상·하, Z = ±35)
+
+**디지트 창 위치**: front panel의 6 창은 split line과 충돌 안 함:
+- Section A: 창 1 (요일, X = -265), 창 2 (시십, X = -170)
+- Section B: 창 3 (시일, X = -65), 창 4 (분십, X = +65)
+- Section C: 창 5 (분일, X = +170), 창 6 (날씨, X = +265)
+
 ### 8.5 STL 출력
 - 각 패널 분리 출력
 - PETG, Layer 0.2 mm, Infill 25%
@@ -1115,7 +1255,16 @@ Parts 패널 → Rename → **`Bottom Plate`**.
 ### 8.5.3 파트 이름 정리
 Parts 패널 → Rename → **`Top Plate`**.
 
-### 8.5.4 STL 출력
+### 8.5.4 분할 설계 (§1.5 적용)
+
+07 Bottom Plate와 동일 구조 — **3 sections (A/B/C, X = ±103 분할)**:
+- Section A: 베어링 시트 D1·D2 (drumX_1, drumX_2)
+- Section B: D3·D4
+- Section C: D5·D6
+
+각 split line: 도브테일 + M3 cross-screw 2개. 07과 같은 위치라 split line이 수직으로 일관.
+
+### 8.5.5 STL 출력
 - PETG, Layer 0.2 mm, Infill 30%
 - 분할 출력 (3등분) 권장
 
@@ -1174,12 +1323,12 @@ Parts 패널 → Rename → **`Top Plate`**.
 | ∅90 Bottom Cap × 4 | `cad/stl/cap_bottom_90.stl` | PETG, 0.2mm, 40% (자석 포켓) |
 | ∅60 Top Cap × 2 | `cad/stl/cap_top_60.stl` | 동일 |
 | ∅60 Bottom Cap × 2 | `cad/stl/cap_bottom_60.stl` | 동일 |
-| **06 Bottom Box** (D30) | `cad/stl/bottom_box.stl` | PETG, 0.2mm, 25% — 분할 출력 (3등분) |
-| **07 Bottom Plate** | `cad/stl/bottom_plate.stl` | PETG, 0.2mm, 30~40% — 분할 출력 (3등분) |
-| **08 Front Panel** (디지트 6창) | `cad/stl/side_front.stl` | PETG, 0.2mm, 25% — 분할 출력 |
-| **08 Back Panel** | `cad/stl/side_back.stl` | 동일 |
-| **08 Left/Right Panel** | `cad/stl/side_left.stl`, `side_right.stl` | 단일 출력 (114mm) |
-| **09 Top Plate** | `cad/stl/top_plate.stl` | PETG, 0.2mm, 30% — 분할 출력 (3등분) |
+| **06 Bottom Box** (3 split, §1.5) | `cad/stl/bottom_box_A.stl`, `_B.stl`, `_C.stl` | PETG, 0.2mm, 25% |
+| **07 Bottom Plate** (3 split) | `cad/stl/bottom_plate_A.stl`, `_B.stl`, `_C.stl` | PETG, 0.2mm, 30~40% |
+| **08 Front Panel** (3 split, 디지트 6창 분할 포함) | `cad/stl/side_front_A.stl`, `_B.stl`, `_C.stl` | PETG, 0.2mm, 25% |
+| **08 Back Panel** (3 split) | `cad/stl/side_back_A.stl`, `_B.stl`, `_C.stl` | 동일 |
+| **08 Left/Right Panel** | `cad/stl/side_left.stl`, `side_right.stl` | 단일 출력 (114mm, 분할 불필요) |
+| **09 Top Plate** (3 split) | `cad/stl/top_plate_A.stl`, `_B.stl`, `_C.stl` | PETG, 0.2mm, 30% |
 
 ### DXF (아크릴 각인 발주용)
 - `cad/dxf/panel_90_engraving_sheet.dxf` — 0~9 마스터 시트 (업체에 발주 완료)
