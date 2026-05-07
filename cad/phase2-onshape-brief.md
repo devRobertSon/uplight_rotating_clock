@@ -1106,21 +1106,25 @@ Parts 패널 → Rename → **`Top Plate`**.
 ## 10. Export 체크리스트
 
 ### STEP (발주·시뮬용)
-- Assembly 전체 → `Export → STEP 214` → `cad/step/proto_1digit.stp`
+- Assembly 전체 → `Export → STEP 214` → `cad/step/full_6digit.stp`
 
-### STL (3D 프린트용, 파트별)
-| 파트 | 파일 | 프린터 설정 제안 |
+### STL (3D 프린트용, 파트별 — D30 통합 enclosure)
+| 파트 | 파일 | 프린터 설정 |
 |---|---|---|
-| Top Cap | `cad/stl/cap_top_90.stl` | PETG, 0.2mm layer, 30% infill |
-| Bottom Cap | `cad/stl/cap_bottom_90.stl` | PETG, 0.2mm, 40% infill (자석 포켓) |
-| Coupler | `cad/stl/coupler_helical.stl` | PETG, 0.15mm, 100% infill, 수직 출력 |
-| Motor Mount | `cad/stl/motor_mount.stl` | PETG, 0.2mm, 40% infill |
-| Hall Bracket | `cad/stl/hall_bracket.stl` | PETG, 0.2mm, 30% infill |
-| Frame Section | `cad/stl/frame_section_105.stl` | PETG, 0.2mm, 30% infill |
+| ∅90 Top Cap × 4 | `cad/stl/cap_top_90.stl` | PETG, 0.2mm, 30% |
+| ∅90 Bottom Cap × 4 | `cad/stl/cap_bottom_90.stl` | PETG, 0.2mm, 40% (자석 포켓) |
+| ∅60 Top Cap × 2 | `cad/stl/cap_top_60.stl` | 동일 |
+| ∅60 Bottom Cap × 2 | `cad/stl/cap_bottom_60.stl` | 동일 |
+| **06 Bottom Box** (D30) | `cad/stl/bottom_box.stl` | PETG, 0.2mm, 25% — 분할 출력 (3등분) |
+| **07 Bottom Plate** | `cad/stl/bottom_plate.stl` | PETG, 0.2mm, 30~40% — 분할 출력 (3등분) |
+| **08 Front Panel** (디지트 6창) | `cad/stl/side_front.stl` | PETG, 0.2mm, 25% — 분할 출력 |
+| **08 Back Panel** | `cad/stl/side_back.stl` | 동일 |
+| **08 Left/Right Panel** | `cad/stl/side_left.stl`, `side_right.stl` | 단일 출력 (114mm) |
+| **09 Top Plate** | `cad/stl/top_plate.stl` | PETG, 0.2mm, 30% — 분할 출력 (3등분) |
 
 ### DXF (아크릴 각인 발주용)
-- `cad/dxf/panel_90_blank.dxf` — 각인 없는 원본 윤곽 (업체가 숫자 벡터 삽입)
-- `cad/dxf/panel_60_blank.dxf` — (Phase 6에서)
+- `cad/dxf/panel_90_engraving_sheet.dxf` — 0~9 마스터 시트 (업체에 발주 완료)
+- `cad/dxf/panel_60_engraving_sheet.dxf` — 요일·날씨 (Phase 7)
 
 ### 폴더 생성 권장
 ```
@@ -1138,16 +1142,18 @@ cad/
 - [ ] 모든 변수가 Variable Studio에 정의됨 (∅90·∅60 치수 각각 `_90`·`_60` 접미사로 구분)
 - [ ] Part Studio "01 Drum ∅90 Caps"를 복제해 `_90` → `_60` 변수로 치환하면 ∅60 캡이 동일 로직으로 생성됨을 확인
 - [ ] STEP 익스포트 성공
-- [ ] 주요 파트 STL 6개 익스포트 성공
-- [ ] 아크릴 DXF 1개 익스포트 성공
-- [ ] Assembly에서 드럼 회전 테스트 (Revolute 회전 자유도 확인)
-- [ ] 간섭 체크: 충돌 0건
+- [ ] 주요 파트 STL 익스포트 성공 (캡 4종 + 06 Box + 07 Plate + 08 측면 4 + 09 Plate = ~10개)
+- [ ] 아크릴 DXF 익스포트 성공 (∅90/∅60 마스터 시트)
+- [ ] Assembly에서 6 드럼 회전 테스트 (각 Revolute 회전 자유도 확인)
+- [ ] 간섭 체크: 충돌 0건 (특히 인접 드럼 15mm gap, 측면 판 ↔ 둘레 홈 fit)
+- [ ] 측면 판 4 piece tongue-groove 결합 시뮬
 
 ## 12. 이후 단계 (Phase 3~4 연계)
 
 - Phase 3: 부품 입고 후 실측 → Variable Studio 값 조정 (실제 샤프트 길이, 베어링 폭 편차 등)
-- Phase 4: 이 어셈블리를 실제 조립하며 공차 검증 → 슬롯 폭·허브 크기 재조정
-- Phase 6 (D30 이후 = 현재): `01 Drum ∅90 Caps` Part Studio 복제 → `10 Drum ∅60 Caps`로 개명 → 모든 `_90` 참조를 `_60`로 치환
+- Phase 4: 6자리 통합 어셈블리를 실제 조립하며 공차 검증 → 슬롯 폭·허브 크기·둘레 홈 폭 재조정
+- D30 이후 단일 자리 프로토 단계 폐기 — Phase 2 → Phase 6 직접 진입
+- ∅60 캡(`10 Drum ∅60 Caps`)은 D30 6자리 설계의 필수 — `01 Drum ∅90 Caps` 복제 후 `_90` → `_60` 치환
 
 ---
 

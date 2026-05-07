@@ -12,7 +12,7 @@
   - ✅ `Clock Config` Variable Studio (26개 변수)
   - ✅ `01 Drum ∅90 Caps` Part Studio (Step 1~11 전부)
   - ✅ `02b Panel 90 Engraving Sheet` 통합 DXF — **아크릴 가공 업체 인그레이빙+커팅 가능 여부 문의 중**
-  - ⏳ 잔여: Shaft·Bearing / Coupler / Motor Mount / Hall Bracket / Frame Section / Assembly
+  - ⏳ 잔여: 06 Bottom Box / 07 Bottom Plate / 08 Side Panels / 09 Top Plate / 10 Drum ∅60 Caps / Assembly (D30 통합 구조)
 - **부품 구매**: Mega 2560 WiFi R3 및 기구·전자 일체 주문 완료, 입고 대기
 - **진행률**: 약 10% (Phase 2 절반 진행)
 - **상세 진행/다음 작업**: [`docs/wbs.md`](docs/wbs.md) §3, §5
@@ -68,6 +68,7 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | [images/bottom_cap_detail.svg](images/bottom_cap_detail.svg) | 하부 캡 상세 (자석 포켓) |
 | [images/led_options_compare.svg](images/led_options_compare.svg) | LED 조명 3안 비교 |
 | [images/block_diagram.svg](images/block_diagram.svg) | 시스템 블록도 (Mega 2560 기준 v2.0) |
+| [images/assembly_steps.svg](images/assembly_steps.svg) | **D30 조립 과정 6단계 (박스→플레이트→드럼×6→측면 ring→상부 plate)** |
 
 ### 작업물 폴더
 
@@ -84,6 +85,6 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 > 자세한 내용은 [`docs/wbs.md`](docs/wbs.md) §5 참조.
 
 1. **아크릴 업체 회신 확인** — 인그레이빙+컷 가능 여부, 단가, 리드타임
-2. **Onshape Phase 2 잔여 Part Studio** — `cad/phase2-onshape-brief.md` §5~§9 순서대로 (Shaft·Bearing → Motor Mount → Hall Bracket → Frame Section → Coupler → Assembly)
+2. **Onshape 잔여 Part Studio (D30)** — `cad/phase2-onshape-brief.md` §6~§9 (Bottom Box → Bottom Plate → Side Panels → Top Plate) → §4.5 (Drum ∅60) → §9 Assembly 14단계
 3. **샤프트 신규 발주** — ∅5 SUS304 × **100 mm** × 10개 (D26, 기존 75 mm 폐기). 입고 후 점검 + DS3231 R5 저항 제거
 4. (선택) 펌웨어 스켈레톤 선행 — `firmware/proto/`
