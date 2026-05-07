@@ -93,14 +93,77 @@ X 방향으로 **±103 mm** 두 곳에서 절단 → 3 sections 각 ~207 mm:
 드럼 X 좌표: -265, -170, -65, +65, +170, +265.
 분할선 ±103은 D2-D3 사이 ((−170 + −65)/2 = −117.5 근처) 와 D4-D5 사이 ((+65 + +170)/2 = +117.5 근처) 의 빈 영역. 드럼·홀과 겹치지 않음.
 
-### 분할 결합 방식
+### 분할 결합 방식 — **사각 tongue-groove + M3 cross-screw**
 
-1. **도브테일 tongue-groove** (정렬·자연 잠금)
-   - Section 양 끝에 사다리꼴 단면의 tongue (한쪽) + groove (반대쪽)
-   - tongue 폭 8 mm, 깊이 4 mm
-2. **M3 cross-screw** (구조 잠금)
-   - 각 split line 상하단 2개씩 M3 heat insert + 볼트
-   - 한쪽 section에 heat insert, 다른 쪽에서 clearance 홀
+FDM 정밀도 한계(±0.3mm)로 사다리꼴 도브테일은 fit 어려움 → **직각 사각 tongue-groove** 채택. M3 cross-screw로 잠금.
+
+#### 결합 형상 (단면도)
+
+```
+[Top view, joint area at split line, 5mm plate 기준]
+
+좌 Section (예: A)        우 Section (예: B)
+
+  ┌──────────────────┐      ┌──────────────────────┐
+  │            tongue│      │groove                │
+  │            ┌──┐  │      │ ┌──┐                 │
+  │            │■■│■■│■■    │ │  │                 │
+  │       y=0 ─┤■■│■■│──────┤─┤  ├─                │  ← tongue 8mm wide × 4mm out
+  │            │■■│■■│      │ │  │                 │
+  │            └──┘  │      │ └──┘                 │
+  │       ●          │      │       ●              │  ← M3 cross-screw (Y=±40)
+  └──────────────────┘      └──────────────────────┘
+        X=-107 ↑    ↑          ↑ X=-103
+                X=-103         (groove inner end at X=-99)
+       ▲                       ▲
+       Section A 외측 끝        Section B 외측 끝
+       (tongue은 +X로 4mm 돌출)  (groove는 +X로 4mm 패임)
+
+조립: A의 tongue이 B의 groove에 슬라이드 삽입 → A 우측 끝 X=-103과 B 좌측 끝 X=-103이 일치
+```
+
+#### 치수 정의
+
+| 요소 | 값 | 변수 |
+|---|---|---|
+| Tongue 폭 (Y 방향) | 8 mm | `#splitTongueWidth` |
+| Tongue 길이 (X 돌출량) | 4 mm | `#splitTongueDepth` |
+| Groove 폭 (clearance 0.4) | 8.4 mm | `splitTongueWidth + 0.4` |
+| Groove 깊이 (clearance 0.2) | 4.2 mm | `splitTongueDepth + 0.2` |
+| Tongue 세로 (Z) — plate | 5 mm = `#plateThickness` | (전 두께 통과) |
+| Tongue 세로 (Z) — 박스 벽 | 80 mm = `#bottomBoxHeight` | (전 두께 통과) |
+
+#### Tongue/Groove 할당 (3 sections)
+
+| Section | 좌측 끝 | 우측 끝 | 비고 |
+|---|---|---|---|
+| A (좌) | (외부 — 가공 X) | tongue | tongue 1개 |
+| B (중) | groove | groove | groove 양쪽 |
+| C (우) | tongue | (외부 — 가공 X) | tongue 1개 |
+
+**B section이 모든 tongue을 받는 "허브" 역할**. A·C는 양 끝에 tongue 1개씩.
+
+#### M3 Cross-screw 위치
+
+각 split line 양쪽에 2개씩 (총 4개) 위치.
+
+| 부품 | Y 위치 (split 양쪽) | Z 위치 |
+|---|---|---|
+| 07 Bottom Plate (5 두께) | Y = ±40 (드럼·홀 회피) | Z 중앙 |
+| 09 Top Plate (5 두께) | Y = ±40 | Z 중앙 |
+| 06 Bottom Box (80 높이) | Y = ±40 (벽) | Z = +20, +60 (상·하 2개) |
+| 08 Front/Back Panel (3 두께, 90 높이) | (split 양쪽 plate 결합 시 plate 자체에 잠금) | Z = +20, +70 (상·하 2개) |
+
+각 위치:
+- 한쪽 section: ∅3.2 clearance 홀 (M3 통과)
+- 다른쪽 section: heat insert 홀 (`#insertHole` = 4.2)
+- M3 볼트 6mm로 결합
+
+> Plate 5mm 두께에서는 M3 cross-screw가 Y 방향(plate 면 안에 평행)으로 들어감 — 즉 plate 옆면에서 진입. 단, 5mm 두께에 ∅3.2 holes는 빡빡하므로 **side flange (plate 아래에 작은 ridge 추가)** 권장:
+- Section A 우측 끝 plate 하면에 5mm 두께 × 10mm 폭 flange 추가 (X 방향 5mm 더 돌출)
+- Flange에 M3 ∅3.2 clearance 홀 (위 → 아래 방향)
+- Section B 좌측 끝 plate 위에 heat insert 홀
+- 조립 시 flange가 B plate 아래로 슬라이드 → 위에서 M3 볼트로 잠금
 
 ### Onshape 모델링 옵션
 
@@ -985,37 +1048,60 @@ Through (측벽 두께 3 mm).
 ### 6.3 파트 이름 정리
 Parts 패널 → Rename → **`Bottom Box`**.
 
-### 6.4 분할 설계 (베드 한계 200mm — §1.5 적용)
+### 6.4 분할 설계 + 결합 (§1.5 적용)
 
-박스 가로 620mm > 200mm → **3 sections로 분할**. Onshape에서 처음부터 3개의 별도 파트로 모델링 (옵션 B).
+박스 가로 620mm → **3 sections (A/B/C) Onshape에서 별도 파트로**. 결합은 **사각 tongue-groove + M3 cross-screw**.
 
-#### Step S1 — 분할 면 sketch
-Front plane → New Sketch. 두 수직선:
-- X = `#splitX_1` (= -103)
-- X = `#splitX_2` (= +103)
+#### Step S1 — Section A (좌) 모델링
 
-이 두 선을 **boundary로 사용해** Step 2 sketch의 외곽 사각형을 3개 직사각형으로 나눔. 각 section 외곽:
+1. Top plane → Sketch "A_outline":
+   - Center point rectangle, 중심 (-206.5, 0)에 207 × 120 ([-310, -103] × [-60, +60] 영역)
+   - Sketch 종료
+2. Extrude → New Solid → Blind, Depth `#bottomBoxHeight` (= 80), -Z
 
-| Section | X 범위 | 너비 |
-|---|---|---|
-| A (좌) | -310 ~ -103 | 207 mm |
-| B (중) | -103 ~ +103 | 206 mm |
-| C (우) | +103 ~ +310 | 207 mm |
+3. **Tongue 추가** (우측 끝 X = -103):
+   - 우측 X = -103 면 클릭 → New Sketch
+   - Center point rectangle, 중심 (Y=0, Z=중앙)에 `#splitTongueWidth` × `#bottomBoxHeight` (8 × 80)
+   - Extrude → **Add (merge)**, Blind, Depth `#splitTongueDepth` (= 4) → +X 방향
+   - → Section A 우측 끝에서 +X로 4mm 돌출 tongue
 
-#### Step S2 — 각 section의 splitX 면에 도브테일
+4. **Cross-screw 홀** (tongue 위치 회피, Y = ±40):
+   - 우측 X = -103 면 (또는 plate 옆면)에 sketch
+   - 2개 ∅3.2 clearance 홀, Y = +40 / Y = -40, Z 중앙(40)에서 ±20mm
+   - Extrude Cut, Through (X 방향으로 박스 본체 안으로 관통, 깊이 ~10mm)
 
-각 section의 절단면에 도브테일 tongue 또는 groove sketch:
-- Section A 우측 면 (X = -103): tongue (사다리꼴 8 × 4 mm)
-- Section B 양 면 (X = ±103): groove (반대쪽 tongue가 끼워질 형태)
-- Section C 좌측 면 (X = +103): tongue
+5. 박스 내부 cavity, DC잭 홀 등은 §6.2 그대로 (단, X 범위 -310 ~ -103)
 
-각 section을 Onshape에서 **별도 New Solid**로 extrude. Parts 패널에 3개 파트 (`Bottom Box A/B/C`).
+#### Step S2 — Section B (중) 모델링
 
-#### Step S3 — Cross-screw 홀
+1. Top plane → Sketch "B_outline":
+   - Center point rectangle, 중심 (0, 0)에 206 × 120
+2. Extrude → New, Blind, Depth 80, -Z
 
-각 split line의 상·하 위치 (z = 5, z = 75 등)에 M3 cross-screw 홀:
-- 한쪽 section: heat insert hole (∅`#insertHole` = 4.2)
-- 다른 쪽 section: M3 clearance (∅3.2)
+3. **Groove 양 끝**:
+   - 좌측 X = -103 면 sketch:
+     - Center rectangle, 중심 (Y=0, Z=중앙)에 `8.4 × 80` (= 8 + 0.4 clearance)
+     - Extrude Cut, Blind, Depth 4.2 (= `#splitTongueDepth + 0.2`) → -X 방향 (groove 안쪽으로 패임)
+   - 우측 X = +103 면 동일하게 groove (반대 방향)
+
+4. **Cross-screw heat insert 홀**:
+   - 양 끝 면에 Y = ±40, Z = +20, +60 위치에 sketch (총 8개)
+   - Extrude Cut, Blind, Depth 6 (insert 길이 4 + 여유 2)
+   - Diameter `#insertHole` (= 4.2)
+
+#### Step S3 — Section C (우) 모델링
+
+Section A의 거울 (좌우 반전):
+- X 범위 +103 ~ +310 (중심 +206.5)
+- Tongue은 좌측 끝 X = +103에서 -X로 돌출
+
+#### Step S4 — Tongue과 Groove 정렬 검증
+
+Onshape Assembly 또는 Boolean 시뮬:
+- Section A의 tongue X 범위: -103 ~ -99 (4mm 돌출)
+- Section B의 -X groove: -103 ~ -99 (4mm 패임)
+- 일치 → 조립 시 tongue이 groove에 정확히 들어가야 함
+- B의 외측 면 (X = -103)과 A의 외측 면 (X = -103)이 일치 (tongue/groove 영역에서만 안쪽으로 들어감)
 
 ### 6.5 STL 출력
 - 재료: PETG, Layer 0.2 mm, Infill 25%
@@ -1096,9 +1182,28 @@ Plate 가로 620mm → **3 sections (A/B/C, 각 ~207mm)**. 분할선 X = ±103.
 - Section B (중): D3·D4 (drumX_3 = -65, drumX_4 = +65) + 콜론 영역
 - Section C (우): D5·D6 (drumX_5 = +170, drumX_6 = +265)
 
-각 split line (X = ±103):
-- 도브테일 tongue/groove (`#splitTongueWidth` 8 × `#splitTongueDepth` 4)
-- M3 cross-screw 2개 (상하, Y = ±40)
+5mm 두께 plate라 박스보다 단순. 각 section 별도 sketch + extrude:
+
+#### Step S1 — Section A (좌) 모델링
+1. Top plane → Sketch: Center point rectangle, 중심 (-206.5, 0), 207 × 120
+2. Extrude New, Blind, Depth `#plateThickness` (= 5)
+3. 모터·Hall·LED·둘레 홈은 §7.2와 같으나 X 범위 -310 ~ -103 한정 (D1, D2 드럼만)
+4. **Tongue**: 우측 X = -103 면 → Sketch 사각형 8 × 5 (`splitTongueWidth × plateThickness`) → Extrude Add, Depth 4 (+X 방향)
+5. **Cross-screw 홀**:
+   - Plate 두께 5mm는 측면 직접 cross-screw 어려움 → **Side flange 사용** (§1.5 권장)
+   - Plate 하면에 작은 ridge 추가: Sketch on bottom face, X = -113 ~ -103 영역 × Y 폭 30 (또는 둘레 홈 안쪽 영역) → Extrude Add, Depth 5 (-Z), 즉 plate 아래로 5mm 돌출
+   - Ridge에 ∅3.2 clearance 홀 2개 (Y = ±40, Z = -2.5 = ridge 중앙)
+   - Through Z 방향 (위→아래)
+
+#### Step S2 — Section B (중)
+1. Top plane → Sketch 206 × 120, 원점 중심
+2. Extrude New, Blind, Depth 5
+3. D3·D4 드럼 위치의 모터·Hall·LED·둘레 홈
+4. **Groove 양 끝**: 양 X = ±103 면에 sketch 8.4 × 5 → Extrude Cut, Depth 4.2 (-X 또는 +X 방향)
+5. **Heat insert 홀**: plate 윗면, X = ±103 근처 (양 끝), Y = ±40, ∅`#insertHole` (= 4.2) Through (또는 Blind 4)
+
+#### Step S3 — Section C (우)
+Section A 거울. X 범위 +103 ~ +310, D5·D6 드럼 부분.
 
 > 둘레 홈은 split line과 만나도 그대로 통과 (각 section의 perimeter groove가 독립적으로 이어짐).
 
@@ -1191,14 +1296,35 @@ Plate 가로 620mm → **3 sections (A/B/C, 각 ~207mm)**. 분할선 X = ±103.
 | Left | 114 | 단일 |
 | Right | 114 | 단일 |
 
-각 split line:
-- 도브테일 tongue/groove (수직 방향, 90 mm 높이 전체)
-- M3 cross-screw 2개 (상·하, Z = ±35)
-
 **디지트 창 위치**: front panel의 6 창은 split line과 충돌 안 함:
 - Section A: 창 1 (요일, X = -265), 창 2 (시십, X = -170)
 - Section B: 창 3 (시일, X = -65), 창 4 (분십, X = +65)
 - Section C: 창 5 (분일, X = +170), 창 6 (날씨, X = +265)
+
+#### Front Panel 각 section 모델링
+
+| Section | X 범위 | 디지트 창 | Tongue/Groove |
+|---|---|---|---|
+| A (좌) | -310 ~ -103 | 창 1·2 (D1·D2) | 우측 (X=-103) tongue |
+| B (중) | -103 ~ +103 | 창 3·4 (D3·D4) | 양 끝 groove |
+| C (우) | +103 ~ +310 | 창 5·6 (D5·D6) | 좌측 (X=+103) tongue |
+
+각 section:
+1. Front plane → Sketch outline (X 범위에 맞는 직사각형 × 90 H)
+2. Extrude `#sidePanelThickness` (= 3)
+3. 디지트 창 sketch + Through Cut (해당 section의 창 위치)
+4. Tongue / Groove 추가:
+   - Tongue: 우측 끝 면(X = -103 또는 +103)에 sketch 8 × 90 → Extrude Add, Depth 4 (+X 또는 -X)
+   - Groove: 끝 면에 sketch 8.4 × 90 → Extrude Cut, Depth 4.2
+5. **Cross-screw 홀** (Z = +20, +70 두 위치, Y는 panel 두께 방향):
+   - Tongue/groove 영역 위·아래에서 panel 두께를 관통하는 ∅3.2 (또는 heat insert ∅4.2)
+   - 또는 panel 옆면에 ∅3.2 clearance through (panel 내부에서 +Y 또는 -Y로)
+   - 3mm panel 얇아 panel 자체에 cross-screw 어려움 → **Bottom Plate의 둘레 홈에 끼웠을 때 plate가 panel을 잡아주므로 panel 자체 cross-screw 생략** 가능
+
+#### Back Panel
+Front와 동일 구조, 디지트 창 없음.
+
+> 측면 panel은 plate 둘레 홈에 끼움으로써 자연 정렬·고정 → **panel split joint는 tongue/groove만으로 충분** (cross-screw 옵션). Plate에서 ring 전체를 잡아줌.
 
 ### 8.5 STL 출력
 - 각 패널 분리 출력
@@ -1257,12 +1383,17 @@ Parts 패널 → Rename → **`Top Plate`**.
 
 ### 8.5.4 분할 설계 (§1.5 적용)
 
-07 Bottom Plate와 동일 구조 — **3 sections (A/B/C, X = ±103 분할)**:
-- Section A: 베어링 시트 D1·D2 (drumX_1, drumX_2)
-- Section B: D3·D4
-- Section C: D5·D6
+**07 Bottom Plate와 같은 구조·같은 X 위치 분할**. 3 sections (A/B/C, X = ±103):
+- Section A: 베어링 시트 D1·D2 (drumX_1, drumX_2), 우측 X=-103에 tongue
+- Section B: D3·D4 (drumX_3, drumX_4), 양 끝 X=±103에 groove
+- Section C: D5·D6 (drumX_5, drumX_6), 좌측 X=+103에 tongue
 
-각 split line: 도브테일 + M3 cross-screw 2개. 07과 같은 위치라 split line이 수직으로 일관.
+각 section 모델링은 §7.4와 동일 (Step S1~S3) — 차이점:
+- Plate 윗면 대신 **아랫면**에 둘레 홈 (Top Plate는 측면 ring 위에 덮어씀)
+- 각 베어링 시트는 §8.5.2 Step 3·4·5 그대로 (∅16 Blind 5 + ∅5.2 Through)
+- Side flange + cross-screw도 §7.4 방식 (plate 5mm 한계로 ridge 추가)
+
+> Top Plate split이 Bottom Plate split과 X 정확 일치 → 측면 panel ring이 두 plate 사이에서 수직 alignment 자연 보장. 조립 시 panel 둘레 홈에 정확히 들어감.
 
 ### 8.5.5 STL 출력
 - PETG, Layer 0.2 mm, Infill 30%
