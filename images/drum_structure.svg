@@ -172,7 +172,7 @@
 
     <!-- Top frame -->
     <rect x="120" y="80" width="370" height="10" fill="#909090" stroke="#555"/>
-    <text x="495" y="88" class="sub">상부 프레임</text>
+    <text x="495" y="88" class="sub">09 Top Plate (D30)</text>
 
     <!-- Top bearing -->
     <rect x="225" y="88" width="30" height="15" fill="#ddd" stroke="#333" stroke-width="1.2"/>
