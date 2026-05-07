@@ -44,11 +44,11 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 ├── 🔧 Part Studio: "03 Shaft"               (Ø5×100mm 연마봉)
 ├── 🔧 Part Studio: "04 Bearing 625ZZ"       (∅16/∅5×5mm)
 ├── 🔧 Part Studio: "05 Coupler"             (보유 placeholder, 3D 프린트는 Phase 6 옵션)
-├── 🔧 Part Studio: "06 Motor Mount"         (28BYJ-48 브라켓)
-├── 🔧 Part Studio: "07 Hall Bracket"        (A3144 + 풀업)
-├── 🔧 Part Studio: "08a Frame Top Plate"    (베어링 시트, Option C)
-├── 🔧 Part Studio: "08b Frame Bottom Plate" (모터·Hall·LED 마운트)
-└── 🗂 Assembly: "Proto 1-Digit"
+├── 🔧 Part Studio: "06 Bottom Box"          (전자부 enclosure, 뚜껑 없음)
+├── 🔧 Part Studio: "07 Bottom Plate"        (박스 뚜껑 + 6 모터 마운트 + 6 Hall + 6 LED + 둘레 홈)
+├── 🔧 Part Studio: "08 Side Panels"         (전·후·좌·우 4 piece, 코너 tongue-groove)
+├── 🔧 Part Studio: "09 Top Plate"           (6 베어링 시트 + 둘레 홈)
+└── 🗂 Assembly: "Full 6-Digit Clock"
 ```
 
 > **Feature Studio 탭은 사용하지 않음**. Feature Studio는 커스텀 FeatureScript 코드(함수·자체 피처) 작성 전용이며, Phase 2에서는 불필요. Onshape의 변수는 **Variable Studio** 탭에서 관리.
@@ -123,13 +123,25 @@ Variable Studio 각 행에는 **Type** 드롭다운이 있음. 아래 둘 중 �
 | `bearingWidth` | Length | `5 mm` | |
 | `couplerOD` | Length | `19 mm` | B02 보유 커플러 외경 (실측, 보유품 freeze) |
 | `couplerLength` | Length | `25 mm` | B02 보유 커플러 길이 (실측). 내경은 `#shaftDiameter` 재사용 |
-| `frameWidth` | Length | `105 mm` | Frame 외곽 폭 (드럼 ∅90 + 좌우 7.5씩) |
-| `frameHeight` | Length | `140 mm` | Frame 외곽 높이 (D28) |
-| `frameDepth` | Length | `95 mm` | Frame 외곽 깊이 (예산 한계) |
-| `frameBarThickness` | Length | `5 mm` | Frame 플레이트 두께 (Option C: 상·하 플레이트 각 5mm) |
-| `frameRodSpacing_X` | Length | `96 mm` | M5 전산봉 4개의 X 방향 중심 거리 (= 2 × 48) |
-| `frameRodSpacing_Y` | Length | `84 mm` | Y 방향 중심 거리 (= 2 × 42) |
-| `frameRodHole` | Length | `5.2 mm` | M5 clearance hole |
+| `enclosureWidth` | Length | `620 mm` | 외부 폭 (D22 590 + 측벽·여유) |
+| `enclosureDepth` | Length | `120 mm` | 외부 깊이 (드럼 95 + 여유) |
+| `bottomBoxHeight` | Length | `80 mm` | 전자부 박스 높이 |
+| `drumCompartmentHeight` | Length | `90 mm` | 드럼 영역 높이 (드럼 56 + 보스 12 + 베어링·여유) |
+| `enclosureHeight` | Length | `#bottomBoxHeight + #drumCompartmentHeight + 2 * #plateThickness` | 자동 계산: ~180 |
+| `plateThickness` | Length | `5 mm` | 상·하 판 두께 |
+| `boxWallThickness` | Length | `3 mm` | 하부 박스 벽 두께 |
+| `sidePanelThickness` | Length | `3 mm` | 측면 판 두께 |
+| `panelGrooveWidth` | Length | `#sidePanelThickness + 0.4 mm` | 둘레 홈 폭 (3 + 0.4 clearance) |
+| `panelGrooveDepth` | Length | `4 mm` | 둘레 홈 깊이 |
+| `digitWindowWidth_90` | Length | `26 mm` | ∅90 디지트 창 폭 (panelWidth_90 + 1 margin) |
+| `digitWindowWidth_60` | Length | `24 mm` | ∅60 디지트 창 폭 |
+| `digitWindowHeight` | Length | `50 mm` | 디지트 창 높이 (drumVisibleHeight + 6 margin) |
+| `drumX_1` | Length | `-265 mm` | 요일 드럼 (∅60) X 위치 |
+| `drumX_2` | Length | `-170 mm` | 시십 (∅90) |
+| `drumX_3` | Length | `-65 mm` | 시일 (∅90) |
+| `drumX_4` | Length | `+65 mm` | 분십 (∅90) |
+| `drumX_5` | Length | `+170 mm` | 분일 (∅90) |
+| `drumX_6` | Length | `+265 mm` | 날씨 (∅60) |
 
 ### 2.4 Part Studio에서 변수 참조하기
 
@@ -552,14 +564,14 @@ Slot extrude(Step 5)의 깊이도 캡별로 다른 값(3 / 6 mm)이 필요한 �
 
 ---
 
-## 4.5 Part Studio "09 Drum ∅60 Caps" (선택, Phase 6 본편용)
+## 4.5 Part Studio "10 Drum ∅60 Caps" (D30 — 6자리 통합 설계의 요일·날씨 드럼)
 
-Phase 2 프로토는 ∅90 한 자리만 출력하면 충분. 하지만 변수 분리가 잘 작동하는지 미리 검증하려면 ∅60 캡도 만들어 두는 게 안전.
+D30 통합 enclosure 채택으로 단일 자리 프로토 폐기 → 6자리 직접 진입. 요일(D1)·날씨(D6) 드럼은 ∅60이므로 본 Part Studio 필수.
 
 ### 가장 간단한 방법 — Part Studio 복사 후 `_90` → `_60` 치환
 
 1. 문서 하단 탭바에서 `01 Drum ∅90 Caps` **우클릭** → **Duplicate** (또는 Copy & Paste)
-2. 복사본 이름 → `09 Drum ∅60 Caps`
+2. 복사본 이름 → `10 Drum ∅60 Caps`
 3. 복사본의 Feature 트리에서 각 피처를 더블클릭하여 편집, 아래 표대로 변수만 일괄 교체:
 
 | 변수 (∅90) | 교체 (∅60) | 사용 위치 |
@@ -761,497 +773,333 @@ Parts 패널 → `Part 1` Rename → **`Coupler (placeholder)`**.
 
 ---
 
-## 6. Part Studio "06 Motor Mount"
+## 6. Part Studio "06 Bottom Box"
 
-### 28BYJ-48 마운팅 기하 (도면 실측)
-
-```
-[Top View — 위에서 ↓ 본 시점, 플레이트 중심 = 원점]
-
-              +Y (위, +20)
-                ↑
-       ┌────────┼────────┐
-       │      ●(0,+11)   │  ← 샤프트 홀 ∅6 (플레이트 +Y 11)
-       │      샤프트      │
-       │     ┌─────┐     │
-       │     │본체 │     │
-   ●───┼─────┤(0,+3)─────┼───●  ← 마운트 홀 ∅3.2 (Y=+3, ±17.5)
-   ∅3.2│     │ 중심 │     │   ∅3.2
-       │     │     │     │       (35mm 간격)
-       │     └─────┘     │
-       │   [커넥터 위치]  │  ← 커넥터 Y≈-11~-16 (플레이트 안)
-       └────────┼────────┘
-              -Y (-20)
-   plate 50(X) × 40(Y), 본체(-11~+17) ⊂ plate(-20~+20) ✓
-```
-
-> **핵심**: 샤프트는 본체 상부 (+Y쪽)에 위치, 본체 중심은 샤프트에서 -Y로 ~8mm 어긋남. 마운트 홀(∅4, 35mm 간격)은 **본체 중심 라인**에 위치. 본 모델에선 **shaft 홀을 플레이트 중심에서 +Y 11mm 위로** 배치하여 본체·커넥터 전체를 플레이트 안에 수용 (∴ 마운트 홀은 플레이트 좌표 Y = +3 = 11 - 8).
-
-### 도면 실측값 요약
-
-| 항목 | 값 |
-|---|---|
-| 본체 직경 | ∅28 |
-| 본체 두께 | 19 mm |
-| 샤프트 D-cut | ∅5 × 돌출 10 mm |
-| 샤프트 hub (기어부) | ∅9 × 3 mm |
-| **마운트 홀 직경** (모터 측) | ∅4 |
-| **마운트 홀 간 거리** | **35 mm** |
-| **마운트 홀 ↔ 샤프트 Y 오프셋** | **8 mm** |
-| 이어 끝 ↔ 홀 중심 | 7 mm |
-| 케이블 커넥터 폭 | 14.6 mm |
+전자부 enclosure. 뚜껑 없는 상자 형태로, **07 Bottom Plate** 가 뚜껑 역할.
 
 ### 6.1 Part Studio 생성 + Variable 연결
 
-1. 탭바 `+` → **Part Studio**, 이름 `06 Motor Mount`
+1. 탭바 `+` → **Part Studio**, 이름 `06 Bottom Box`
 2. `Feature ▾` → **Variable Studio** → `Clock Config`
-3. 본 단계는 새 변수 추가 없음 (리터럴 값 직접 입력)
 
 ### 6.2 Feature tree
 
-#### Step 1 — Sketch "base plate" (Top plane)
+#### Step 1 — Sketch "outer shell" (Top plane)
 
 | 항목 | 값 |
 |---|---|
 | 평면 | Top |
 | 도구 | Center point rectangle |
-| 중심 | **원점 (= 플레이트 중심)** |
-| Width (X) | **50 mm** |
-| Depth (Y) | **40 mm** |
+| 중심 | 원점 |
+| Width (X) | `#enclosureWidth` (= 620) |
+| Depth (Y) | `#enclosureDepth` (= 120) |
 
-→ Sketch 종료. 플레이트 Y 범위: -20 ~ +20. 본체 위치는 Step 3에서 결정.
+#### Step 2 — Extrude "outer shell"
 
-#### Step 2 — Extrude "plate body"
+- Type: **New**
+- End: Blind, Depth `#bottomBoxHeight` (= 80)
+- Direction: -Z (아래로) — 원점이 박스 윗면에 위치하도록
 
-| 칸 | 값 |
+→ 620 × 120 × 80 mm 솔리드 직육면체.
+
+#### Step 3 — Sketch "interior cavity" (Top plane)
+
+박스 안쪽 공간을 빼낼 영역:
+
+| 항목 | 값 |
 |---|---|
-| Profile | Step 1 sketch |
-| Type | **New** (새 솔리드 파트) |
-| End | Blind |
-| Depth | **3 mm** |
-| Direction | +Z |
+| 도구 | Center point rectangle |
+| 중심 | 원점 |
+| Width (X) | `#enclosureWidth - 2 * #boxWallThickness` (= 614) |
+| Depth (Y) | `#enclosureDepth - 2 * #boxWallThickness` (= 114) |
 
-→ 50 × 40 × 3 mm 플레이트.
+#### Step 4 — Extrude Cut "cavity"
 
-#### Step 3 — Sketch "shaft + motor mount holes" (top face)
+- Type: **Remove**
+- End: Blind, Depth `#bottomBoxHeight - #boxWallThickness` (= 77, 바닥 3mm 남김)
+- Direction: -Z
 
-플레이트 윗면(z=3) 클릭 → New Sketch. 원 3개:
+→ 박스 내부 공간. 측벽 3 mm + 바닥 3 mm.
 
-| 홀 | 위치 (X, Y) | Diameter |
-|---|---|---|
-| 모터 샤프트 통과 | **(0, +11)** | **6 mm** (∅5 + 1 clearance) |
-| 모터 마운트 좌 | **(-17.5, +3)** | **3.2 mm** (M3 clearance) |
-| 모터 마운트 우 | **(+17.5, +3)** | 3.2 mm |
+#### Step 5 — Sketch "DC jack hole" (back wall)
 
-좌표 근거:
-- Shaft를 +Y 11에 두면 본체(샤프트 -Y 8mm)는 (0, +3)에 위치 → 본체 ∅28 footprint Y 범위 -11 ~ +17, 플레이트(-20 ~ +20) 안에 fully contained.
-- 마운트 홀은 도면상 본체 중심 라인 = 샤프트 -Y 8 → 플레이트 좌표 Y = +11 - 8 = **+3**.
-- 커넥터(본체 -Y 측)는 플레이트 좌표 Y ≈ -11 ~ -16, 플레이트 -20 안에 위치 (모터는 플레이트 아래에 매달리므로 케이블은 옆/아래로 자유 출구).
+뒷벽 (Y = -enclosureDepth/2 면)에 DC 바렐잭 홀:
+- Diameter: ∅8 (M2.1 panel-mount 잭)
+- 위치: 측면 한쪽 끝 (X = -200 정도, Z = -bottomBoxHeight/2)
 
-#### Step 4 — Extrude Cut "shaft + mount holes"
+#### Step 6 — Extrude Cut "DC jack" (Through 벽)
+- Type: Remove, Through all (벽 두께 3mm 관통)
 
-| 칸 | 값 |
-|---|---|
-| Profile | Step 3 sketch (3개 원) |
-| Type | **Remove** |
-| End | **Through all** |
+#### Step 7 — (선택) Sketch "ventilation slots"
 
-→ ∅6 1개 + ∅3.2 2개 관통.
+발열 통기를 위해 측벽에 슬롯 패턴:
+- 좌·우 측벽에 1×10 mm 슬롯을 5~10개씩
+- 또는 메쉬 패턴 (∅3 hole × 격자)
 
-#### Step 5 — Sketch "frame fix holes" (4 corners)
+#### Step 8 — Extrude Cut "vents"
+Through (측벽 두께 3 mm).
 
-플레이트 윗면 → New Sketch. 4 모서리:
+#### Step 9 — Sketch "plate fix holes" on top edge of walls
 
-| 홀 | 위치 (X, Y) | Diameter |
-|---|---|---|
-| 좌상 | (-20, +15) | 3.2 mm |
-| 우상 | (+20, +15) | 3.2 mm |
-| 좌하 | (-20, -15) | 3.2 mm |
-| 우하 | (+20, -15) | 3.2 mm |
+박스 윗면 테두리에 plate 결합용 M3 heat insert 홀:
+- 8개 (각 면 2개씩, 코너 근처)
+- 위치 예: (±290, ±50) 등 박스 윗 테두리 안쪽
+- Diameter `#insertHole` (= 4.2)
 
-> 코너에서 5mm 안쪽. Sketch Mirror 또는 Linear pattern으로 1개 → 4개 자동 가능.
-
-#### Step 6 — Extrude Cut "frame holes"
-
-| 칸 | 값 |
-|---|---|
-| Profile | Step 5 sketch (4개 원) |
-| Type | **Remove** |
-| End | **Through all** |
-
-→ 4모서리 M3 관통.
+#### Step 10 — Extrude Cut "insert holes"
+- Blind, Depth 6mm (insert 길이 4 + 여유 2)
+- 방향: -Z (벽 안쪽)
 
 ### 6.3 파트 이름 정리
+Parts 패널 → Rename → **`Bottom Box`**.
 
-Parts 패널 → `Part 1` Rename → **`Motor Mount`**.
-
-### 6.4 검증
-
-| 확인 | 기대 |
-|---|---|
-| 플레이트 외형 | 50 × 40 × 3 mm |
-| 중앙 ∅6 (모터 샤프트, **Y=+11**) | 1개 |
-| ∅3.2 모터 마운트 (35mm 간격, **Y=+3**) | 2개 |
-| ∅3.2 프레임 고정 (코너) | 4개 |
-| 총 홀 수 | 7개 |
-
-### 6.5 STL 출력 설정
-
-| 설정 | 값 |
-|---|---|
-| 재료 | PETG |
-| Layer | 0.2 mm |
-| Infill | 40% |
-| 출력 방향 | 평면이 베드와 평행 (지지대 불필요) |
-
-### 6.6 주의사항
-
-- 모터 샤프트가 본체 중심에서 +Y로 8mm 어긋남, 본 모델은 shaft 홀을 플레이트 중심에서 +Y 11mm 위에 둠 → 본체·커넥터가 플레이트 footprint 안에 fully contained.
-- **§8 Frame Section** 설계 시 motor mount의 shaft 위치(plate local +Y 11)가 frame 내 drum 샤프트 라인과 일치하도록 mate. 즉 plate 중심은 drum 샤프트 라인에서 -Y 11 만큼 아래에 위치.
-- 마운트 홀 정렬 축(X)을 드럼 면 방향과 일치시킬지 직각으로 둘지는 Frame Section에서 결정.
+### 6.4 STL 출력
+- 재료: PETG, Layer 0.2 mm, Infill 25%
+- 출력 방향: 윗면 트인 채로 베드 위 (서포트 최소)
+- 큰 부피라 분할 출력 필요할 수 있음 (3등분 도브테일)
 
 ---
 
-## 7. Part Studio "07 Hall Bracket"
+## 7. Part Studio "07 Bottom Plate"
 
-### 핵심 설계 고려사항
-
-#### A3144 (TO-92) 감지 원리
-- TO-92 패키지의 **인쇄(branded) 면**이 감지면
-- 감지면에 **수직** 방향 자기장에 반응
-- 자석 축이 수직(Z) → A3144 감지면도 Z 방향, **인쇄면이 위(+Z)를 향해야** 함
-- TO-92를 **눕혀서** 인쇄면이 위로 가게 배치
-
-#### 위치
-- 자석 궤적 R = 30 mm (∅90 드럼) 또는 R = 15 mm (∅60)
-- 자석 ↔ 센서 거리: 1~2 mm (1차 시험), 5 mm 이내 권장
-
-#### 고정 방식
-- 브라켓은 단순 플레이트 + M3 홀 2개
-- A3144는 핫글루 또는 양면테이프로 위에 부착 (인쇄면 위)
-- (선택) 얕은 recess로 위치 가이드
+박스 뚜껑 + 6 모터 마운트 + 6 Hall 센서 자리 + 6 LED 슬롯 + 측면 판 둘레 홈.
 
 ### 7.1 Part Studio 생성 + Variable 연결
-
-1. 탭바 `+` → **Part Studio**, 이름 `07 Hall Bracket`
-2. `Feature ▾` → **Variable Studio** → `Clock Config`
-3. 본 단계는 새 변수 추가 없음 (리터럴 입력)
+1. 탭바 `+` → **Part Studio**, 이름 `07 Bottom Plate`
+2. Variable Studio → `Clock Config`
 
 ### 7.2 Feature tree
 
-#### Step 1 — Sketch "base plate" (Top plane)
+#### Step 1 — Sketch "plate outline" (Top plane)
 
 | 항목 | 값 |
 |---|---|
-| 평면 | Top |
-| 도구 | Center point rectangle |
-| 중심 | 원점 (Coincident) |
-| Width (X) | **20 mm** |
-| Depth (Y) | **15 mm** |
-
-→ Sketch 종료.
+| 도구 | Center point rectangle, 원점 중심 |
+| Width (X) | `#enclosureWidth` (= 620) |
+| Depth (Y) | `#enclosureDepth` (= 120) |
 
 #### Step 2 — Extrude "plate body"
+- Type: New, Blind, Depth `#plateThickness` (= 5), +Z
 
-| 칸 | 값 |
-|---|---|
-| Profile | Step 1 sketch |
-| Type | **New** (새 솔리드 파트) |
-| End | Blind |
-| Depth | **2 mm** |
-| Direction | +Z |
+→ 620 × 120 × 5 plate.
 
-→ 20 × 15 × 2 mm 플레이트.
+#### Step 3 — Sketch "6 motor + Hall + LED holes" (top face)
 
-#### Step 3 (선택) — Sketch "sensor recess" (top face)
+윗면에 6세트의 홀 패턴. 각 드럼 위치 (X = `#drumX_1` ~ `#drumX_6`)에서:
 
-A3144 위치 가이드용 얕은 recess. 안 만들어도 무방 (핫글루로 직접 부착).
+**모터 샤프트 통과 (X, +11)** — D28 motor mount plate +Y 11 정렬:
+- ∅6 (∅5 모터 샤프트 clearance)
 
-| 항목 | 값 |
-|---|---|
-| 평면 | top face (z=2) |
-| 도구 | Center point rectangle |
-| 중심 | 원점 |
-| Width (X) | **4.5 mm** (TO-92 폭 ~4 + 0.5 여유) |
-| Depth (Y) | **3.5 mm** (TO-92 두께 ~3 + 0.5) |
+**모터 마운트 4 코너 (X, +11±15) and (X±20, +11±15)** — 모터 마운트 plate 코너:
+- 4× ∅3.2 at (X-20, +4), (X+20, +4), (X-20, -26), (X+20, -26)
 
-#### Step 4 (선택) — Extrude Cut "recess"
+**Hall 센서 통과 슬롯** — 자석 궤적 R 위치:
+- ∅90 드럼 (D2-D5): 자석 R=30, sensor 위치 (X, +30)
+- ∅60 드럼 (D1, D6): 자석 R=15, sensor 위치 (X, +15)
+- 슬롯: 5 × 8 mm 직사각형 (TO-92 본체 + 와이어)
 
-| 칸 | 값 |
-|---|---|
-| Profile | Step 3 sketch |
-| Type | **Remove** |
-| End | Blind, Depth **0.5 mm** |
-| Direction | -Z (플레이트 안쪽) |
+**LED 와이어 통과 홀** — 각 드럼 전면 LED 바 와이어용:
+- ∅5 hole at (X, -45) 정도 (드럼 정면, 판 끝 가까이)
 
-→ 얕은 recess (관통 X), 센서 본체 위치 가이드.
+> 위치는 6 드럼 모두 반복. 1 세트 만든 뒤 Linear Pattern으로 6 복제 가능 (각자 X 위치 차이).
 
-#### Step 5 — Sketch "mount holes" (top face)
+#### Step 4 — Extrude Cut (Through all)
+모든 홀·슬롯 선택 → Remove → Through all.
 
-플레이트 윗면 → New Sketch.
+#### Step 5 — Sketch "perimeter groove for side panels" (top face)
 
-| 홀 | 위치 (X, Y) | Diameter |
-|---|---|---|
-| 좌 | (-7, 0) | **3.2 mm** (M3 clearance) |
-| 우 | (+7, 0) | 3.2 mm |
+측면 판이 끼워질 둘레 홈:
+- 외측: 판 외곽에서 안쪽으로 5mm 들어간 위치 (groove 외측 라인)
+- 내측: 외측에서 +`#panelGrooveWidth` 만큼 안쪽 (= 8.4mm)
+- 직사각형 ring 영역
 
-> 마운트 홀 간 14 mm, 양 끝에서 3 mm 안쪽.
+#### Step 6 — Extrude Cut "perimeter groove"
+- Type: Remove
+- End: Blind, Depth `#panelGrooveDepth` (= 4)
+- 방향: -Z (판 안으로 4mm 깎임)
 
-#### Step 6 — Extrude Cut "mount holes"
-
-| 칸 | 값 |
-|---|---|
-| Profile | Step 5 sketch (2개 원) |
-| Type | **Remove** |
-| End | **Through all** |
-
-→ 양쪽 ∅3.2 관통.
+→ 판 윗면 둘레 ring 형태의 홈. 측면 판이 위에서 끼워짐.
 
 ### 7.3 파트 이름 정리
+Parts 패널 → Rename → **`Bottom Plate`**.
 
-Parts 패널 → `Part 1` Rename → **`Hall Bracket`**.
-
-### 7.4 검증
-
-| 확인 | 기대 |
-|---|---|
-| 플레이트 외형 | 20 × 15 × 2 mm |
-| (선택) 센서 recess | 4.5 × 3.5 × 0.5 (중앙) |
-| ∅3.2 마운트 홀 (×2) | X = ±7, Y = 0 |
-| 총 관통 홀 | 2개 |
-
-### 7.5 STL 출력 설정
-
-| 설정 | 값 |
-|---|---|
-| 재료 | PETG |
-| Layer | 0.2 mm |
-| Infill | 30% |
-| 출력 방향 | 평면 위로 (지지대 불필요) |
-
-### 7.6 조립 시 주의
-
-- A3144 본체를 recess (또는 plate 중앙)에 **인쇄면 위로** 향하게 부착
-- 핫글루 또는 양면테이프로 고정
-- 리드 3개는 plate 옆으로 빼서 dupont 커넥터로 ULN2003·MCU에 연결
-- Frame 조립 후 자석 ↔ 센서 거리 1~2 mm 확보 (실측·미세 조정)
-- 자석 궤적 R 위치에 정확히 정렬되도록 §8 Frame Section에서 bracket 부착 위치 결정
+### 7.4 STL 출력
+- 재료: PETG, Layer 0.2 mm, Infill 30~40%
+- 분할 출력 (3등분 도브테일) 권장 — 일반 베드(200~250mm)에서 출력 가능
+- 분할 위치: 드럼 사이 빈 공간 (D2-D3 사이, D4-D5 사이)
 
 ---
 
-## 8. Frame Section — Option C (2 plates + 4 M5 rods)
+## 8. Part Studio "08 Side Panels"
 
-> **설계 컨셉**: 상·하부 평면 플레이트 2장 + 4개 M5 전산봉 (구매품)으로 분리·조립. 측면·뒷벽 없음. 출력 빠르고 분해·조립 자유.
+전·후·좌·우 4 piece. 코너에서 tongue-groove로 결합되어 ring 형성.
 
-### 핵심 구조
+### 8.1 Part Studio 생성 + Variable 연결
+1. 탭바 `+` → **Part Studio**, 이름 `08 Side Panels`
+2. Variable Studio → `Clock Config`
 
-```
-[측면도]
-   ┌──────────────────┐  ← 08a Top Plate (105 × 95 × 5)
-   │  ◯ 베어링 시트   │      ∅16 + 샤프트 ∅5.2
-   │  ●  ←→  ●       │      4 × ∅5.2 코너 홀 (M5 전산봉 통과)
-   │  ┊        ┊      │
-   │  ┊  드럼  ┊      │
-   │  ┊        ┊      │  ← M5 전산봉 4개 (구매품)
-   │  ┊        ┊      │     길이 140 mm, 너트로 양 끝 고정
-   │  ┊        ┊      │
-   │  ●        ●     │
-   ├──────────────────┤  ← 08b Bottom Plate (105 × 95 × 5)
-   │  Motor mount /   │      모터 마운트 4× M3 (±20, +4)/(±20,-26)
-   │  Hall / LED      │      Hall bracket 2× M3 (±7, +30)
-   └──────────────────┘      LED 슬롯 50 × 10
-```
+### 8.2 4개 파트 설계
 
-### 8.1 Part Studio "08a Frame Top Plate"
+| Piece | 길이 (X) | 깊이 (Y) | 높이 (Z) | 끝단 가공 |
+|---|---|---|---|---|
+| 전면 패널 (front, 6 디지트 창) | `#enclosureWidth - 2 × #sidePanelThickness` (614) | 3 | `#drumCompartmentHeight` (90) | 양 끝 groove |
+| 후면 패널 (back, 솔리드) | 614 | 3 | 90 | 양 끝 groove |
+| 좌측 패널 (left) | 3 | `#enclosureDepth - 2 × #sidePanelThickness` (114) | 90 | 양 끝 tongue |
+| 우측 패널 (right) | 3 | 114 | 90 | 양 끝 tongue |
 
-#### Step 1 — Part Studio 생성 + Variable 연결
-1. 탭바 `+` → **Part Studio**, 이름 `08a Frame Top Plate`
-2. Variable Studio → `Clock Config` 연결
+> **결합 원리**: 좌·우 패널 양 끝의 tongue (3 × 4 × 90 돌출)이 전·후 패널 양 끝의 groove (3.4 × 4 × 90 홈)에 삽입됨.
 
-#### Step 2 — Sketch "plate outline" (Top plane)
-| 항목 | 값 |
-|---|---|
-| 도구 | Center point rectangle |
-| 중심 | 원점 |
-| Width (X) | `#frameWidth` (= 105) |
-| Depth (Y) | `#frameDepth` (= 95) |
+### 8.3 Feature tree (전면 패널 예시)
 
-#### Step 3 — Extrude "plate body"
-| 칸 | 값 |
-|---|---|
-| Type | New |
-| End | Blind |
-| Depth | `#frameBarThickness` (= 5) |
-| Direction | +Z |
+#### Step 1 — Sketch "front panel outline" (Front plane)
+- 직사각형 614 (W) × 90 (H), 원점 중심
+- Sketch 종료
 
-→ 105 × 95 × 5 mm 플레이트.
+#### Step 2 — Extrude "front panel"
+- New, Symmetric, Depth `#sidePanelThickness` (= 3)
 
-#### Step 4 — Sketch "bearing seat + shaft + rod holes" (top face)
+→ 614 × 90 × 3 솔리드.
 
-윗면 → New Sketch. 원 6개:
+#### Step 3 — Sketch "groove on each end" (양 끝면)
+양 끝 X = ±307 면에 sketch:
+- 직사각형 holes: 3.4 × 4 mm (groove 단면)
+- 위치: 패널 두께 중심에 정렬, 깊이 4mm
 
-| 홀 | 위치 (X, Y) | Diameter | 비고 |
-|---|---|---|---|
-| 베어링 시트 (외) | (0, 0) | `#bearingOD` (= 16) | Blind 5 |
-| 샤프트 (내) | (0, 0) | `#shaftHole` (= 5.2) | Through |
-| M5 전산봉 좌상 | (-48, +42) | `#frameRodHole` (= 5.2) | Through |
-| M5 전산봉 우상 | (+48, +42) | 5.2 | Through |
-| M5 전산봉 좌하 | (-48, -42) | 5.2 | Through |
-| M5 전산봉 우하 | (+48, -42) | 5.2 | Through |
+#### Step 4 — Extrude Cut "end grooves"
+- Blind, Depth 4mm
+- → 양 끝에 tongue 삽입용 홈
 
-#### Step 5 — Extrude Cut "shaft + 4 rod holes" (Through)
-- Profile: 샤프트 원 + 4개 코너 원 (5개)
-- Type: Remove
-- End: Through all
+#### Step 5 — Sketch "6 digit windows" (front face)
+6개 직사각형 창 — 각 드럼 위치에 디지트 가시:
 
-#### Step 6 — Extrude Cut "bearing seat" (Blind 5)
-- Profile: 베어링 ring (∅16 외측 - ∅5.2 내측)
-  - 또는 별도 sketch에 ∅16만 그리고 Blind 5 cut
-- 깊이: `#bearingWidth` (= 5)
-- 방향: -Z
-
-> Step 5/6 순서 주의: 샤프트는 Through, 베어링은 Blind. Bearing seat는 별도 sketch가 더 안전.
-
-#### Step 7 — 파트 이름
-Parts 패널 → Rename → **`Frame Top Plate`**.
-
-### 8.2 Part Studio "08b Frame Bottom Plate"
-
-#### Step 1 — Part Studio 생성 + Variable 연결
-1. 탭바 `+` → **Part Studio**, 이름 `08b Frame Bottom Plate`
-2. Variable Studio → `Clock Config` 연결
-
-#### Step 2 — Sketch "plate outline" (Top plane)
-Top Plate와 동일: `#frameWidth` × `#frameDepth` (105 × 95), 원점 중심.
-
-#### Step 3 — Extrude "plate body"
-- Type: New, Blind, Depth `#frameBarThickness` (= 5), +Z
-→ 105 × 95 × 5 plate.
-
-#### Step 4 — Sketch "all holes" (top face)
-
-윗면 → New Sketch. 모든 홀을 한 sketch에 (편의):
-
-**M5 전산봉 4개 (Top Plate와 정확히 같은 위치)**
-| 위치 (X, Y) | Diameter |
-|---|---|
-| (-48, +42), (+48, +42), (-48, -42), (+48, -42) | 5.2 |
-
-**Motor mount fix 홀 4개** (D28: motor mount plate +Y 11 정렬, plate 코너가 frame 좌표 (±20, +4)/(±20, -26))
-| 위치 (X, Y) | Diameter |
-|---|---|
-| (-20, +4), (+20, +4), (-20, -26), (+20, -26) | 3.2 |
-
-**Hall bracket 홀 2개** (자석 궤적 R=30, 센서 중심 (0, +30), bracket 14mm 간격)
-| 위치 (X, Y) | Diameter |
-|---|---|
-| (-7, +30), (+7, +30) | 3.2 |
-
-> Hall과 Motor mount는 충분히 떨어져 있음 (+30 vs +4, 26mm gap). 충돌 없음.
-
-#### Step 5 — Extrude Cut (Through all)
-모든 원 선택 → Remove → Through all.
-
-#### Step 6 — Sketch "LED bar slot" (top face)
-
-LED 바 안착 슬롯. 위치: 드럼 -Y쪽(slot 0 방향, 패널 전면) 아래.
-
-| 항목 | 값 |
-|---|---|
-| 도구 | Center point rectangle |
-| 중심 | (0, -40) |
-| Width (X) | 50 mm |
-| Depth (Y) | 10 mm |
-
-#### Step 7 — Extrude Cut "LED slot"
-- Type: Remove
-- End: Blind, Depth 3 mm (LED 바 안착 깊이) 또는 Through all (옆으로 삽입)
-
-#### Step 8 — 파트 이름
-Parts 패널 → Rename → **`Frame Bottom Plate`**.
-
-### 8.3 BOM 추가 (구매품)
-
-| 부품 | 사양 | 수량 |
+| 드럼 | 위치 X | 폭 |
 |---|---|---|
-| M5 전산봉 (threaded rod, 전산봉) | 길이 140 mm | 4 |
-| M5 너트 | SUS304 | 8 (또는 16 더블 너트) |
-| M5 와셔 | 평와셔 | 8 (선택) |
+| D1 (요일 ∅60) | `#drumX_1` (-265) | `#digitWindowWidth_60` (24) |
+| D2 (시십 ∅90) | `#drumX_2` (-170) | `#digitWindowWidth_90` (26) |
+| D3 (시일 ∅90) | `#drumX_3` (-65) | 26 |
+| D4 (분십 ∅90) | `#drumX_4` (+65) | 26 |
+| D5 (분일 ∅90) | `#drumX_5` (+170) | 26 |
+| D6 (날씨 ∅60) | `#drumX_6` (+265) | 24 |
 
-홈센터 또는 알리에서 구매. 1m 전산봉 1개 사서 잘라 써도 됨 (140 mm × 4 + 절단 손실 = 600 mm).
+각 창 높이: `#digitWindowHeight` (= 50). 위치 Z: 패널 중앙.
+
+#### Step 6 — Extrude Cut "windows"
+- Remove, Through all → 6개 창 관통.
+
+#### Step 7~ — 후면·좌측·우측 패널 추가
+
+각 패널을 별도 New 파트로 생성:
+- 후면: 전면과 동일 외곽·groove, 디지트 창만 없음
+- 좌·우: 외곽 3 × 114 × 90, 양 끝에 **tongue** (groove 반대) 추가
+  - Tongue: 3 × 4 × 90 돌출 (sketch + extrude add)
 
 ### 8.4 검증
-
 | 확인 | 기대 |
 |---|---|
-| Top plate 외형 | 105 × 95 × 5 |
-| Top plate 베어링 시트 + 샤프트 | ∅16 Blind 5 + ∅5.2 Through |
-| Top plate 4 코너 홀 | (±48, ±42), ∅5.2 |
-| Bottom plate 외형 | 105 × 95 × 5 |
-| Bottom plate 4 코너 홀 | (±48, ±42), ∅5.2 (top과 동일 좌표) |
-| Bottom plate motor mount 4 홀 | (±20, +4) and (±20, -26), ∅3.2 |
-| Bottom plate Hall 2 홀 | (±7, +30), ∅3.2 |
-| Bottom plate LED 슬롯 | 50 × 10 at (0, -40) |
-| 두 plate의 4 코너 홀 일치 | 양 plate의 (±48, ±42)가 정확히 정렬 — 봉 통과 시 수직 |
+| 4개 파트 (front/back/left/right) | Parts 패널에 4개 |
+| 전·후 양 끝 groove | 3.4 × 4 × 90 |
+| 좌·우 양 끝 tongue | 3 × 4 × 90 |
+| 4 piece 결합 시 ring 형성 | 614 × 114 외곽 |
 
 ### 8.5 STL 출력
-
-| 설정 | 값 |
-|---|---|
-| 재료 | PETG |
-| Layer | 0.2 mm |
-| Infill | 30~40% |
-| 출력 방향 | 평면이 베드 위 |
-| 예상 시간 | 각 plate 2~3시간 (총 4~6시간) |
-
-기존 사각 ring 설계(6~10시간) 대비 절반.
-
-### 8.6 조립 순서
-
-1. Top plate 4 코너에 M5 전산봉 4개 끼움, 위에서 너트 1개씩 (or 더블 너트)
-2. 봉이 아래로 향하게 놓고, 가운데 베어링 시트에 625ZZ 베어링 압입
-3. 샤프트(∅5×100mm)에 모든 캡·드럼 어셈블 후, 위에서 샤프트를 베어링 통해 통과
-4. Bottom plate를 4 봉에 끼워서 아래에서 끼움, 너트로 고정
-5. Bottom plate에 motor mount plate + 모터 + Hall bracket + LED 부착
-6. 봉 길이 조정으로 plate 간격(envelope 127mm) 조정
-
-### 8.7 iteration 안내
-
-- 1차 출력 후 베어링·모터·Hall·LED fit 확인
-- 봉 길이 조정으로 envelope 미세 변경 가능 (140 → 130 등)
-- 강성 부족 시 봉 ∅5 → ∅6 (M6) 또는 봉 6개 (각 모서리 + 가운데)로 보강
+- 각 패널 분리 출력
+- PETG, Layer 0.2 mm, Infill 25%
+- 전·후면은 분할 출력 (3등분, 도브테일)
+- 좌·우는 단일 출력 (114mm, 베드 안)
 
 ---
 
-## 9. Assembly "Proto 1-Digit"
+## 8.5 Part Studio "09 Top Plate"
 
-### Instance 배치 (D28 조립 방향)
+상부 판. 6 베어링 시트 + 측면 판 ring 상단 결합용 둘레 홈.
 
-> **하부 캡과 상부 캡은 둘 다 CAD에서 모델된 그대로 (보스가 캡 상면에 위로) 사용**. 어느 캡도 뒤집지 않음.
-> - 하부 캡: 보스가 드럼 내부 방향으로 → M3 set screw로 잠김 (조립 중 한 번만 접근 가능, 이후 분해 불가). **접착제 안 씀**
-> - 상부 캡: 보스가 드럼 외부 위로 → M3 접근 가능, 패널 교체 시 분리
+### 8.5.1 Part Studio 생성 + Variable 연결
+1. 탭바 `+` → **Part Studio**, 이름 `09 Top Plate`
+2. Variable Studio → `Clock Config`
 
-1. Frame Section (고정)
-2. Bearing (상부 바 내부)
-3. Shaft (Bearing 통과, 수직)
-4. Bottom Cap (Shaft에 Concentric, **CAD 그대로 — 보스 위, 자석 아래**) → **이 단계에서 M3 set screw로 샤프트에 잠금** (이후 분해 불가)
-5. Panel × 10 (Bottom Cap slot에 위에서 삽입)
-6. Top Cap (Shaft에 Concentric, **CAD 그대로 — 보스 위, 슬롯 아래**) — Bottom Cap에서 50mm 위
-7. Coupler (Shaft 하단, Motor 샤프트와 연결)
-8. Motor + Motor Mount (Frame 하부 바 하단에 볼트)
-9. Hall Bracket (Frame 하부 바, 자석 궤적 아래)
-10. LED Bar (하부 바 전면)
+### 8.5.2 Feature tree
+
+#### Step 1 — Sketch "plate outline" (Top plane)
+- Rectangle, 원점 중심, `#enclosureWidth` × `#enclosureDepth` (620 × 120)
+
+#### Step 2 — Extrude "plate body"
+- New, Blind, Depth `#plateThickness` (= 5), +Z
+
+#### Step 3 — Sketch "6 bearing seats + shaft holes" (top face)
+
+각 드럼 위치 (X = `#drumX_1` ~ `#drumX_6`, Y = +11 — 모터 mount plate +Y 11과 동일 정렬)에 동심원 2개:
+
+| 홀 | Diameter | End |
+|---|---|---|
+| 베어링 시트 (외) | `#bearingOD` (= 16) | Blind 5 |
+| 샤프트 (내) | `#shaftHole` (= 5.2) | Through |
+
+#### Step 4 — Extrude Cut "shaft holes (Through)"
+샤프트 ∅5.2 원 6개 → Remove, Through all.
+
+#### Step 5 — Extrude Cut "bearing seats (Blind 5)"
+베어링 ring (∅16 ~ ∅5.2 사이) 6개 → Remove, Blind `#bearingWidth` (= 5), -Z.
+
+#### Step 6 — Sketch "perimeter groove" (bottom face)
+
+판 **아랫면**에 둘레 홈 (07 Bottom Plate와 동일 위치):
+- 외측: 판 외곽에서 5mm 안쪽
+- 내측: 외측에서 +3.4 mm 안쪽
+- 직사각형 ring
+
+#### Step 7 — Extrude Cut "perimeter groove"
+- Remove, Blind, Depth `#panelGrooveDepth` (= 4)
+- 방향: +Z (판 안으로)
+
+→ 측면 판 ring 상단이 위에서 이 홈으로 끼워짐.
+
+### 8.5.3 파트 이름 정리
+Parts 패널 → Rename → **`Top Plate`**.
+
+### 8.5.4 STL 출력
+- PETG, Layer 0.2 mm, Infill 30%
+- 분할 출력 (3등분) 권장
+
+---
+## 9. Assembly "Full 6-Digit Clock"
+
+### 조립 순서 (D30 통합 enclosure)
+
+> D28 캡 방향: 하부 캡·상부 캡 모두 CAD 그대로 (보스 위로). 하부 캡은 조립 중 M3 잠금 후 영구 고정.
+
+1. **06 Bottom Box** 출력 후 내부에 Mega 2560 + ULN2003 × 6 + MOSFET + LED 바 와이어·전원 어댑터 잭 배치
+2. **07 Bottom Plate** 위 6 모터 마운트 (4× M3 each), Hall 센서 6개 (인쇄면 위), LED 바 6개 (양면테이프 또는 슬롯)
+3. Plate 와이어를 박스 측 슬롯·홀로 통과시킴
+4. 07 Bottom Plate를 06 Bottom Box 위에 결합 (M3 + heat insert × 8)
+5. 각 모터축 (총 6개)에 **05 Coupler** 끼움
+6. 각 커플러에 **03 Shaft** (∅5×100) 삽입
+7. 각 샤프트에 **하부 캡** (D28 — 보스 위, 자석 아래) → **M3 set screw로 샤프트 잠금** (이후 분해 불가)
+8. 각 캡 슬롯에 **02 Acrylic Panel** 삽입 (∅90 = 10장, ∅60 = 7장)
+9. 각 샤프트에 **상부 캡** 슬라이드 (보스 위) → 임시로 위에 둠 (아직 잠금 X)
+10. **08 Side Panels** 4 piece 코너 tongue-groove로 결합 → 사각 ring 형성
+11. Ring을 07 Bottom Plate 둘레 홈에 떨어뜨려 끼움 (위에서 ↓)
+12. **09 Top Plate**의 6 베어링 시트에 **04 Bearing 625ZZ** 6개 압입
+13. 09 Top Plate를 위에서 떨어뜨려 측면 판 ring 상단에 끼움 (둘레 홈 정렬)
+14. 각 드럼의 보스가 베어링 안으로 들어가도록 정렬, 상부 캡의 M3 set screw 잠금 (역시 분해 시 풀어야 함)
+
+### 분해 (패널 교체)
+
+1. 09 Top Plate 들어 올림 (둘레 홈에서 분리)
+2. 베어링 보스에서 빼냄
+3. 상부 캡 M3 set screw 풀고 캡 슬라이드 → 패널 교체 → 상부 캡 재장착
+4. 09 Top Plate 다시 끼움
 
 ### Mate 종류
-- Fastened (Frame ↔ Bracket, 볼트 자리)
-- Concentric (Shaft ↔ Bearing, Shaft ↔ Cap hub)
-- Slider (없음, 회전 허용 위해 Concentric만)
-- Revolute (Top Cap ↔ Shaft, 회전축)
+- **Fastened**: 06 Box ↔ 07 Plate (insert+screw), Plate ↔ Motor mount points
+- **Concentric**: Shaft ↔ Bearing, Shaft ↔ Cap hub
+- **Revolute**: Cap ↔ Shaft (회전축)
+- **Sliding/snap**: Side Panels ↔ Plates (groove 결합)
 
 ### 간섭 체크
-- Top Cap 꼭짓점 ↔ Frame 측면 기둥: 최소 7.5mm 이상 유지
-- 자석 포켓 ↔ 베어링 하면: 최소 3mm
-- Panel 하단 노출 엣지 ↔ LED 바 상면: 약 2mm (광 주입 간격)
+- 6 드럼 외경 envelope: 인접 드럼 간 15 mm 클리어런스 (D22)
+- Bottom plate 모터 마운트 4 홀: motor body footprint와 충돌 X
+- LED 와이어 통과 홀 ↔ 측면 판 위치: 충분한 거리
+- 측면 판 두께 (3) + 둘레 홈 폭 (3.4) → 0.4 mm slip fit
 
 ---
 
@@ -1299,7 +1147,7 @@ cad/
 
 - Phase 3: 부품 입고 후 실측 → Variable Studio 값 조정 (실제 샤프트 길이, 베어링 폭 편차 등)
 - Phase 4: 이 어셈블리를 실제 조립하며 공차 검증 → 슬롯 폭·허브 크기 재조정
-- Phase 6: `01 Drum ∅90 Caps` Part Studio 복제 → `09 Drum ∅60 Caps`로 개명 → 모든 `_90` 참조를 `_60`로 치환 → 프레임 6자리로 확장
+- Phase 6 (D30 이후 = 현재): `01 Drum ∅90 Caps` Part Studio 복제 → `10 Drum ∅60 Caps`로 개명 → 모든 `_90` 참조를 `_60`로 치환
 
 ---
 
@@ -1307,17 +1155,20 @@ cad/
 
 | Step | Part Studio | 순 예상 |
 |---|---|---|
-| 1 | Variable Studio 정의 | 30분 |
-| 2 | 01 Caps (상부 먼저) | 1h |
+| 1 | Variable Studio (~50개 변수) | 45분 |
+| 2 | 01 Drum ∅90 Caps | 1h |
 | 3 | Configuration으로 하부 자석 포켓 추가 | 30분 |
-| 4 | 02 Acrylic Panel | 15분 |
+| 4 | 02 Acrylic Panel 90 + 02b Engraving Sheet (DXF) | 30분 |
 | 5 | 03 Shaft | 10분 |
 | 6 | 04 Bearing 625ZZ | 10분 |
 | 7 | 05 Coupler (placeholder) | 10분 |
-| 8 | 06 Motor Mount | 45분 |
-| 9 | 07 Hall Bracket | 30분 |
-| 10 | 08a Top Plate + 08b Bottom Plate (Option C) | 1h |
-| 11 | Assembly + 간섭 체크 | 1.5h |
-| 12 | Export (STEP/STL/DXF) | 15분 |
+| 8 | **06 Bottom Box** (전자부 enclosure) | 1.5h |
+| 9 | **07 Bottom Plate** (6 모터·Hall·LED + 둘레 홈) | 2h |
+| 10 | **08 Side Panels** (4 piece, 코너 결합) | 1.5h |
+| 11 | **09 Top Plate** (6 베어링 + 둘레 홈) | 1h |
+| 12 | **10 Drum ∅60 Caps** (01 복제·치환) | 30분 |
+| 13 | Assembly + 간섭 체크 (6자리) | 2h |
+| 14 | Export (STEP/STL/DXF) | 30분 |
+| **합계** | | **~12h** |
 
 **총 예상**: 약 7시간 (WBS Phase 2 순공수와 일치)
