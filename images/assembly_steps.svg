@@ -1,0 +1,302 @@
+<svg viewBox="0 0 900 1450" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa; max-width:100%; height:auto; font-family: system-ui,-apple-system,sans-serif;">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+  <style>
+    .title { font-size: 22px; font-weight: 800; fill: #1a1a1a; }
+    .panel { font-size: 15px; font-weight: 700; fill: #2a3d55; }
+    .lbl { font-size: 11px; fill: #333; font-weight: 600; }
+    .sub { font-size: 11px; fill: #555; }
+    .step-num { font-size: 24px; font-weight: 900; fill: #ffffff; }
+    .note { font-size: 10px; fill: #888; font-style: italic; }
+    .dim { font-size: 11px; fill: #2255aa; font-weight: 600; }
+    .box { fill: #d0dae7; stroke: #5a7aa0; stroke-width: 1.5; }
+    .plate { fill: #c3d1e3; stroke: #5a7aa0; stroke-width: 1.5; }
+    .panel-side { fill: #eaf2fb; stroke: #2f5179; stroke-width: 1.3; }
+    .drum { fill: #f5faff; stroke: #2f5179; stroke-width: 1.5; }
+    .motor { fill: #fff4e1; stroke: #c99400; stroke-width: 1.2; }
+    .pcb { fill: #2a6c38; stroke: #163d1e; stroke-width: 0.8; }
+    .led { fill: #fff1a0; stroke: #c99400; stroke-width: 1; }
+    .cap { fill: #c3d1e3; stroke: #5a7aa0; stroke-width: 1.3; }
+    .step-circle { fill: #2255aa; }
+    .arrow { stroke: #d48c00; stroke-width: 2; fill: none; }
+  </style>
+
+  <!-- Title -->
+  <text x="20" y="32" class="title">D30 통합 Enclosure 조립 과정 (6자리)</text>
+  <text x="20" y="54" class="sub">Bottom Box → Bottom Plate → 드럼 6세트 → Side Panels (4 piece ring) → Top Plate</text>
+
+  <!-- ============ Step 1: Bottom Box ============ -->
+  <g transform="translate(20, 80)">
+    <rect width="860" height="210" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">1</text>
+    <text x="75" y="40" class="panel">06 Bottom Box 출력 + 전자부 배치</text>
+    <text x="75" y="58" class="sub">PETG 박스 (뚜껑 없음). 내부에 Mega 2560 + ULN2003×6 + MOSFET + 어댑터 잭 + LED 와이어 미리 배선.</text>
+
+    <!-- 박스 isometric-ish view -->
+    <g transform="translate(80, 80)">
+      <!-- Bottom box outline -->
+      <path d="M 0 60 L 0 110 L 600 110 L 600 60 Z" class="box"/>
+      <path d="M 0 60 L 50 30 L 650 30 L 600 60 Z" class="box"/>
+      <path d="M 600 60 L 650 30 L 650 80 L 600 110 Z" class="box" opacity="0.85"/>
+      <text x="320" y="135" class="lbl" text-anchor="middle">620 × 120 × 80 mm 전자부 박스 (D30)</text>
+
+      <!-- 전자부 -->
+      <rect x="40" y="68" width="80" height="30" fill="#2a3d55" stroke="#1a1a1a"/>
+      <text x="80" y="86" class="sub" text-anchor="middle" fill="#fff" font-size="9">Mega 2560</text>
+
+      <rect x="135" y="70" width="60" height="20" class="pcb"/>
+      <text x="165" y="83" class="sub" text-anchor="middle" fill="#fff" font-size="9">ULN×6</text>
+
+      <rect x="210" y="72" width="40" height="16" fill="#222" stroke="#000"/>
+      <text x="230" y="83" class="sub" text-anchor="middle" fill="#fff" font-size="8">MOSFET</text>
+
+      <rect x="270" y="76" width="100" height="10" class="led"/>
+      <text x="320" y="100" class="note" text-anchor="middle">LED 바 와이어</text>
+
+      <rect x="555" y="70" width="30" height="22" fill="#444" stroke="#000"/>
+      <text x="570" y="103" class="note" text-anchor="middle">DC잭</text>
+    </g>
+  </g>
+
+  <!-- ============ Step 2-3: Bottom Plate ============ -->
+  <g transform="translate(20, 300)">
+    <rect width="860" height="220" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">2-3</text>
+    <text x="75" y="40" class="panel">07 Bottom Plate에 6 모터·Hall·LED 마운트 → 박스에 결합</text>
+    <text x="75" y="58" class="sub">Plate 윗면에 6 모터 (M3 × 4 each), Hall 6개 (recess + 핫글루), LED 바. 와이어 통과 홀로 박스 안 전자부와 연결.</text>
+
+    <!-- Plate top view with 6 drum positions -->
+    <g transform="translate(70, 80)">
+      <!-- Plate outline -->
+      <rect x="0" y="0" width="700" height="100" class="plate"/>
+      <text x="350" y="120" class="lbl" text-anchor="middle">07 Bottom Plate (620 × 120 × 5 mm)</text>
+
+      <!-- 6 drum centers + motor footprints (scaled X) -->
+      <!-- drum X positions: -265, -170, -65, +65, +170, +265 → translate to plate 0~700 (scale 700/620) -->
+      <!-- center at x=350 -->
+      <g>
+        <!-- D1 요일 ∅60 -->
+        <circle cx="51" cy="50" r="17" class="drum" opacity="0.7"/>
+        <text x="51" y="54" class="lbl" text-anchor="middle" font-size="9">요일</text>
+        <text x="51" y="80" class="note" text-anchor="middle" font-size="8">∅60</text>
+
+        <!-- D2 시십 ∅90 -->
+        <circle cx="158" cy="50" r="25" class="drum" opacity="0.7"/>
+        <text x="158" y="54" class="lbl" text-anchor="middle" font-size="9">시십</text>
+        <text x="158" y="84" class="note" text-anchor="middle" font-size="8">∅90</text>
+
+        <!-- D3 시일 -->
+        <circle cx="277" cy="50" r="25" class="drum" opacity="0.7"/>
+        <text x="277" y="54" class="lbl" text-anchor="middle" font-size="9">시일</text>
+
+        <!-- 콜론 -->
+        <text x="350" y="55" class="lbl" text-anchor="middle" font-size="20" fill="#888">:</text>
+
+        <!-- D4 분십 -->
+        <circle cx="423" cy="50" r="25" class="drum" opacity="0.7"/>
+        <text x="423" y="54" class="lbl" text-anchor="middle" font-size="9">분십</text>
+
+        <!-- D5 분일 -->
+        <circle cx="542" cy="50" r="25" class="drum" opacity="0.7"/>
+        <text x="542" y="54" class="lbl" text-anchor="middle" font-size="9">분일</text>
+
+        <!-- D6 날씨 ∅60 -->
+        <circle cx="649" cy="50" r="17" class="drum" opacity="0.7"/>
+        <text x="649" y="54" class="lbl" text-anchor="middle" font-size="9">날씨</text>
+        <text x="649" y="80" class="note" text-anchor="middle" font-size="8">∅60</text>
+      </g>
+
+      <!-- Perimeter groove indicator -->
+      <rect x="6" y="6" width="688" height="88" fill="none" stroke="#a02020" stroke-width="0.7" stroke-dasharray="4,2"/>
+      <text x="350" y="100" class="note" text-anchor="middle" fill="#a02020">둘레 홈 (측면 판 결합용)</text>
+    </g>
+  </g>
+
+  <!-- ============ Step 4: Drum assembly ============ -->
+  <g transform="translate(20, 530)">
+    <rect width="860" height="270" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">4</text>
+    <text x="75" y="40" class="panel">6 드럼 어셈블리 (각 모터마다 반복)</text>
+    <text x="75" y="58" class="sub">Coupler → Shaft → 하부 캡 (M3 잠금, D28 영구 고정) → 패널 10/7장 → 상부 캡 (M3 잠금, 분해 가능)</text>
+
+    <!-- 측면도 — 드럼 1개 stack -->
+    <g transform="translate(120, 80)">
+      <!-- 모터 -->
+      <rect x="40" y="170" width="60" height="30" class="motor"/>
+      <text x="70" y="190" class="lbl" text-anchor="middle" font-size="10">모터</text>
+      <text x="115" y="188" class="note">28BYJ-48</text>
+
+      <!-- Bottom Plate (얇게) -->
+      <rect x="0" y="160" width="200" height="6" class="plate"/>
+      <text x="-50" y="166" class="note" text-anchor="end">Plate</text>
+
+      <!-- 커플러 -->
+      <rect x="60" y="135" width="20" height="25" fill="#888" stroke="#555"/>
+      <text x="115" y="150" class="note">Coupler</text>
+
+      <!-- Shaft -->
+      <line x1="70" y1="20" x2="70" y2="135" stroke="#444" stroke-width="3"/>
+
+      <!-- 하부 캡 (with boss UP) -->
+      <rect x="40" y="115" width="60" height="6" class="cap"/>
+      <rect x="60" y="100" width="20" height="15" class="cap"/>
+      <text x="115" y="120" class="note">하부 캡 (보스 위)</text>
+      <text x="115" y="132" class="note" fill="#a02020" font-size="9">M3 잠금 (영구)</text>
+
+      <!-- 드럼 (panels) -->
+      <g>
+        <rect x="38" y="50" width="3" height="50" class="panel-side"/>
+        <rect x="50" y="50" width="3" height="50" class="panel-side"/>
+        <rect x="65" y="50" width="3" height="50" class="panel-side"/>
+        <rect x="80" y="50" width="3" height="50" class="panel-side"/>
+        <rect x="95" y="50" width="3" height="50" class="panel-side"/>
+      </g>
+      <text x="115" y="78" class="note">패널 10장</text>
+
+      <!-- 상부 캡 (with boss UP) -->
+      <rect x="40" y="44" width="60" height="6" class="cap"/>
+      <rect x="60" y="29" width="20" height="15" class="cap"/>
+      <text x="115" y="38" class="note">상부 캡 (보스 위)</text>
+      <text x="115" y="50" class="note" fill="#0d7a3f" font-size="9">M3 잠금 (분리 가능)</text>
+
+      <!-- × 6 화살표 -->
+      <text x="320" y="105" class="lbl" font-size="20" fill="#d48c00">→ × 6</text>
+      <text x="320" y="125" class="note" fill="#d48c00">6 드럼 모두 반복</text>
+    </g>
+
+    <!-- 6개 결과물 미니어처 -->
+    <g transform="translate(440, 100)">
+      <text x="0" y="-5" class="sub">결과: 6 드럼이 plate 위에 수직 정렬</text>
+      <g>
+        <rect x="0" y="0" width="20" height="120" class="drum"/>
+        <rect x="35" y="-15" width="30" height="135" class="drum"/>
+        <rect x="80" y="-15" width="30" height="135" class="drum"/>
+        <rect x="125" y="-15" width="30" height="135" class="drum"/>
+        <rect x="170" y="-15" width="30" height="135" class="drum"/>
+        <rect x="215" y="0" width="20" height="120" class="drum"/>
+      </g>
+      <rect x="-10" y="125" width="260" height="6" class="plate"/>
+    </g>
+  </g>
+
+  <!-- ============ Step 5: Side Panels ring ============ -->
+  <g transform="translate(20, 810)">
+    <rect width="860" height="270" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">5</text>
+    <text x="75" y="40" class="panel">08 Side Panels 4 piece 코너 결합 → ring → Bottom Plate 둘레 홈</text>
+    <text x="75" y="58" class="sub">전·후 패널 양 끝 groove + 좌·우 패널 양 끝 tongue 결합. 4 piece ring 완성 후 plate 둘레 홈에 위에서 떨어뜨림.</text>
+
+    <!-- 4 piece exploded -->
+    <g transform="translate(60, 90)">
+      <text x="0" y="0" class="lbl">분리 상태</text>
+
+      <!-- Front -->
+      <rect x="0" y="20" width="200" height="50" class="panel-side"/>
+      <text x="100" y="50" class="lbl" text-anchor="middle">전면 (Front, 6 디지트 창)</text>
+      <text x="100" y="65" class="note" text-anchor="middle">양 끝 groove ▽</text>
+
+      <!-- Back -->
+      <rect x="0" y="80" width="200" height="50" class="panel-side"/>
+      <text x="100" y="110" class="lbl" text-anchor="middle">후면 (Back)</text>
+      <text x="100" y="125" class="note" text-anchor="middle">양 끝 groove ▽</text>
+
+      <!-- Left/Right -->
+      <rect x="0" y="140" width="60" height="50" class="panel-side"/>
+      <text x="30" y="170" class="lbl" text-anchor="middle">좌</text>
+      <text x="30" y="183" class="note" text-anchor="middle">tongue ▲</text>
+      <rect x="80" y="140" width="60" height="50" class="panel-side"/>
+      <text x="110" y="170" class="lbl" text-anchor="middle">우</text>
+      <text x="110" y="183" class="note" text-anchor="middle">tongue ▲</text>
+    </g>
+
+    <!-- Arrow → -->
+    <text x="305" y="155" class="lbl" font-size="30" fill="#d48c00">→</text>
+
+    <!-- Ring assembled -->
+    <g transform="translate(380, 90)">
+      <text x="0" y="0" class="lbl">결합 후 ring 형성</text>
+      <rect x="20" y="20" width="220" height="100" fill="none" stroke="#2f5179" stroke-width="3"/>
+      <text x="130" y="55" class="sub" text-anchor="middle">전면 (디지트 창 6)</text>
+      <text x="130" y="100" class="sub" text-anchor="middle">후면</text>
+      <text x="35" y="75" class="sub">좌</text>
+      <text x="225" y="75" class="sub">우</text>
+    </g>
+
+    <!-- Arrow ↓ -->
+    <text x="495" y="155" class="lbl" font-size="30" fill="#d48c00">↓</text>
+
+    <!-- 끼우기 -->
+    <g transform="translate(560, 90)">
+      <text x="0" y="0" class="lbl">Plate 둘레 홈에 끼움</text>
+      <rect x="0" y="20" width="240" height="80" fill="none" stroke="#2f5179" stroke-width="3"/>
+      <rect x="-10" y="100" width="260" height="6" class="plate"/>
+      <text x="120" y="120" class="note" text-anchor="middle" fill="#a02020">홈에 ring 하단 삽입</text>
+    </g>
+  </g>
+
+  <!-- ============ Step 6: Top Plate ============ -->
+  <g transform="translate(20, 1090)">
+    <rect width="860" height="220" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">6</text>
+    <text x="75" y="40" class="panel">09 Top Plate에 베어링 6개 압입 → 측면 ring 상단에 끼움</text>
+    <text x="75" y="58" class="sub">Top plate의 6 ∅16 시트에 625ZZ 베어링 6개 압입. Plate를 위에서 떨어뜨려 측면 판 ring 상단의 둘레 홈에 결합.</text>
+
+    <!-- Top Plate -->
+    <g transform="translate(80, 90)">
+      <!-- Plate -->
+      <rect x="0" y="40" width="700" height="6" class="plate"/>
+      <text x="350" y="36" class="lbl" text-anchor="middle">09 Top Plate (620 × 120 × 5 mm)</text>
+
+      <!-- 6 bearings -->
+      <circle cx="51" cy="43" r="6" fill="#bbb" stroke="#333"/>
+      <circle cx="158" cy="43" r="8" fill="#bbb" stroke="#333"/>
+      <circle cx="277" cy="43" r="8" fill="#bbb" stroke="#333"/>
+      <circle cx="423" cy="43" r="8" fill="#bbb" stroke="#333"/>
+      <circle cx="542" cy="43" r="8" fill="#bbb" stroke="#333"/>
+      <circle cx="649" cy="43" r="6" fill="#bbb" stroke="#333"/>
+
+      <!-- 6 holes -->
+      <circle cx="51" cy="43" r="2" fill="#fff"/>
+      <circle cx="158" cy="43" r="2" fill="#fff"/>
+      <circle cx="277" cy="43" r="2" fill="#fff"/>
+      <circle cx="423" cy="43" r="2" fill="#fff"/>
+      <circle cx="542" cy="43" r="2" fill="#fff"/>
+      <circle cx="649" cy="43" r="2" fill="#fff"/>
+
+      <text x="350" y="80" class="note" text-anchor="middle">6 베어링 (∅16 시트, ∅5 샤프트 통과)</text>
+
+      <!-- Down arrow -->
+      <line x1="350" y1="100" x2="350" y2="140" class="arrow" marker-end="url(#ar)"/>
+      <text x="370" y="125" class="note" fill="#d48c00">측면 ring 상단에 결합</text>
+    </g>
+  </g>
+
+  <!-- ============ Final Assembly ============ -->
+  <g transform="translate(20, 1320)">
+    <rect width="860" height="120" fill="#fff" stroke="#e0e0e0"/>
+    <circle cx="38" cy="34" r="20" class="step-circle"/>
+    <text x="38" y="42" class="step-num" text-anchor="middle">✓</text>
+    <text x="75" y="40" class="panel">완성 — 시계 외형 620 × 120 × ~180 mm</text>
+    <text x="75" y="58" class="sub">정면에 6 디지트 창만 노출. 분해 (패널 교체): Top Plate 들어 올림 → 베어링 분리 → 상부 캡 M3 풀고 패널 교체.</text>
+
+    <!-- 최종 외형 -->
+    <g transform="translate(280, 75)">
+      <rect x="0" y="0" width="320" height="35" fill="#1a1a1a" stroke="#333"/>
+      <rect x="20" y="8" width="20" height="20" fill="#fff1a0"/><text x="30" y="22" text-anchor="middle" font-size="11" font-weight="700">월</text>
+      <rect x="55" y="8" width="22" height="20" fill="#fff1a0"/><text x="66" y="22" text-anchor="middle" font-size="11" font-weight="700">1</text>
+      <rect x="82" y="8" width="22" height="20" fill="#fff1a0"/><text x="93" y="22" text-anchor="middle" font-size="11" font-weight="700">2</text>
+      <text x="113" y="22" font-size="14">:</text>
+      <rect x="125" y="8" width="22" height="20" fill="#fff1a0"/><text x="136" y="22" text-anchor="middle" font-size="11" font-weight="700">3</text>
+      <rect x="152" y="8" width="22" height="20" fill="#fff1a0"/><text x="163" y="22" text-anchor="middle" font-size="11" font-weight="700">4</text>
+      <rect x="187" y="8" width="20" height="20" fill="#fff1a0"/><text x="197" y="22" text-anchor="middle" font-size="11" font-weight="700">☀</text>
+    </g>
+  </g>
+</svg>
