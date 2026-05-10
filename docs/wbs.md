@@ -66,7 +66,7 @@
 - **CAD 툴**: **Onshape** (확정)
 - **Deliverable**: STEP/STL 익스포트 + DXF
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
-- **세부 작업 지시서**: [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md)
+- **세부 작업 지시서**: [`../cad/phase2/`](../cad/phase2/) (탭별 분리, 색인 [`README.md`](../cad/phase2/README.md))
 
 ### 3.3 Phase 2 진행 중 결정·정정 (D22~D30)
 
@@ -110,26 +110,26 @@
 
 1. **아크릴 가공 업체 회신 확인**
    - 인그레이빙+커팅 가능 여부 / 단가 / 리드타임
-   - 가능 시: 발주 진행 (수량은 [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md) §4.4 표 참조)
+   - 가능 시: 발주 진행 (수량은 [`../cad/phase2/03-panel-90.md`](../cad/phase2/03-panel-90.md) §4.4 표 참조)
    - 불가 시: 다른 업체 견적 또는 인그레이빙·컷 분리 발주 검토
 
-### 5.2 Onshape Phase 2 잔여 Part Studio (브리프 §5~§9 순서)
+### 5.2 Onshape Phase 2 잔여 Part Studio (브리프 순서)
 
-순서대로 모델링. 각 단계는 [`../cad/phase2-onshape-brief.md`](../cad/phase2-onshape-brief.md) 해당 섹션 참조.
+순서대로 모델링. 각 단계는 [`../cad/phase2/`](../cad/phase2/) 해당 파일 참조.
 
-| 다음 작업 | 브리프 위치 | 예상 순공수 |
+| 다음 작업 | 브리프 파일 | 예상 순공수 |
 |---|---|---|
-| `03 Shaft` Part Studio | §5 | 10분 |
-| `04 Bearing 625ZZ` | §5.5 | 10분 |
-| `06 Bottom Box` (D30) | §6 | 1.5h |
-| `07 Bottom Plate` (D30) | §7 | 2h |
-| `08 Side Panels` × 4 (D30) | §8 | 1.5h |
-| `09 Top Plate` (D30) | §8.5 | 1h |
-| `10 Drum ∅60 Caps` (D30 필수) | §4.5 | 30분 |
-| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | §4.6 | 30분 |
-| `05 Coupler` (placeholder) | §5.7 | 10분 |
-| Assembly `Proto 1-Digit` + 간섭 체크 | §10 | 1.5시간 |
-| Export STEP / STL × 6 / DXF | §11 | 15분 |
+| `03 Shaft` Part Studio | [`06-shaft.md`](../cad/phase2/06-shaft.md) | 10분 |
+| `04 Bearing 625ZZ` | [`07-bearing.md`](../cad/phase2/07-bearing.md) | 10분 |
+| `06 Bottom Box` (D30) | [`09-bottom-box.md`](../cad/phase2/09-bottom-box.md) | 1.5h |
+| `07 Bottom Plate` (D30) | [`10-bottom-plate.md`](../cad/phase2/10-bottom-plate.md) | 2h |
+| `08 Side Panels` × 4 (D30) | [`11-side-panels.md`](../cad/phase2/11-side-panels.md) | 1.5h |
+| `09 Top Plate` (D30) | [`12-top-plate.md`](../cad/phase2/12-top-plate.md) | 1h |
+| `10 Drum ∅60 Caps` (D30 필수) | [`04-drum-60.md`](../cad/phase2/04-drum-60.md) | 30분 |
+| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | [`05-panel-60.md`](../cad/phase2/05-panel-60.md) | 30분 |
+| `05 Coupler` (placeholder) | [`08-coupler.md`](../cad/phase2/08-coupler.md) | 10분 |
+| Assembly `Full 6-Digit Clock` + 간섭 체크 | [`13-assembly.md`](../cad/phase2/13-assembly.md) | 1.5시간 |
+| Export STEP / STL / DXF | [`14-export.md`](../cad/phase2/14-export.md) | 15분 |
 
 ### 5.3 부품 입고 후 (병행)
 

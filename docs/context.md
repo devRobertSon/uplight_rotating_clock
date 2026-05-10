@@ -54,7 +54,7 @@
 | HH:MM | 4 | ∅90 | 56mm | 10 | 27.812mm | **25.032mm** | 36° |
 | 요일·날씨 | 2 | ∅60 | 56mm | 7 | 26.033mm | **22.251mm** | 51.43° |
 
-> Phase 2 CAD 진행 중 발견: 슬롯 길이를 폴리곤 변(chord)과 동일하게 두면 인접 슬롯이 vertex 안쪽에서 겹침. `slotLength = 2·(apothem-slotWidth)·tan(180°/n) - 0.5` 로 축소, 패널은 그보다 0.2 mm 작게. (cad/phase2-onshape-brief.md §2.3)
+> Phase 2 CAD 진행 중 발견: 슬롯 길이를 폴리곤 변(chord)과 동일하게 두면 인접 슬롯이 vertex 안쪽에서 겹침. `slotLength = 2·(apothem-slotWidth)·tan(180°/n) - 0.5` 로 축소, 패널은 그보다 0.2 mm 작게. (cad/phase2/01-variable-studio.md)
 
 **드럼 외곽 56mm 상세**: 상부 캡 6mm + 가시 영역 44mm + 하부 캡 6mm
 
