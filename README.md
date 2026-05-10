@@ -57,7 +57,7 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | [docs/bom.md](docs/bom.md) | 자재 명세서 (구매 완료 / 보유 / 외주) |
 | [docs/wbs.md](docs/wbs.md) | WBS · Phase 진행 스냅샷 · 리스크 · 다음 작업 |
 | [docs/context.md](docs/context.md) | Phase 0·1 전체 컨텍스트 핸드오프 원문 |
-| [cad/phase2-onshape-brief.md](cad/phase2-onshape-brief.md) | Phase 2 Onshape CAD 작업 지시서 (Variable Studio · Part Studio 11 step) |
+| [cad/phase2/](cad/phase2/) | Phase 2 Onshape CAD 작업 지시서 — 탭별 14개 파일 (색인 [`README.md`](cad/phase2/README.md)) |
 
 ### 이미지 산출물
 
@@ -85,6 +85,6 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 > 자세한 내용은 [`docs/wbs.md`](docs/wbs.md) §5 참조.
 
 1. **아크릴 업체 회신 확인** — 인그레이빙+컷 가능 여부, 단가, 리드타임
-2. **Onshape 잔여 Part Studio (D30)** — `cad/phase2-onshape-brief.md` §6~§9 (Bottom Box → Bottom Plate → Side Panels → Top Plate) → §4.5 (Drum ∅60) → §9 Assembly 14단계
+2. **Onshape 잔여 Part Studio (D30)** — [`cad/phase2/`](cad/phase2/) 09-bottom-box → 10-bottom-plate → 11-side-panels → 12-top-plate → 04-drum-60 → 13-assembly 14단계
 3. **샤프트 신규 발주** — ∅5 SUS304 × **100 mm** × 10개 (D26, 기존 75 mm 폐기). 입고 후 점검 + DS3231 R5 저항 제거
 4. (선택) 펌웨어 스켈레톤 선행 — `firmware/proto/`
