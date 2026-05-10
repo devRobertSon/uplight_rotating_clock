@@ -9,7 +9,7 @@
 - **주당 가용 시간**: 3시간
 - **총 순 공수**: 약 **94 h**
 - **예상 경과**: **25~27주** (부품 리드타임 병행 반영)
-- **현재 진행률**: ~10% (Phase 0·1 완료, Phase 2 진행 중)
+- **현재 진행률**: ~15% (Phase 0·1 완료, Phase 2 CAD 절차 문서화 완료, Onshape 모델링 진행 중)
 
 ---
 
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | 0. 요구·치수 확정 | ✅ 완료 | 3 | 1 | - |
 | 1. 핵심 설계 결정 | ✅ 완료 | 3 | 1 | - |
-| 2. 프로토 1자리 CAD | 🔄 **진행 중** (∅90 Caps 완료, Panel DXF 발주 문의 중) | 7 | 3 | - |
+| 2. 6자리 CAD (D30) | 🔄 **진행 중** — 모든 Part Studio 절차 문서화 완료, Onshape 모델링 들어감 | 7 | 3 | - |
 | 3. 프로토 부품 확보 | ⚙️ 주문 완료, 입고 대기 (여유 있음) | 2 | 1 | 병행 |
 | 4. 프로토 조립·펌웨어 | 예정 | 9 | 3 | - |
 | 5. 프로토 검증 | 예정 | 3 | 1 | - |
@@ -36,23 +36,24 @@
 
 ## 3. Phase 2 상세 (진행 중)
 
-### 3.1 진행 현황 (스냅샷 2026-04-27)
+### 3.1 진행 현황 (스냅샷 2026-05-10)
 
 | Part Studio / 산출물 | 상태 | 비고 |
 |---|---|---|
-| `Clock Config` Variable Studio | ✅ 완료 | 26개 변수 (drumDiameter_90/60, slotLength, hubBossHeight 등) |
-| `01 Drum ∅90 Caps` Part Studio | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss 12 mm / M3 Hole / Configuration Checkbox `hasMagnet` / 자석 포켓 모두 적용. 1차 프린트 후 보스 6→12 mm 상향 (D25), 샤프트 75→100 mm (D26) 변수 갱신 필요 |
-| `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성, 가공 업체에 인그레이빙+커팅 가능 여부 문의 중 |
-| `03 Shaft` | ⏳ 대기 | Phase 2 §5 (Shaft·Bearing 분리됨) |
-| `04 Bearing 625ZZ` | ⏳ 대기 | Phase 2 §5.5 |
-| `05 Coupler` (placeholder) | ⏳ 대기 | Phase 2 §5.7 — 보유품 placeholder 모델 |
-| `06 Bottom Box` (D30) | ⏳ 대기 | 전자부 enclosure, 뚜껑 없음 |
-| `07 Bottom Plate` (D30) | ⏳ 대기 | 박스 뚜껑 + 6 모터·Hall·LED + 둘레 홈 |
-| `08 Side Panels` × 4 (D30) | ⏳ 대기 | 전·후·좌·우, 코너 tongue-groove |
-| `09 Top Plate` (D30) | ⏳ 대기 | 6 베어링 시트 + 둘레 홈 |
-| `10 Drum ∅60 Caps` (D30 — 6자리 필수) | ⏳ 대기 | ∅90 Caps 복제 + `_90` → `_60` 치환 |
-| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | ⏳ 대기 | 22.251 × 55 × 3, 요일·날씨 14장 |
-| Assembly `Proto 1-Digit` | ⏳ 대기 | 모든 Part Studio 완료 후 |
+| `Clock Config` Variable Studio | ✅ 완료 | ~50개 변수 (drumDiameter_90/60, slotLength, hubBossHeight, splitX, dcJack, ventSlot, rimBoss 등) |
+| `01 Drum ∅90 Caps` | ✅ **완료** | base / cap body / slot 0 / Circular Pattern 10 / Hub Boss 12 mm / M3 Hole / Configuration `hasMagnet` / 자석 포켓 모두 적용 |
+| `02b Panel 90 Engraving Sheet` (마스터 시트) | ✅ **DXF 발주 문의 완료** | 전체 아크릴판 통합 DXF 작성 |
+| **Phase 2 절차 문서화** (`cad/phase2/` 14 파일) | ✅ **완료** | 14개 탭별 md (00-overview ~ 14-export). §6·§7 분할·hidden-bolt·H-shape 벽·Mirror feature 모두 반영 |
+| `03 Shaft` | ⏳ Onshape 모델링 대기 | [`06-shaft.md`](../cad/phase2/06-shaft.md) |
+| `04 Bearing 625ZZ` | ⏳ 대기 | [`07-bearing.md`](../cad/phase2/07-bearing.md) |
+| `05 Coupler` (placeholder) | ⏳ 대기 | [`08-coupler.md`](../cad/phase2/08-coupler.md) |
+| `06 Bottom Box` (3 sections) | 🔄 **모델링 진행 중** | [`09-bottom-box.md`](../cad/phase2/09-bottom-box.md) — Section A 진행 중 (Step A10.5 cable passthrough까지 진행 가능) |
+| `07 Bottom Plate` (3 sections) | ⏳ 대기 | [`10-bottom-plate.md`](../cad/phase2/10-bottom-plate.md) — 모터·Hall·LED 좌표 구체화 완료 |
+| `08 Side Panels` × 4 | ⏳ 대기 | [`11-side-panels.md`](../cad/phase2/11-side-panels.md) |
+| `09 Top Plate` (3 sections) | ⏳ 대기 | [`12-top-plate.md`](../cad/phase2/12-top-plate.md) |
+| `10 Drum ∅60 Caps` | ⏳ 대기 | [`04-drum-60.md`](../cad/phase2/04-drum-60.md) — 01 복제 + `_90` → `_60` 치환 |
+| `11 Acrylic Panel 60` (+ 11b Engraving Sheet) | ⏳ 대기 | [`05-panel-60.md`](../cad/phase2/05-panel-60.md) |
+| Assembly `Full 6-Digit Clock` | ⏳ 대기 | [`13-assembly.md`](../cad/phase2/13-assembly.md) — 모든 Part Studio 완료 후 |
 
 ### 3.2 Sub-task 진행 매핑
 
@@ -68,19 +69,24 @@
 - **DoD**: 공차 표기 포함된 발주 가능 도면, 간섭 체크 완료
 - **세부 작업 지시서**: [`../cad/phase2/`](../cad/phase2/) (탭별 분리, 색인 [`README.md`](../cad/phase2/README.md))
 
-### 3.3 Phase 2 진행 중 결정·정정 (D22~D30)
+### 3.3 Phase 2 진행 중 결정·정정 (D22~D35)
 
 | ID | 결정 | 발생 시점 |
 |---|---|---|
 | D22 | 드럼 간격 10 → 15 mm | Phase 2 시작 직후 |
 | D23 | 슬롯 길이 = `2·(apothem-slotWidth)·tan(180°/n) - 0.5`, 패널 폭 = 슬롯 - 0.2 (∅90: 25.032 / ∅60: 22.251) | CAD Step 6 슬롯 비겹침 발견 |
 | D24 | 슬롯 깊이 상부 3 Blind / 하부 6 Through | CAD Step 5 |
-| D25 | 허브 보스 ∅20 × **12 mm** 위로 돌출, M3 홀 자리 확보 (1차 6 mm 시도 후 12 mm로 상향) | CAD Step 7 (M3 홀 z 자리 부족) + 1차 프린트 검증 |
-| D26 | 샤프트 75 → **100 mm** 신규 발주 (75 mm × 10개 폐기) | D25 보스 12 mm 후 스택 97~99 mm로 75 mm 부족 |
-| D27 | Frame 측면 기둥 높이 140 → **160 mm** (D28에 의해 140 mm로 회복) | D25·D26 후 envelope ≈ 147 mm, 13 mm 버퍼 확보 |
-| D28 | 하부 보스 드럼 **내부 방향**. 양 캡 모두 M3 set screw 사용 (접착제 X). 하부 캡 M3은 조립 중 잠근 후 드럼 닫혀 분해 불가. 상부 보스는 외부(M3 접근). Frame 160 → **140 mm** | 보스가 드럼과 높이 공유 → envelope 12 mm 절감, 상부 캡만 분리하여 패널 교체 가능 (D13 부합) |
-| D29 | 🔒 패널 폭 freeze 3자리 (∅90: 25.032, ∅60: 22.251). slot ← panel 의존 반전 | 외주 가공 발주 완료, 사후 변경 불가. drumDiameter 등 변경 시 panel은 보호됨 |
-| D30 | 통합 enclosure 구조, 6자리 직접 진입. **§6 Motor Mount + §7 Hall Bracket 제거**, 4개 신규 Part Studio (06 박스 + 07 하부 plate + 08 측면 4 piece + 09 상부 plate) | 단일 자리 프로토 의미 없음 (plate가 6자리 통합), 외관 깔끔, 격벽 자동 형성, 무도구 분해 |
+| D25 | 허브 보스 ∅20 × **12 mm** (1차 6 mm 시도 후 상향) | CAD Step 7 + 1차 프린트 검증 |
+| D26 | 샤프트 75 → **100 mm** 신규 발주 | D25 보스 12 mm 후 스택 부족 |
+| D27 | Frame 측면 기둥 140 → **160 mm** (D28에 의해 140 회복) | envelope ≈ 147 mm, 버퍼 확보 |
+| D28 | 하부 보스 드럼 **내부 방향**, 양 캡 M3 set screw, Frame 160 → 140 mm | envelope 12 mm 절감 |
+| D29 | 🔒 패널 폭 freeze 3자리 (∅90: 25.032, ∅60: 22.251) | 외주 발주 완료 |
+| D30 | 통합 enclosure 구조, 6자리 직접 진입 (4개 Part Studio: 06·07·08·09) | 단일 자리 프로토 의미 없음 |
+| D31 | 분할 출력 (3 sections, A·B·C, X=±103). 사각 tongue-groove + M3 cross-screw. **Onshape Option B** 처음부터 3 section 모델링 | 베드 200mm 한계, FDM 정밀도 |
+| D32 | Cross-screw 위치 모두 **내부 face** (외부 visible 차단). 사전 조립 단계 신설 | 외관 깔끔 |
+| D33 | Section split 벽 추가 + cable passthrough. **H-shape 골격** (center strip + top 림 + back boss pad), 와이어 통로 ~6000 mm²/side | tongue 부유 결함 해결 + Mega/드라이버 와이어 통로 |
+| D34 | Section C는 A의 **Mirror feature** (Right plane) | 작업 시간 절반, parametric link |
+| D35 | Phase 2 브리프 → 14개 탭별 파일로 분리 (`cad/phase2/`) | 1793줄 단일 파일 read·edit 비효율 |
 
 ---
 

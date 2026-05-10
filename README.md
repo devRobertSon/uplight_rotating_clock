@@ -4,17 +4,19 @@
 
 ---
 
-## 현재 상태 (2026-04-26 기준)
+## 현재 상태 (2026-05-10 기준)
 
 - **Phase 0 (요구·치수 확정)** ✅ 완료
-- **Phase 1 (핵심 설계 결정 30건)** ✅ 완료 (D22~D30 Phase 2 진행 중 추가)
-- **Phase 2 (프로토 1자리 CAD)** 🔄 **진행 중**
-  - ✅ `Clock Config` Variable Studio (26개 변수)
+- **Phase 1 (핵심 설계 결정)** ✅ 완료 (D22~D35 Phase 2 진행 중 추가, 총 35건)
+- **Phase 2 (6자리 통합 CAD, D30)** 🔄 **진행 중**
+  - ✅ `Clock Config` Variable Studio (~50개 변수)
   - ✅ `01 Drum ∅90 Caps` Part Studio (Step 1~11 전부)
-  - ✅ `02b Panel 90 Engraving Sheet` 통합 DXF — **아크릴 가공 업체 인그레이빙+커팅 가능 여부 문의 중**
-  - ⏳ 잔여: 06 Bottom Box / 07 Bottom Plate / 08 Side Panels / 09 Top Plate / 10 Drum ∅60 Caps / Assembly (D30 통합 구조)
+  - ✅ `02b Panel 90 Engraving Sheet` 통합 DXF — 아크릴 가공 업체 인그레이빙+커팅 가능 여부 문의 중
+  - ✅ **Phase 2 절차 문서화 완료** — [`cad/phase2/`](cad/phase2/) 14개 탭별 파일 (분할 출력 D31, hidden-bolt D32, H-shape 벽 D33, Mirror feature D34 모두 반영)
+  - 🔄 Onshape 모델링 진행 중 — **06 Bottom Box Section A** 작업 중 (Step A10.5 cable passthrough까지 진행 가능)
+  - ⏳ 잔여: 06 나머지 sections / 07 Bottom Plate / 08 Side Panels / 09 Top Plate / 10 Drum ∅60 / Assembly
 - **부품 구매**: Mega 2560 WiFi R3 및 기구·전자 일체 주문 완료, 입고 대기
-- **진행률**: 약 10% (Phase 2 절반 진행)
+- **진행률**: 약 15% (Phase 2 절차 문서화 완료, 모델링 진입)
 - **상세 진행/다음 작업**: [`docs/wbs.md`](docs/wbs.md) §3, §5
 
 ---
@@ -53,7 +55,7 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 | 문서 | 내용 |
 |---|---|
 | [docs/spec.md](docs/spec.md) | 기구 · 전자 · 인터페이스 사양 |
-| [docs/decisions.md](docs/decisions.md) | 설계 의사결정 로그 (D01~D30) |
+| [docs/decisions.md](docs/decisions.md) | 설계 의사결정 로그 (D01~D35) |
 | [docs/bom.md](docs/bom.md) | 자재 명세서 (구매 완료 / 보유 / 외주) |
 | [docs/wbs.md](docs/wbs.md) | WBS · Phase 진행 스냅샷 · 리스크 · 다음 작업 |
 | [docs/context.md](docs/context.md) | Phase 0·1 전체 컨텍스트 핸드오프 원문 |
@@ -85,6 +87,8 @@ Mega 2560 WiFi R3 기준 v2.0 — 5V 통일, 54 GPIO 직결(레벨 시프터·GP
 > 자세한 내용은 [`docs/wbs.md`](docs/wbs.md) §5 참조.
 
 1. **아크릴 업체 회신 확인** — 인그레이빙+컷 가능 여부, 단가, 리드타임
-2. **Onshape 잔여 Part Studio (D30)** — [`cad/phase2/`](cad/phase2/) 09-bottom-box → 10-bottom-plate → 11-side-panels → 12-top-plate → 04-drum-60 → 13-assembly 14단계
+2. **Onshape 모델링 진행** (절차 문서화 완료)
+   - 현재 위치: [`09-bottom-box.md`](cad/phase2/09-bottom-box.md) Section A 진행 중 (Step A10.5 cable passthrough)
+   - 이후 순서: 09 나머지 → 10-bottom-plate (모터·Hall·LED 좌표 구체화 완료) → 11-side-panels → 12-top-plate → 04-drum-60 → 13-assembly
 3. **샤프트 신규 발주** — ∅5 SUS304 × **100 mm** × 10개 (D26, 기존 75 mm 폐기). 입고 후 점검 + DS3231 R5 저항 제거
 4. (선택) 펌웨어 스켈레톤 선행 — `firmware/proto/`
